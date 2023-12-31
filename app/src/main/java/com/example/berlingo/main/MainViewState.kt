@@ -1,4 +1,4 @@
-package com.example.berlingo
+package com.example.berlingo.main
 
 data class MainViewState(
 //    val repositories: List<RepositoryDto?>? = emptyList<RepositoryDto>(),
