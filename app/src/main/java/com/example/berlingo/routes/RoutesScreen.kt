@@ -1,5 +1,6 @@
 package com.example.berlingo.routes
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -7,9 +8,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -30,11 +33,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.berlingo.R
+import com.example.berlingo.data.network.responses.Journeys
+import com.example.berlingo.data.network.responses.Leg
+import com.example.berlingo.data.network.responses.Trip
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
+@SuppressLint("CoroutineCreationDuringComposition")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RoutesScreen(routesViewModel: RoutesViewModel) {
@@ -44,15 +51,34 @@ fun RoutesScreen(routesViewModel: RoutesViewModel) {
         var searchText by remember { mutableStateOf("") }
         val searchLocations = routesViewModel.searchLocations.collectAsState()
         val selectedLocation = routesViewModel.selectedLocation.collectAsState()
-        var searchedJourneys by remember { mutableStateOf(listOf("")) }
+        var searchedJourneys by remember {
+            mutableStateOf(
+                listOf(
+                    Journeys(
+                        type = "",
+                        listOf(Leg()),
+                    ),
+                ),
+            )
+        }
+        var searchedLegs by remember { mutableStateOf(listOf(Leg())) }
 
-//        val viewModel = hiltViewModel<RoutesViewModel>()
+        var searchedStopovers by remember { mutableStateOf(listOf(Trip.Stopover())) }
+        var searchedTrips by remember { mutableStateOf(listOf(Trip())) }
         val state = routesViewModel.state.collectAsState()
         var textFieldOriginFocused by remember { mutableStateOf(false) }
         var textFieldDestinationFocused by remember { mutableStateOf(false) }
         val focusRequester = remember { FocusRequester() }
+        var expandedItemIndex by remember { mutableStateOf(-1) }
+
         var stateOriginTextField by remember { mutableStateOf("") }
         var stateDestinationTextField by remember { mutableStateOf("") }
+        var stateOriginNameId by remember { mutableStateOf("") }
+        var stateDestinationNameId by remember { mutableStateOf("") }
+        var stateOriginLongitude by remember { mutableStateOf("") }
+        var stateOriginLatitude by remember { mutableStateOf("") }
+        var stateDestinationLongitude by remember { mutableStateOf("") }
+        var stateDestinationLatitude by remember { mutableStateOf("") }
         Column(
             modifier = Modifier.fillMaxSize(),
         ) {
@@ -64,33 +90,42 @@ fun RoutesScreen(routesViewModel: RoutesViewModel) {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Top,
             ) {
+                CoroutineScope(Dispatchers.IO).launch {
+                    routesViewModel.queryJourneys(
+                        "",
+                        "",
+                        0.0,
+                        0.0,
+                    )
+                }
                 TextField(
                     value = stateOriginTextField,
                     onValueChange = {
-//                        state.value.isLoading
                         searchText = it
                         stateOriginTextField = it
                         runBlocking { routesViewModel.queryLocation(it) }
-//                    viewModel
                     },
                     label = { Text("A") },
-                    modifier = Modifier.fillMaxWidth().padding(8.dp).onFocusChanged { focusState ->
-                        textFieldOriginFocused = focusState.isFocused
-//                        textFieldDestinationClicked = false
-                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp)
+                        .onFocusChanged { focusState ->
+                            textFieldOriginFocused = focusState.isFocused
+                        },
                 )
                 TextField(
                     value = stateDestinationTextField,
                     onValueChange = {
-//                        searchText = it
                         stateDestinationTextField = it
                         runBlocking { routesViewModel.queryLocation(it) }
                     },
                     label = { Text("B") },
-                    modifier = Modifier.fillMaxWidth().padding(8.dp).onFocusChanged { focusState ->
-                        textFieldDestinationFocused = focusState.isFocused
-//                        textFieldOriginClicked = false
-                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp)
+                        .onFocusChanged { focusState ->
+                            textFieldDestinationFocused = focusState.isFocused
+                        },
                 )
                 Box(
                     modifier = Modifier
@@ -99,23 +134,31 @@ fun RoutesScreen(routesViewModel: RoutesViewModel) {
                 ) {
                     Button(
                         onClick = {
-                            Log.d("dev-log", "$stateOriginTextField $stateDestinationTextField")
-//                            runBlocking { routesViewModel.queryJourneys(stateOriginTextField, "", stateDestinationTextField, 1.1, 1.1) }
+                            Log.d(
+                                "dev-log",
+                                "$stateOriginTextField $stateDestinationTextField ${stateDestinationLatitude.toDouble()} $stateOriginNameId",
+                            )
+                            val fromId = routesViewModel.searchedJourneys.value
                             CoroutineScope(Dispatchers.IO).launch {
-                                routesViewModel.queryJourneys("900023201", "900980720", "ATZE+Musiktheater", 52.54333, 13.35167)
-                                routesViewModel.queryJourneys("900023201", "900980720", "ATZE+Musiktheater", 52.54333, 13.35167)
+                                routesViewModel.queryJourneys(
+                                    stateOriginNameId,
+                                    stateDestinationNameId,
+                                    stateDestinationLatitude.toDouble(),
+                                    stateDestinationLongitude.toDouble(),
+                                )
                                 searchedJourneys = routesViewModel.searchedJourneys.value
+                                searchedLegs = routesViewModel.searchedLegs.value
                             }
                         },
-                        modifier = Modifier.padding(8.dp)
+                        modifier = Modifier
+                            .padding(8.dp)
                             .align(Alignment.CenterEnd),
 
                     ) {
                         // Icon on the left of the text
                         Icon(
                             painter = painterResource(id = R.drawable.icon_search),
-                            contentDescription = null, // Provide a proper description for accessibility
-//                        modifier = Modifier.size(24.dp) // Set the size of the icon as needed
+                            contentDescription = null,
                         )
                     }
                 }
@@ -127,11 +170,25 @@ fun RoutesScreen(routesViewModel: RoutesViewModel) {
                             modifier = Modifier.clickable {
                                 if (textFieldOriginFocused) {
                                     stateOriginTextField = result.name
-                                    runBlocking { routesViewModel.queryLocation("") }
+                                    stateOriginNameId = result.id
+                                    stateOriginLongitude = result.location.longitude
+                                    stateOriginLatitude = result.location.latitude
+                                    CoroutineScope(Dispatchers.IO).launch {
+                                        routesViewModel.queryLocation(
+                                            "",
+                                        )
+                                    }
                                 }
                                 if (textFieldDestinationFocused) {
                                     stateDestinationTextField = result.name
-                                    runBlocking { routesViewModel.queryLocation("") }
+                                    stateDestinationNameId = result.id
+                                    stateDestinationLongitude = result.location.longitude
+                                    stateDestinationLatitude = result.location.latitude
+                                    CoroutineScope(Dispatchers.IO).launch {
+                                        routesViewModel.queryLocation(
+                                            "",
+                                        )
+                                    }
                                 }
                             },
                             text = result.name,
@@ -141,18 +198,43 @@ fun RoutesScreen(routesViewModel: RoutesViewModel) {
                 }
             }
 
-            // Middle and bottom part with LazyColumn
             LazyColumn(
                 modifier = Modifier
                     .weight(2f)
-                    .fillMaxWidth(), // Adjust the weight to control the space distribution
+                    .fillMaxWidth(),
             ) {
-                items(searchedJourneys) {journey ->
-                    if (searchedJourneys.isNotEmpty()) {
-                        Text(
-                            text = journey,
-                            modifier = Modifier.padding(16.dp),
-                        )
+                itemsIndexed(searchedLegs) { index, leg ->
+                    Text(
+                        text = leg.departure ?: "",
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .clickable {
+                                expandedItemIndex = if (index == expandedItemIndex) -1 else index
+                                CoroutineScope(Dispatchers.IO).launch {
+                                    routesViewModel.queryTripById(
+                                        searchedLegs[expandedItemIndex].tripId ?: "",
+                                    )
+                                    searchedStopovers =
+                                        routesViewModel.searchedStopovers.value ?: emptyList()
+                                }
+                            },
+                    )
+                    if (index == expandedItemIndex) {
+                        Box(modifier = Modifier.heightIn(max = 200.dp)) {
+                            LazyColumn(
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+                            ) {
+                                items(searchedStopovers) { stopover ->
+                                    Log.d("dev-tag", "STOP NAME ${stopover.stop?.name} ")
+
+                                    Text(
+                                        "${stopover.stop?.name}",
+                                        modifier = Modifier.padding(8.dp),
+                                    )
+                                }
+                            }
+                        }
                     }
                 }
             }

@@ -4,7 +4,10 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.berlingo.data.network.NetworkApiImpl
+import com.example.berlingo.data.network.responses.Journeys
+import com.example.berlingo.data.network.responses.Leg
 import com.example.berlingo.data.network.responses.Stop
+import com.example.berlingo.data.network.responses.Trip
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -28,35 +31,25 @@ class RoutesViewModel @Inject constructor(
     private val _searchLocations = MutableStateFlow<List<Stop>>(emptyList())
     val searchLocations: StateFlow<List<Stop>> = _searchLocations
 
-//    private val _searchJourneys = MutableStateFlow<List<String>>(emptyList())
-//    val searchJourneys: StateFlow<List<String>> = _searchJourneys
-
     private val _selectedLocation = MutableStateFlow("")
     val selectedLocation: StateFlow<String> = _selectedLocation
 
-    private val _searchedJourneys = MutableStateFlow<List<String>>(emptyList())
-    val searchedJourneys: StateFlow<List<String>> = _searchedJourneys
+    private val _searchedJourneys = MutableStateFlow<List<Journeys>>(emptyList())
+    val searchedJourneys: StateFlow<List<Journeys>> = _searchedJourneys
+
+    private val _searchedLegs = MutableStateFlow<List<Leg>>(emptyList())
+    val searchedLegs: StateFlow<List<Leg>> = _searchedLegs
+
+    private val _searchedTrips = MutableStateFlow<List<Trip>>(emptyList())
+    val searchedTrips: StateFlow<List<Trip>> = _searchedTrips
+
+    private val _searchedStopovers = MutableStateFlow<List<Trip.Stopover>>(emptyList())
+    val searchedStopovers: StateFlow<List<Trip.Stopover>> = _searchedStopovers
+
+    private var legsMutableList: MutableList<Leg> = mutableListOf()
 
     init {
         viewModelScope.launch {
-//            val journeys = networkApiImpl.getJourneys()
-//            val locations = networkApiImpl.getLocations(false, addresses = false, query = "")
-
-//            Log.d("dev-log", "data ${journeys}")
-//            Log.d("dev-log", "message ${journeys.message}")
-//            Log.d("dev-log", "status ${journeys.status}")
-
-//            Log.d("dev-log", "data${locations}")
-//            Log.d("dev-log", "message ${locations.message}")
-//            Log.d("dev-log", "status ${locations.status}")
-
-//            _state.update { it.copy(isLoading = true) }
-//            _state.update {
-//                it.copy(
-//                    repositories = appRepository.getLocations(""),
-//                    isLoading = true,
-//                )
-//            }
         }
     }
 
@@ -67,32 +60,37 @@ class RoutesViewModel @Inject constructor(
             emptyList()
         } else {
             locations.data?.filter {
-                Log.d("dev-log", "id: ${it.id} name: ${it.name} long: ${it.location.longitude} lat: ${it.location.latitude}")
                 it.name.contains(query, ignoreCase = true)
             } ?: emptyList()
         }
     }
 
-    suspend fun queryJourneys(from: String, toId: String, toName: String, toLatitude: Double, toLongitude: Double) {
-        val journeys = networkApiImpl.getJourneys(from = from, toId = toId, toName = toName, toLatitude = toLatitude, toLongitude = toLongitude)
-        Log.d("dev-log", "journeys data: ${journeys.data?.journeys?.get(0)?.legs}")
-        Log.d("dev-log", "journeys message: ${journeys.message}")
-
-        _searchedJourneys.value = journeys.data?.journeys?.get(0)?.legs?.map {
-            "${it.origin.name} to ${it.destination.name}"
-        }!! //TODO replace !! with a safer alternative
-//        _searchJourneys.value = if (from.isEmpty()) {
-//            emptyList()
-//        } else {
-//            journeys.data?.asJsonArray?.filter {
-// //                Log.d("dev-log", "querySearch: ${it.name}")
-//
-// //                it.asString.contains(query, ignoreCase = true)
-//            } ?: emptyList()
-//        }
+    suspend fun queryJourneys(from: String, toId: String, toLatitude: Double, toLongitude: Double) {
+        val response = networkApiImpl.getJourneys(
+            from = from,
+            toId = toId,
+            toLatitude = toLatitude,
+            toLongitude = toLongitude,
+        )
+        val journeysList = response.data?.journeys
+        _searchedJourneys.value = journeysList ?: emptyList()
+        journeysList?.forEachIndexed { index, journey ->
+            journey.legs?.forEach {
+                legsMutableList.add(it)
+            }
+        }
+        Log.d("dev-log", "legs size: ${legsMutableList.size}")
+        _searchedLegs.value = legsMutableList
     }
 
-    fun selectLocation(location: String) {
-        _selectedLocation.value = location
+    suspend fun queryTrips(from: String, to: String, results: Int) {
+        val trips = networkApiImpl.getTrips(from = from, to = to, results)
+        _searchedTrips.value = trips.data?.trips ?: emptyList()
+    }
+
+    suspend fun queryTripById(tripId: String) {
+        val trip = networkApiImpl.getTripById(tripId = tripId)
+        Log.d("dev-log", "stopovers stop: ${trip.data}")
+        _searchedStopovers.value = trip.data?.trip?.stopovers ?: emptyList()
     }
 }
