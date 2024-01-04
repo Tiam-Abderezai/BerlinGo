@@ -12,6 +12,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -20,6 +21,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.berlingo.R
 import com.example.berlingo.map.MapScreen
 import com.example.berlingo.routes.RoutesScreen
+import com.example.berlingo.routes.RoutesViewModel
 import com.example.berlingo.ui.theme.BerlinGoTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -41,8 +43,7 @@ class MainActivity : ComponentActivity() {
 //                    modifier = Modifier.fillMaxSize(),
 //                    color = MaterialTheme.colorScheme.background,
 //                ) {
-//                    val viewModel = hiltViewModel<MainViewModel>()
-//                    viewModel
+
             }
         }
     }
@@ -97,8 +98,11 @@ fun BottomNavigationBar(navController: NavController) {
 
 @Composable
 fun NavigationHost(navController: NavHostController) {
+    val routesViewModel = hiltViewModel<RoutesViewModel>()
+
+//    viewModel
     NavHost(navController, startDestination = "routes") {
-        composable("routes") { RoutesScreen() }
+        composable("routes") { RoutesScreen(routesViewModel) }
         composable("map") { MapScreen() }
     }
 }
