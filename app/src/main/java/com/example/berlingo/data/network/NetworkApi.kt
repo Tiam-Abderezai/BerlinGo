@@ -13,15 +13,10 @@ import retrofit2.http.Query
 
 interface NetworkApi {
     @GET("locations")
-    suspend fun getLocations(
+    suspend fun getStops(
         @Query("poi") poi: Boolean = false,
         @Query("addresses") addresses: Boolean = false,
         @Query("query") query: String,
-    ): Response<List<Stop>>
-
-    @GET("stops/900360136?linesOfStops=true&language=en")
-    suspend fun getStops(
-        @Query("") searchQuery: String,
     ): Response<List<Stop>>
 
     @GET("trips")
@@ -61,4 +56,9 @@ interface NetworkApi {
     suspend fun getArrivals(
         @Query("") searchQuery: String,
     ): Response<List<Stop>>
+
+    //    @GET("stops/900360136?linesOfStops=true&language=en")
+//    suspend fun getStops(
+//        @Query("") searchQuery: String,
+//    ): Response<List<Stop>>
 }

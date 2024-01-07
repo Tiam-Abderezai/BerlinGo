@@ -1,6 +1,7 @@
 package com.example.berlingo.common.extensions
 
 import com.google.android.gms.maps.model.LatLng
+import java.time.OffsetDateTime
 
 fun String.replaceWhiteSpaceWithPlus(): String {
     return this.replace(" ", "+")
@@ -39,4 +40,6 @@ fun String.decodePolyline(): List<LatLng> {
     }
 
     return poly
+fun String.getDepartureTime(): String? {
+    return if (this.length >= 16 && this[10] == 'T') this.substring(11, 16) else null
 }

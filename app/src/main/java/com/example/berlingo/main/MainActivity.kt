@@ -26,6 +26,9 @@ import com.example.berlingo.map.MapsScreen
 import com.example.berlingo.map.MapsViewModel
 import com.example.berlingo.routes.RoutesScreen
 import com.example.berlingo.routes.RoutesViewModel
+import com.example.berlingo.journeys.JourneysViewModel
+import com.example.berlingo.map.MapScreen
+import com.example.berlingo.routes.JourneysScreen
 import com.example.berlingo.ui.theme.BerlinGoTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -103,13 +106,15 @@ fun BottomNavigationBar(navController: NavController) {
 
 @Composable
 fun NavigationHost(navController: NavHostController) {
-    val routesViewModel = hiltViewModel<RoutesViewModel>()
+    val journeysViewModel = hiltViewModel<JourneysViewModel>()
+    val journeysViewState = journeysViewModel.state.collectAsState()
 
     val mapsViewModel = hiltViewModel<MapsViewModel>()
     val mapsState = mapsViewModel.state.collectAsState()
 //    viewModel
+
     NavHost(navController, startDestination = "routes") {
-        composable("routes") { RoutesScreen(routesViewModel) }
+        composable("routes") { JourneysScreen(viewState = journeysViewState, onEvent = journeysViewModel::handleEvent) }
         composable("map") { MapsScreen(mapsState, mapsViewModel::handleEvent) }
     }
 }

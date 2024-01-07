@@ -3,10 +3,10 @@ package com.example.berlingo.data.network.responses
 import java.math.BigDecimal
 
 data class JourneysResponse(
-    val journeys: List<Journeys>,
+    val journeys: List<Journey>,
 )
 
-data class Journeys(
+data class Journey(
     val type: String? = "",
     val legs: List<Leg>? = emptyList(),
 )
@@ -40,12 +40,12 @@ data class Origin(
 )
 
 data class Destination(
-    val type: String,
-    val id: String,
-    val name: String,
-    val latitude: BigDecimal,
-    val longitude: BigDecimal,
-    val poi: Boolean,
+    val type: String? = "",
+    val id: String? = "",
+    val name: String? = "",
+    val latitude: BigDecimal? = BigDecimal.ZERO,
+    val longitude: BigDecimal? = BigDecimal.ZERO,
+    val poi: Boolean? = false,
 )
 
 data class Line(
