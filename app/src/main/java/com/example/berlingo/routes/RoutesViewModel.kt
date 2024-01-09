@@ -79,7 +79,7 @@ class RoutesViewModel @Inject constructor(
                 legsMutableList.add(it)
             }
         }
-        Log.d("dev-log", "legs size: ${legsMutableList.size}")
+//        Log.d("dev-log", "legs size: ${legsMutableList.size}")
         _searchedLegs.value = legsMutableList
     }
 

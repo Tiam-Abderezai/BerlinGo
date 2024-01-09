@@ -10,6 +10,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -19,7 +20,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.berlingo.R
-import com.example.berlingo.map.MapScreen
+import com.example.berlingo.map.MapsScreen
+import com.example.berlingo.map.MapsViewModel
 import com.example.berlingo.routes.RoutesScreen
 import com.example.berlingo.routes.RoutesViewModel
 import com.example.berlingo.ui.theme.BerlinGoTheme
@@ -43,7 +45,6 @@ class MainActivity : ComponentActivity() {
 //                    modifier = Modifier.fillMaxSize(),
 //                    color = MaterialTheme.colorScheme.background,
 //                ) {
-
             }
         }
     }
@@ -100,10 +101,12 @@ fun BottomNavigationBar(navController: NavController) {
 fun NavigationHost(navController: NavHostController) {
     val routesViewModel = hiltViewModel<RoutesViewModel>()
 
+    val mapsViewModel = hiltViewModel<MapsViewModel>()
+    val mapsState = mapsViewModel.state.collectAsState()
 //    viewModel
     NavHost(navController, startDestination = "routes") {
         composable("routes") { RoutesScreen(routesViewModel) }
-        composable("map") { MapScreen() }
+        composable("map") { MapsScreen(mapsState, mapsViewModel::handleEvent) }
     }
 }
 

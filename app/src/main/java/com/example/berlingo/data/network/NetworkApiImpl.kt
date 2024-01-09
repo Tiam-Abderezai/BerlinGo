@@ -21,9 +21,9 @@ class NetworkApiImpl @Inject constructor(
             if (response.isSuccessful) {
                 response.body()?.let {
                     return@let Resource.success(it)
-                } ?: Resource.error("An unknown error occured", null)
+                } ?: Resource.error("An unknown error occurred", null)
             } else {
-                Resource.error("An unknown error occured", null)
+                Resource.error("An unknown error occurred", null)
             }
         } catch (e: Exception) {
             Resource.error("Couldn't reach the server. Check your internet connection", null)
@@ -34,16 +34,16 @@ class NetworkApiImpl @Inject constructor(
     override suspend fun getJourneys(from: String, toId: String, toLatitude: Double, toLongitude: Double): Resource<JourneysResponse> {
         return try {
             val response = networkApi.getJourneys(from = from, toId = toId, toLatitude = toLatitude, toLongitude = toLongitude)
-            Log.d("dev-log", "getJourneys: ${response.raw()} ")
+//            Log.d("dev-log", "getJourneys: ${response.raw()} ")
 
             if (response.isSuccessful) {
                 Log.d("dev-log", "getJourneys: ${response.raw().body} ")
 
                 response.body()?.let {
                     return@let Resource.success(it)
-                } ?: Resource.error("An unknown error occured", null)
+                } ?: Resource.error("An unknown error occurred", null)
             } else {
-                Resource.error("An unknown error occured", null)
+                Resource.error("An unknown error occurred", null)
             }
         } catch (e: Exception) {
             Resource.error("Couldn't reach the server. Check your internet connection", null)
@@ -61,9 +61,9 @@ class NetworkApiImpl @Inject constructor(
 
                 response.body()?.let {
                     return@let Resource.success(it)
-                } ?: Resource.error("An unknown error occured", null)
+                } ?: Resource.error("An unknown error occurred", null)
             } else {
-                Resource.error("An unknown error occured", null)
+                Resource.error("An unknown error occurred", null)
             }
         } catch (e: Exception) {
             Resource.error("Couldn't reach the server. Check your internet connection", null)
@@ -81,9 +81,9 @@ class NetworkApiImpl @Inject constructor(
 
                 response.body()?.let {
                     return@let Resource.success(it)
-                } ?: Resource.error("An unknown error occured", null)
+                } ?: Resource.error("An unknown error occurred", null)
             } else {
-                Resource.error("An unknown error occured", null)
+                Resource.error("An unknown error occurred", null)
             }
         } catch (e: Exception) {
             Resource.error("Couldn't reach the server. Check your internet connection", null)
@@ -101,9 +101,9 @@ class NetworkApiImpl @Inject constructor(
 
                 response.body()?.let {
                     return@let Resource.success(it)
-                } ?: Resource.error("An unknown error occured", null)
+                } ?: Resource.error("An unknown error occurred", null)
             } else {
-                Resource.error("An unknown error occured", null)
+                Resource.error("An unknown error occurred", null)
             }
         } catch (e: Exception) {
             Resource.error("Couldn't reach the server. Check your internet connection", null)
