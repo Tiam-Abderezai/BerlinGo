@@ -1,6 +1,5 @@
 package com.example.berlingo.map
 
-import android.util.Log
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
@@ -12,6 +11,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.berlingo.common.extensions.decodePolyline
+import com.example.berlingo.common.logger.BaseLogger
+import com.example.berlingo.common.logger.FactoryLogger
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
@@ -20,6 +21,8 @@ import com.google.maps.android.compose.rememberCameraPositionState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+
+private val logger: BaseLogger = FactoryLogger.getLoggerCompose("MapsScreen()")
 
 @Composable
 fun MapsScreen(mapsState: State<MapsState>, onEvent: suspend (MapsEvent) -> Unit) {
@@ -40,7 +43,7 @@ fun MapsScreen(mapsState: State<MapsState>, onEvent: suspend (MapsEvent) -> Unit
                 )
             }
         }
-        Log.d("MapsScreen", "Direction: ${mapsState.value.routes}")
+        logger.debug("Direction: ${mapsState.value.routes}")
 
         GoogleMap(
             modifier = Modifier.fillMaxSize(),
@@ -58,9 +61,9 @@ fun MapsScreen(mapsState: State<MapsState>, onEvent: suspend (MapsEvent) -> Unit
 
             val points = mapsState.value.routes?.get(0)?.polyline?.points ?: ""
             val polyLine = points.decodePolyline()
-            Log.d("MapsScreen", "points: $points")
 
-            Log.d("MapsScreen", "polyLine: $polyLine")
+            logger.debug("points: $points")
+            logger.debug("polyLine: $polyLine")
 
             Polyline(
                 points = polyLine,
