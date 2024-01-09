@@ -4,12 +4,17 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.berlingo.common.API_KEY_GOOGLE_MAPS
+import com.example.berlingo.common.logger.BaseLogger
+import com.example.berlingo.common.logger.FactoryLogger
 import com.example.berlingo.data.network.maps.MapsNetworkApiImpl
+import com.example.berlingo.main.MainActivity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
+private val logger: BaseLogger = FactoryLogger.getLoggerKClass(MapsViewModel::class)
 
 @HiltViewModel
 class MapsViewModel @Inject constructor(
@@ -43,8 +48,8 @@ class MapsViewModel @Inject constructor(
             transitMode = transitMode,
             language = language,
         )
-        Log.d("MapsViewModel", "getDirection message:${directions.message} ")
-        Log.d("MapsViewModel", "getDirection data:${directions.data} ")
+        logger.debug("getDirection message:${directions.message}")
+        logger.debug("getDirection data:${directions.data} ")
 
         _state.value = MapsState(routes = directions.data?.routes)
     }
