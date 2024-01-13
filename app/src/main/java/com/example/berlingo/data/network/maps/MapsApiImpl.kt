@@ -3,19 +3,19 @@ package com.example.berlingo.data.network.maps
 import com.example.berlingo.common.logger.BaseLogger
 import com.example.berlingo.common.logger.FactoryLogger
 import com.example.berlingo.data.network.Resource
-import com.example.berlingo.data.network.responses.maps.DirectionsResponse
+import com.example.berlingo.data.network.maps.responses.DirectionsResponse
 import com.example.berlingo.repositories.MapsRepository
 import javax.inject.Inject
 
-private val logger: BaseLogger = FactoryLogger.getLoggerKClass(MapsNetworkApiImpl::class)
+private val logger: BaseLogger = FactoryLogger.getLoggerKClass(MapsApiImpl::class)
 
-class MapsNetworkApiImpl @Inject constructor(
-    private val mapsNetworkApi: MapsNetworkApi,
+class MapsApiImpl @Inject constructor(
+    private val mapsApi: MapsApi,
 ) : MapsRepository {
 
     override suspend fun getDirection(key: String, origin: String, destination: String, mode: String, transitMode: String, language: String): Resource<DirectionsResponse> {
         return try {
-            val response = mapsNetworkApi.getDirection(key = key, origin = origin, destination = destination, mode = mode, transitMode = transitMode, language = language)
+            val response = mapsApi.getDirection(key = key, origin = origin, destination = destination, mode = mode, transitMode = transitMode, language = language)
             logger.debug("getDirection message: ${response.raw()} ")
 
             if (response.isSuccessful) {

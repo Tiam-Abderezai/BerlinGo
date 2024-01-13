@@ -1,13 +1,11 @@
 package com.example.berlingo.map
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.berlingo.common.API_KEY_GOOGLE_MAPS
 import com.example.berlingo.common.logger.BaseLogger
 import com.example.berlingo.common.logger.FactoryLogger
-import com.example.berlingo.data.network.maps.MapsNetworkApiImpl
-import com.example.berlingo.main.MainActivity
+import com.example.berlingo.data.network.maps.MapsApiImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -18,7 +16,7 @@ private val logger: BaseLogger = FactoryLogger.getLoggerKClass(MapsViewModel::cl
 
 @HiltViewModel
 class MapsViewModel @Inject constructor(
-    private val mapsNetworkApiImpl: MapsNetworkApiImpl,
+    private val mapsApiImpl: MapsApiImpl,
 ) : ViewModel() {
     private val _state = MutableStateFlow(MapsState())
     val state = _state.asStateFlow()
@@ -40,7 +38,7 @@ class MapsViewModel @Inject constructor(
         transitMode: String,
         language: String,
     ) {
-        val directions = mapsNetworkApiImpl.getDirection(
+        val directions = mapsApiImpl.getDirection(
             key = API_KEY_GOOGLE_MAPS,
             origin = origin,
             destination = destination,

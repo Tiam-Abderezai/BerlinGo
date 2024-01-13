@@ -22,10 +22,10 @@ import androidx.navigation.compose.rememberNavController
 import com.example.berlingo.R
 import com.example.berlingo.common.logger.BaseLogger
 import com.example.berlingo.common.logger.FactoryLogger
+import com.example.berlingo.journeys.JourneysViewModel
 import com.example.berlingo.map.MapsScreen
 import com.example.berlingo.map.MapsViewModel
-import com.example.berlingo.routes.RoutesScreen
-import com.example.berlingo.routes.RoutesViewModel
+import com.example.berlingo.routes.JourneysScreen
 import com.example.berlingo.ui.theme.BerlinGoTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -45,10 +45,6 @@ class MainActivity : ComponentActivity() {
                 ) {
                     NavigationHost(navController = navController)
                 }
-//                Surface(
-//                    modifier = Modifier.fillMaxSize(),
-//                    color = MaterialTheme.colorScheme.background,
-//                ) {
             }
         }
     }
@@ -61,12 +57,12 @@ fun BottomNavigationBar(navController: NavController) {
         contentColor = Color.White,
     ) {
         val currentRoute = currentRoute(navController)
-//      Tab: Routes
+//      Tab: Journeys
         BottomNavigationItem(
-            selected = currentRoute == "routes",
+            selected = currentRoute == "journeys",
             selectedContentColor = Color.Green,
             onClick = {
-                navController.navigate("routes") {
+                navController.navigate("journeys") {
                     popUpTo(navController.graph.startDestinationId)
                     launchSingleTop = true
                 }
@@ -103,13 +99,15 @@ fun BottomNavigationBar(navController: NavController) {
 
 @Composable
 fun NavigationHost(navController: NavHostController) {
-    val routesViewModel = hiltViewModel<RoutesViewModel>()
+    val journeysViewModel = hiltViewModel<JourneysViewModel>()
+    val journeysViewState = journeysViewModel.state.collectAsState()
 
     val mapsViewModel = hiltViewModel<MapsViewModel>()
     val mapsState = mapsViewModel.state.collectAsState()
 //    viewModel
+
     NavHost(navController, startDestination = "routes") {
-        composable("routes") { RoutesScreen(routesViewModel) }
+        composable("routes") { JourneysScreen(viewState = journeysViewState, onEvent = journeysViewModel::handleEvent) }
         composable("map") { MapsScreen(mapsState, mapsViewModel::handleEvent) }
     }
 }

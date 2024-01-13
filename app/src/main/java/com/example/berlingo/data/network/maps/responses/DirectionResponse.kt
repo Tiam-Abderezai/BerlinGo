@@ -1,4 +1,4 @@
-package com.example.berlingo.data.network.responses.maps
+package com.example.berlingo.data.network.maps.responses
 
 import com.google.gson.annotations.SerializedName
 

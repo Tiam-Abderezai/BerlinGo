@@ -1,27 +1,20 @@
-package com.example.berlingo.data.network
+package com.example.berlingo.data.network.journeys
 
-import com.example.berlingo.data.network.responses.JourneysResponse
-import com.example.berlingo.data.network.responses.Stop
-import com.example.berlingo.data.network.responses.Trip
-import com.example.berlingo.data.network.responses.TripResponse
-import com.example.berlingo.data.network.responses.TripsResponse
-import com.google.gson.JsonObject
+import com.example.berlingo.data.network.journeys.responses.JourneysResponse
+import com.example.berlingo.data.network.journeys.responses.Stop
+import com.example.berlingo.data.network.journeys.responses.TripResponse
+import com.example.berlingo.data.network.journeys.responses.TripsResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-interface NetworkApi {
+interface JourneysApi {
     @GET("locations")
-    suspend fun getLocations(
+    suspend fun getStops(
         @Query("poi") poi: Boolean = false,
         @Query("addresses") addresses: Boolean = false,
         @Query("query") query: String,
-    ): Response<List<Stop>>
-
-    @GET("stops/900360136?linesOfStops=true&language=en")
-    suspend fun getStops(
-        @Query("") searchQuery: String,
     ): Response<List<Stop>>
 
     @GET("trips")
@@ -36,13 +29,15 @@ interface NetworkApi {
         @Path("tripId") tripId: String,
         @Query("stopovers") stopovers: Boolean = true,
         @Query("results") results: Int = 1,
-        ): Response<TripResponse>
+    ): Response<TripResponse>
+
     @GET("journeys")
     suspend fun getJourneys(
         @Query("from") from: String,
         @Query("to") toId: String,
         @Query("to.latitude") toLatitude: Double,
         @Query("to.longitude") toLongitude: Double,
+        @Query("results") results: Int = 10,
     ): Response<JourneysResponse>
 
     @GET("stops/{stopId}/departures")

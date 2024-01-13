@@ -1,8 +1,7 @@
 package com.example.berlingo.di
 
-import com.example.berlingo.common.API_KEY_GOOGLE_MAPS
-import com.example.berlingo.data.network.NetworkApi
-import com.example.berlingo.data.network.maps.MapsNetworkApi
+import com.example.berlingo.data.network.journeys.JourneysApi
+import com.example.berlingo.data.network.maps.MapsApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,23 +24,23 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideNetwork(): NetworkApi {
+    fun provideNetwork(): JourneysApi {
         return Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
             .baseUrl("https://v6.bvg.transport.rest/")
             .client(okHttpClient)
             .build()
-            .create(NetworkApi::class.java)
+            .create(JourneysApi::class.java)
     }
 
     @Singleton
     @Provides
-    fun provideMapsNetwork(): MapsNetworkApi {
+    fun provideMapsNetwork(): MapsApi {
         return Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
             .baseUrl("https://maps.googleapis.com/maps/api/directions/")
             .client(okHttpClient)
             .build()
-            .create(MapsNetworkApi::class.java)
+            .create(MapsApi::class.java)
     }
 }
