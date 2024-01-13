@@ -1,21 +1,17 @@
 package com.example.berlingo.journeys
 
-import com.example.berlingo.data.network.responses.Stop
-
-sealed class JourneysViewEvent {
+sealed class JourneysEvent {
     data class JourneyQueryEvent(
         val from: String,
         val to: String,
         val toLatitude: Double,
         val toLongitude: Double,
-    ) : JourneysViewEvent()
-
+    ) : JourneysEvent()
     data class TripQueryEvent(
         val tripId: String,
-    ) : JourneysViewEvent()
+    ) : JourneysEvent()
 
     data class StopsQueryEvent(
         val name: String,
-    ) : JourneysViewEvent()
-
+    ) : JourneysEvent()
 }

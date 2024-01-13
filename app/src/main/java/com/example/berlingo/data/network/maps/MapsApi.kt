@@ -1,11 +1,11 @@
 package com.example.berlingo.data.network.maps
 
-import com.example.berlingo.data.network.responses.maps.DirectionsResponse
+import com.example.berlingo.data.network.maps.responses.DirectionsResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-interface MapsNetworkApi {
+interface MapsApi {
     @GET("json")
     suspend fun getDirection(
         @Query("key") key: String,

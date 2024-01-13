@@ -1,12 +1,12 @@
 package com.example.berlingo.journeys
 
-import com.example.berlingo.data.network.responses.Journey
-import com.example.berlingo.data.network.responses.Leg
-import com.example.berlingo.data.network.responses.Location
-import com.example.berlingo.data.network.responses.Stop
-import com.example.berlingo.data.network.responses.Trip
+import com.example.berlingo.data.network.journeys.responses.Journey
+import com.example.berlingo.data.network.journeys.responses.Leg
+import com.example.berlingo.data.network.journeys.responses.Location
+import com.example.berlingo.data.network.journeys.responses.Stop
+import com.example.berlingo.data.network.journeys.responses.Trip
 
-data class JourneysViewState(
+data class JourneysState(
     val isInitial: Boolean? = false,
     val isLoading: Boolean? = false,
     val isError: Boolean? = false,

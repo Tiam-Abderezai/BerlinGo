@@ -1,4 +1,4 @@
-package com.example.berlingo.data.network.responses
+package com.example.berlingo.data.network.journeys.responses
 
 import java.math.BigDecimal
 
@@ -20,7 +20,7 @@ data class Leg(
     val arrival: String? = "",
     val reachable: Boolean? = false,
     val tripId: String? = "",
-    val line: Line? = null,
+    val line: Line? = Line(),
     val direction: String? = "",
     val currentLocation: CurrentLocation? = null,
     val arrivalPlatform: String? = "",
@@ -49,21 +49,21 @@ data class Destination(
 )
 
 data class Line(
-    val type: String,
-    val id: String,
-    val fahrtNr: Int,
-    val name: String,
-    val public: Boolean,
-    val adminCode: String,
-    val mode: String,
-    val product: String,
-    val operator: Operator,
+    val type: String? = "",
+    val id: String? = "",
+    val fahrtNr: Int? = 0,
+    val name: String? = "",
+    val public: Boolean? = false,
+    val adminCode: String? = "",
+    val mode: String? = "",
+    val product: String? = "",
+    val operator: Operator? = Operator(),
 )
 
 data class Operator(
-    val type: String,
-    val id: String,
-    val name: String,
+    val type: String? = "",
+    val id: String? = "",
+    val name: String? = "",
 )
 
 data class CurrentLocation(
@@ -75,4 +75,9 @@ data class CurrentLocation(
 data class Products(
     val suburban: Boolean,
     val subway: Boolean,
+    val tram: Boolean,
+    val bus: Boolean,
+    val ferry: Boolean,
+    val express: Boolean,
+    val regional: Boolean,
 )

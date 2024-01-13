@@ -2,7 +2,7 @@
 //import android.util.Log
 //import androidx.lifecycle.ViewModel
 //import androidx.lifecycle.viewModelScope
-//import com.example.berlingo.data.network.NetworkApiImpl
+//import com.example.berlingo.data.network.journeys.NetworkApiImpl
 //import com.example.berlingo.repositories.AppRepository
 //import dagger.hilt.android.lifecycle.HiltViewModel
 //import kotlinx.coroutines.launch

@@ -1,4 +1,4 @@
-package com.example.berlingo.data.network.responses
+package com.example.berlingo.data.network.journeys.responses
 
 data class TripsResponse(
     val trips: List<Trip>,

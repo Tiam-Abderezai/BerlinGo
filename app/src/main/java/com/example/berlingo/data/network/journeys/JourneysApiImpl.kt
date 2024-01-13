@@ -1,21 +1,26 @@
-package com.example.berlingo.data.network
+package com.example.berlingo.data.network.journeys
 
-import android.util.Log
-import com.example.berlingo.data.network.responses.JourneysResponse
-import com.example.berlingo.data.network.responses.Stop
-import com.example.berlingo.data.network.responses.TripResponse
-import com.example.berlingo.data.network.responses.TripsResponse
-import com.example.berlingo.repositories.AppRepository
+import com.example.berlingo.common.logger.BaseLogger
+import com.example.berlingo.common.logger.FactoryLogger
+import com.example.berlingo.data.network.Resource
+import com.example.berlingo.data.network.journeys.responses.JourneysResponse
+import com.example.berlingo.data.network.journeys.responses.Stop
+import com.example.berlingo.data.network.journeys.responses.TripResponse
+import com.example.berlingo.data.network.journeys.responses.TripsResponse
+import com.example.berlingo.repositories.JourneysRepository
 import javax.inject.Inject
 
-class NetworkApiImpl @Inject constructor(
-    private val networkApi: NetworkApi,
-) : AppRepository {
+private val logger: BaseLogger = FactoryLogger.getLoggerKClass(JourneysApiImpl::class)
+
+class JourneysApiImpl @Inject constructor(
+    private val journeysApi: JourneysApi,
+) : JourneysRepository {
 
     override suspend fun getStops(poi: Boolean, addresses: Boolean, query: String): Resource<List<Stop>> {
         return try {
-            val response = networkApi.getStops(poi = poi, addresses = addresses, query = query)
-            Log.d("dev-log", "getLocations: ${response.raw()} ")
+            val response = journeysApi.getStops(poi = poi, addresses = addresses, query = query)
+            logger.debug("getStops: ${response.raw()} ")
+
             if (response.isSuccessful) {
                 response.body()?.let {
                     return@let Resource.success(it)
@@ -31,11 +36,11 @@ class NetworkApiImpl @Inject constructor(
 
     override suspend fun getJourneys(from: String, toId: String, toLatitude: Double, toLongitude: Double): Resource<JourneysResponse> {
         return try {
-            val response = networkApi.getJourneys(from = from, toId = toId, toLatitude = toLatitude, toLongitude = toLongitude)
-//            Log.d("dev-log", "getJourneys: ${response.raw()} ")
+            val response = journeysApi.getJourneys(from = from, toId = toId, toLatitude = toLatitude, toLongitude = toLongitude)
+            logger.debug("getJourneys: ${response.raw()}")
 
             if (response.isSuccessful) {
-                Log.d("dev-log", "getJourneys: ${response.raw().body} ")
+                logger.debug("getJourneys: ${response.raw().body} ")
 
                 response.body()?.let {
                     return@let Resource.success(it)
@@ -51,12 +56,11 @@ class NetworkApiImpl @Inject constructor(
 
     override suspend fun getTrips(from: String, to: String, results: Int): Resource<TripsResponse> {
         return try {
-            val response = networkApi.getTrips(from = from, to = to, results = 10)
-            Log.d("dev-log", "getTrips: ${response.raw()} ")
+            val response = journeysApi.getTrips(from = from, to = to, results = 10)
+            logger.debug("getTrips: ${response.raw()} ")
 
             if (response.isSuccessful) {
-                Log.d("dev-log", "getTrips: ${response.raw().body} ")
-
+                logger.debug("getTrips: ${response.raw().body} ")
                 response.body()?.let {
                     return@let Resource.success(it)
                 } ?: Resource.error("An unknown error occurred", null)
@@ -71,11 +75,11 @@ class NetworkApiImpl @Inject constructor(
 
     override suspend fun getTripById(tripId: String): Resource<TripResponse> {
         return try {
-            val response = networkApi.getTripById(tripId = tripId)
-            Log.d("dev-log", "getTrips: ${response.raw()} ")
+            val response = journeysApi.getTripById(tripId = tripId)
+            logger.debug("getTripById: ${response.raw()} ")
 
             if (response.isSuccessful) {
-                Log.d("dev-log", "getTrips: ${response.raw().body} ")
+                logger.debug("getTripById: ${response.raw().body} ")
 
                 response.body()?.let {
                     return@let Resource.success(it)
@@ -91,11 +95,11 @@ class NetworkApiImpl @Inject constructor(
 
     override suspend fun getStopsByDeparture(stopId: String, direction: String, duration: Int): Resource<Stop> {
         return try {
-            val response = networkApi.getStopsByDeparture(stopId = stopId, direction = direction, duration = duration)
-            Log.d("dev-log", "getTrips: ${response.raw()} ")
+            val response = journeysApi.getStopsByDeparture(stopId = stopId, direction = direction, duration = duration)
+            logger.debug("getStopsByDeparture: ${response.raw()} ")
 
             if (response.isSuccessful) {
-                Log.d("dev-log", "getTrips: ${response.raw().body} ")
+                logger.debug("getTrips: ${response.raw().body} ")
 
                 response.body()?.let {
                     return@let Resource.success(it)

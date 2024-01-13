@@ -1,39 +1,44 @@
 package com.example.berlingo.journeys
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
-import com.example.berlingo.data.network.NetworkApiImpl
-import com.example.berlingo.data.network.responses.Leg
-import com.example.berlingo.data.network.responses.Trip
+import com.example.berlingo.common.logger.BaseLogger
+import com.example.berlingo.common.logger.FactoryLogger
+import com.example.berlingo.data.network.journeys.JourneysApiImpl
+import com.example.berlingo.data.network.journeys.responses.Leg
+import com.example.berlingo.data.network.journeys.responses.Trip
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
+private val logger: BaseLogger = FactoryLogger.getLoggerKClass(JourneysViewModel::class)
 @HiltViewModel
 class JourneysViewModel @Inject constructor(
-    private val networkApiImpl: NetworkApiImpl,
+    private val journeysApiImpl: JourneysApiImpl,
 ) : ViewModel() {
-    private val _state = MutableStateFlow(JourneysViewState(isInitial = true))
-    val state: StateFlow<JourneysViewState> = _state.asStateFlow()
+    private val _state = MutableStateFlow(JourneysState(isInitial = true))
+    val state: StateFlow<JourneysState> = _state.asStateFlow()
 
-    suspend fun handleEvent(event: JourneysViewEvent) {
+    suspend fun handleEvent(event: JourneysEvent) {
         when (event) {
-            is JourneysViewEvent.StopsQueryEvent -> {
+            is JourneysEvent.StopsQueryEvent -> {
                 queryStops(event.name)
             }
-            is JourneysViewEvent.JourneyQueryEvent -> {
+//            is JourneysEvent.LegsGetEvent -> {
+//                getLegs(event.journey)
+//            }
+            is JourneysEvent.JourneyQueryEvent -> {
                 queryJourneys(event.from, event.to, event.toLatitude, event.toLongitude)
             }
-            is JourneysViewEvent.TripQueryEvent -> {
+            is JourneysEvent.TripQueryEvent -> {
                 queryTripById(event.tripId)
             }
         }
     }
 
     private suspend fun queryStops(query: String) {
-        val stops = networkApiImpl.getStops(false, addresses = false, query = query).data
+        val stops = journeysApiImpl.getStops(false, addresses = false, query = query).data
         if (query.isEmpty()) {
             emptyList()
         } else {
@@ -41,7 +46,7 @@ class JourneysViewModel @Inject constructor(
                 stop.name?.contains(query, ignoreCase = true) ?: false
             } ?: emptyList()
         }
-        _state.value = JourneysViewState(stops = stops)
+        _state.value = JourneysState(stops = stops)
     }
 
     private suspend fun queryJourneys(
@@ -50,7 +55,7 @@ class JourneysViewModel @Inject constructor(
         toLatitude: Double,
         toLongitude: Double,
     ) {
-        val response = networkApiImpl.getJourneys(
+        val response = journeysApiImpl.getJourneys(
             from = from,
             toId = toId,
             toLatitude = toLatitude,
@@ -61,17 +66,21 @@ class JourneysViewModel @Inject constructor(
             legs = journey.legs?.associateWith { it.tripId ?: "" } ?: emptyMap()
             journey.legs ?: emptyList()
         } ?: emptyMap()
-        _state.value = JourneysViewState(journeys = journeys, legs = legs)
+        logger.debug("response: ${response.data?.journeys}")
+        logger.debug("journeys: $journeys")
+        logger.debug("legs: $legs")
+
+        _state.value = JourneysState(journeys = journeys)
     }
 
     suspend fun queryTrips(from: String, to: String, results: Int) {
-        val trips = networkApiImpl.getTrips(from = from, to = to, results)
+        val trips = journeysApiImpl.getTrips(from = from, to = to, results)
 //        _searchedTrips.value = trips.data?.trips ?: emptyList()
     }
 
     private suspend fun queryTripById(tripId: String) {
-        val trip = networkApiImpl.getTripById(tripId = tripId).data?.trip
-        Log.d("dev-log", "stopovers stop: $trip")
+        val trip = journeysApiImpl.getTripById(tripId = tripId).data?.trip
+        logger.debug("stopovers stop: $trip")
 
         _state.value.trip = trip ?: Trip()
     }

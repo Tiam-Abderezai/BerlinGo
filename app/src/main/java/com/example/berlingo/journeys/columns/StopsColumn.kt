@@ -2,7 +2,6 @@ package com.example.berlingo.journeys.columns
 
 import android.annotation.SuppressLint
 import android.content.res.Configuration
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -30,24 +29,28 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.berlingo.R
-import com.example.berlingo.data.network.responses.Destination
-import com.example.berlingo.data.network.responses.Journey
-import com.example.berlingo.data.network.responses.Leg
-import com.example.berlingo.data.network.responses.Origin
-import com.example.berlingo.data.network.responses.Stop
-import com.example.berlingo.data.network.responses.Trip
-import com.example.berlingo.journeys.JourneysViewEvent
-import com.example.berlingo.journeys.JourneysViewState
+import com.example.berlingo.common.logger.BaseLogger
+import com.example.berlingo.common.logger.FactoryLogger
+import com.example.berlingo.data.network.journeys.responses.Destination
+import com.example.berlingo.data.network.journeys.responses.Journey
+import com.example.berlingo.data.network.journeys.responses.Leg
+import com.example.berlingo.data.network.journeys.responses.Origin
+import com.example.berlingo.data.network.journeys.responses.Stop
+import com.example.berlingo.data.network.journeys.responses.Trip
+import com.example.berlingo.journeys.JourneysEvent
+import com.example.berlingo.journeys.JourneysState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+
+private val logger: BaseLogger = FactoryLogger.getLoggerCompose("StopsColumn()")
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun StopsQuerySection(
-    viewState: State<JourneysViewState>,
-    onEvent: suspend (JourneysViewEvent) -> Unit,
+    viewState: State<JourneysState>,
+    onEvent: suspend (JourneysEvent) -> Unit,
 ) {
     var originLocation by remember { mutableStateOf(Stop().location) }
     var destinationLocation by remember { mutableStateOf(Stop().location) }
@@ -79,11 +82,10 @@ fun StopsQuerySection(
         TextField(
             value = originStopName,
             onValueChange = { query ->
-                Log.d("dev-log", "query origin: $query")
                 originStopName = query
                 CoroutineScope(Dispatchers.IO).launch {
                     onEvent.invoke(
-                        JourneysViewEvent.StopsQueryEvent(
+                        JourneysEvent.StopsQueryEvent(
                             query,
                         ),
                     )
@@ -103,7 +105,7 @@ fun StopsQuerySection(
                 destinStopName = query
                 CoroutineScope(Dispatchers.IO).launch {
                     onEvent.invoke(
-                        JourneysViewEvent.StopsQueryEvent(query),
+                        JourneysEvent.StopsQueryEvent(query),
                     )
                 }
             },
@@ -123,27 +125,28 @@ fun StopsQuerySection(
             Button(
                 onClick = {
                     CoroutineScope(Dispatchers.IO).launch {
-                        onEvent.invoke(
-                            JourneysViewEvent.JourneyQueryEvent(
-                                from = originLocationId.toString(),
-                                to = originLocationId.toString(),
-                                toLatitude = destinLocationLat.toDouble(),
-                                toLongitude = destinLocationLong.toDouble(),
-                            ),
-                        )
-                        // ------------------------------ //
-                        // Hardcoded Values for Debugging //
+                        logger.debug("originLocationId: $originLocationId")
+                        logger.debug("destinLocationId: $destinLocationId")
+                        logger.debug("destinLocationLat: $originLocationId")
+                        logger.debug("originLocationId: $destinLocationLong")
 //                        onEvent.invoke(
-//                            JourneysViewEvent.JourneyQueryEvent(
-//                                "900064301",
-//                                "900003200",
-//                                52.525607,
-//                                13.369072,
+//                            JourneysEvent.JourneyQueryEvent(
+//                                from = originLocationId.toString(),
+//                                to = destinLocationId.toString(),
+//                                toLatitude = destinLocationLat.toDouble(),
+//                                toLongitude = destinLocationLong.toDouble(),
 //                            ),
 //                        )
-//                        searchedJourneys = viewState.value.journeys
                         // ------------------------------ //
-                        // ------------------------------ //
+                        // Hardcoded Values for Debugging //
+                        onEvent.invoke(
+                            JourneysEvent.JourneyQueryEvent(
+                                "900064301",
+                                "900003200",
+                                52.525607,
+                                13.369072,
+                            ),
+                        )
                     }
                 },
                 modifier = Modifier
@@ -183,7 +186,7 @@ fun StopsQuerySection(
                         // focusing on either A or B TextField
                         CoroutineScope(Dispatchers.IO).launch {
                             onEvent.invoke(
-                                JourneysViewEvent.StopsQueryEvent(
+                                JourneysEvent.StopsQueryEvent(
                                     "",
                                 ),
                             )
@@ -200,7 +203,7 @@ fun StopsQuerySection(
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Composable
 fun LegsColumnPreview() {
-    val viewState = remember { mutableStateOf(JourneysViewState()) }
+    val viewState = remember { mutableStateOf(JourneysState()) }
 
     val leg1 = Leg(destination = Destination(name = "Hauptbahnhof"), departure = "11:11")
     val leg2 =
