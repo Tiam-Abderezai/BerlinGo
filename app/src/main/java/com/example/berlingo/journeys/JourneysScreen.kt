@@ -59,10 +59,8 @@ fun JourneysScreen(
 fun JourneysScreenPreview() {
     val viewState = remember { mutableStateOf(JourneysState()) }
     val leg1 = Leg(destination = Destination(name = "Hauptbahnhof"), departure = "11:11")
-    val leg2 =
-        Leg(Origin(name = "Lichterfelde"), Destination(name = "Hauptbahnhof"), departure = "11:11")
-    val leg3 =
-        Leg(Origin(name = "Lichterfelde"), Destination(name = "Hauptbahnhof"), departure = "11:11")
+    val leg2 = Leg(Origin(name = "Lichterfelde"), Destination(name = "Hauptbahnhof"), departure = "11:11")
+    val leg3 = Leg(Origin(name = "Lichterfelde"), Destination(name = "Hauptbahnhof"), departure = "11:11")
     val legs = listOf(leg1, leg2, leg3)
 
     val journey1 = Journey(legs = legs)

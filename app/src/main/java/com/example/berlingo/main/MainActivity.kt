@@ -100,15 +100,15 @@ fun BottomNavigationBar(navController: NavController) {
 @Composable
 fun NavigationHost(navController: NavHostController) {
     val journeysViewModel = hiltViewModel<JourneysViewModel>()
-    val journeysViewState = journeysViewModel.state.collectAsState()
+    val journeysState = journeysViewModel.state.collectAsState()
 
     val mapsViewModel = hiltViewModel<MapsViewModel>()
     val mapsState = mapsViewModel.state.collectAsState()
 //    viewModel
 
-    NavHost(navController, startDestination = "routes") {
-        composable("routes") { JourneysScreen(viewState = journeysViewState, onEvent = journeysViewModel::handleEvent) }
-        composable("map") { MapsScreen(mapsState, mapsViewModel::handleEvent) }
+    NavHost(navController, startDestination = "journeys") {
+        composable("journeys") { JourneysScreen(viewState = journeysState, onEvent = journeysViewModel::handleEvent) }
+        composable("map") { MapsScreen(mapsState = mapsState, journeysState = journeysState, onMapsEvent = mapsViewModel::handleEvent, onJourneysEvent = journeysViewModel::handleEvent) }
     }
 }
 

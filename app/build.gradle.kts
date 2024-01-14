@@ -24,7 +24,7 @@ android {
         }
         // API KEYS
         buildConfigField("String", "API_KEY_GOOGLE_MAPS", "\"${properties["API_KEY_GOOGLE_MAPS"]}\"")
-        manifestPlaceholders["API_KEY_GOOGLE_MAPS"] = "\"${properties["API_KEY_GOOGLE_MAPS"]}\""
+        manifestPlaceholders["API_KEY_GOOGLE_MAPS"] = "${properties["API_KEY_GOOGLE_MAPS"]}"
     }
 
     buildTypes {
