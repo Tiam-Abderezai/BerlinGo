@@ -17,6 +17,7 @@ data class JourneysState(
     val destinationStopFocused: Boolean? = false,
     val stops: List<Stop>? = emptyList(),
     val location: Location? = null,
+    val journey: Journey? = null,
     var journeys: Map<Journey, List<Leg>>? = emptyMap(),
     var legs: Map<Leg, String>? = emptyMap(),
     var trip: Trip? = Trip(),

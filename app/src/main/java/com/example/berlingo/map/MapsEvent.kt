@@ -1,5 +1,7 @@
 package com.example.berlingo.map
 
+import com.example.berlingo.data.network.journeys.responses.Journey
+
 sealed class MapsEvent {
     data class DirectionsGet(
         val origin: String,
@@ -7,5 +9,9 @@ sealed class MapsEvent {
         val mode: String,
         val transitMode: String,
         val language: String,
+    ) : MapsEvent()
+
+    data class DirectionsJourneyGet(
+        val journey: Journey,
     ) : MapsEvent()
 }
