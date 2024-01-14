@@ -8,11 +8,11 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
@@ -41,9 +41,6 @@ import com.example.berlingo.data.network.journeys.responses.Origin
 import com.example.berlingo.data.network.journeys.responses.Trip
 import com.example.berlingo.journeys.JourneysEvent
 import com.example.berlingo.journeys.JourneysState
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 private val logger: BaseLogger = FactoryLogger.getLoggerCompose("JourneysColumn()")
 
@@ -52,7 +49,6 @@ fun JourneysColumn(
     viewState: State<JourneysState>,
     onEvent: suspend (JourneysEvent) -> Unit,
 ) {
-    var expandedItemIndex by remember { mutableStateOf(-1) }
     val journeys = viewState.value.journeys
     Box(modifier = Modifier.fillMaxHeight()) {
         LazyColumn(
@@ -67,25 +63,17 @@ fun JourneysColumn(
                 logger.debug("Journey: ${journeys?.size}")
                 logger.debug("Legs: ${journey.legs}")
                 logger.debug("TripIds: ${journey.legs?.get(0)?.tripId}")
-
-                Text(
-                    text = "Journey ${journey.legs?.get(0)?.line?.name} ${journey.legs?.get(0)?.departure?.getDepartureTime()}",
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .clickable {
-                            expandedItemIndex =
-                                if (indexJourney == expandedItemIndex) -1 else indexJourney
-                            CoroutineScope(Dispatchers.IO).launch {
-                                logger.debug("test click ${viewState.value.legs?.entries}")
-//                            onEvent.invoke(
-//                                JourneysEvent.LegsGetEvent(journey),
-//                            )
-                            }
-                        },
+                Divider(
+                    modifier = Modifier.padding(vertical = 8.dp),
+                    color = Color.Black,
+                    thickness = 0.5.dp,
                 )
-
-                logger.debug("indexJourney == expandedJourneyItemIndex1 ${indexJourney == expandedItemIndex}")
-                DrawLegsLineWithIcons(legs)
+                Text(
+                    modifier = Modifier
+                        .padding(16.dp),
+                    text = "${journey.legs?.get(0)?.departure?.getDepartureTime()}",
+                )
+                DrawLegsLineWithIcons(legs, viewState, onEvent, indexJourney)
             }
         }
     }
@@ -94,9 +82,16 @@ fun JourneysColumn(
 @Composable
 fun DrawLegsLineWithIcons(
     legs: List<Leg>?,
+    viewState: State<JourneysState>,
+    onEvent: suspend (JourneysEvent) -> Unit,
+    indexJourney: Int,
 ) {
+    var expandedItemIndex by remember { mutableStateOf(-1) }
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth()
+            .clickable {
+                expandedItemIndex = if (indexJourney == expandedItemIndex) -1 else indexJourney
+            },
         verticalAlignment = Alignment.CenterVertically,
     ) {
         legs?.forEach { leg ->
@@ -120,6 +115,13 @@ fun DrawLegsLineWithIcons(
                 )
             }
         }
+    }
+    if (indexJourney == expandedItemIndex) {
+        LegsColumn(
+            viewState = viewState,
+            onEvent = onEvent,
+            legs = legs,
+        )
     }
 }
 
@@ -170,6 +172,6 @@ fun JourneysColumnPreview() {
     LegsColumn(
         viewState = viewState,
         onEvent = {},
-        journey = journey1,
+        legs = legs,
     )
 }
