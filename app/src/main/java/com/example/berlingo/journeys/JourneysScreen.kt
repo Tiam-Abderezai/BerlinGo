@@ -84,7 +84,7 @@ fun JourneysScreenPreview() {
     LegsColumn(
         viewState = viewState,
         onEvent = {},
-        journey = journey1,
+        legs = legs,
     )
     StopoversColumn(
         viewState = viewState,

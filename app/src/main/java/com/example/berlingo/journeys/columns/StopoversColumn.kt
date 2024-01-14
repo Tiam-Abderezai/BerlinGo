@@ -9,7 +9,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.example.berlingo.common.extensions.getDepartureTime
 import com.example.berlingo.common.logger.BaseLogger
 import com.example.berlingo.common.logger.FactoryLogger
 import com.example.berlingo.journeys.JourneysEvent
@@ -28,19 +30,17 @@ fun StopoversColumn(
     Box(modifier = Modifier.heightIn(max = 200.dp)) {
         LazyColumn(
             modifier = Modifier
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .padding(start = 32.dp),
         ) {
             items(trip?.stopovers?.toList() ?: emptyList()) { stopovers ->
                 logger.debug("trip.stopovers === $stopovers}")
                 Text(
-                    "Stopovers: ${stopovers.stop?.name}",
+                    "${stopovers.departure?.getDepartureTime()} - ${stopovers.stop?.name}",
                     modifier = Modifier
-                        .padding(16.dp)
-                        .clickable {
-                            logger.debug("trip.stopovers CLICKED}")
-
-//                                                        expandedLegItemIndex = if (index == expandedLegItemIndex) -1 else index
-                        },
+                        .padding(4.dp)
+                        .clickable { logger.debug("trip.stopovers CLICKED}") },
+                    fontWeight = FontWeight.Light,
                 )
             }
         }

@@ -1,11 +1,13 @@
 import android.content.res.Configuration
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -35,6 +37,9 @@ import com.example.berlingo.data.network.journeys.responses.Origin
 import com.example.berlingo.data.network.journeys.responses.Trip
 import com.example.berlingo.journeys.JourneysEvent
 import com.example.berlingo.journeys.JourneysState
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 private val logger: BaseLogger = FactoryLogger.getLoggerCompose("LegsColumn()")
 
@@ -42,41 +47,16 @@ private val logger: BaseLogger = FactoryLogger.getLoggerCompose("LegsColumn()")
 fun LegsColumn(
     viewState: State<JourneysState>,
     onEvent: suspend (JourneysEvent) -> Unit,
-    journey: Journey,
+    legs: List<Leg>?,
 ) {
-    var expandedItemIndex by remember { mutableStateOf(-1) }
-//    val journeys = viewState.value.journeys
-    val legs = journey.legs?.toList()
-//    var searchedTrips1 = searchedTrips
     Box(modifier = Modifier.heightIn(max = 200.dp)) {
         LazyColumn(
             modifier = Modifier
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .padding(start = 32.dp),
         ) {
             itemsIndexed(legs ?: emptyList()) { indexLeg, leg ->
-//                val origin = journey.key.legs?.get(0)?.origin
-                val line = journey.legs?.get(0)?.line
-
-//                logger.debug("legs : ${journeys?.values}")
-
-//                Text(
-//                    "Leg ${leg.origin?.name}",
-//                    modifier = Modifier
-//                        .padding(16.dp)
-//                        .clickable {
-//                            expandedItemIndex =
-//                                if (indexLeg == expandedItemIndex) -1 else indexLeg
-//                            CoroutineScope(Dispatchers.IO).launch {
-//                                onEvent.invoke(
-//                                    JourneysEvent.TripQueryEvent(
-//                                        leg.tripId ?: "",
-// //                                    tripIds?.get(expandedItemIndex) ?: "",
-//                                    ),
-//                                )
-// //                                searchedTrips1 = viewState.searchedTrips.value
-//                            }
-//                        },
-//                )
+                val line = legs?.get(indexLeg)?.line
                 val lineProductIcon = line?.product?.getLineProductIcon() ?: 0
                 val lineProductColor = line?.product?.getLineProductColor() ?: Color.Transparent
                 val lineNameIcon = line?.name?.getLineNameIcon() ?: 0
@@ -85,81 +65,75 @@ fun LegsColumn(
                 logger.debug("line name: ${line?.name}")
                 logger.debug("lineProductIcon: $lineProductIcon")
                 logger.debug("lineNameIcon: $lineNameIcon")
-//                DrawLegsLineWithIcons(lineProductColor, lineProductIcon, lineNameIcon)
-                DrawLineProductImage(lineProductIcon, lineProductColor, lineNameIcon)
-
-                //                if (lineProductIcon != 0 && lineNameIcon != 0) {
-//                    Image(
-//                        modifier = Modifier.size(32.dp),
-//                        painter = painterResource(id = lineProductIcon),
-//                        contentDescription = null,
-//                    )
-//                    Image(
-//                        modifier = Modifier.size(32.dp),
-//                        painter = painterResource(id = lineNameIcon),
-//                        contentDescription = null,
-//                    )
-//                }
-//                if (indexLeg == expandedItemIndex) {
-//                    StopoversColumn(
-//                        viewState = viewState,
-//                        onEvent = onEvent,
-//                    )
-//                }
+                val tripId = leg.tripId ?: ""
+                DrawLineProductImage(leg, viewState, onEvent, indexLeg)
             }
         }
     }
 }
 
-// @Composable
-// fun DrawLegsLineWithIcons(lineProductColor: Color, lineProductIcon: Int, lineNameIcon: Int) {
-//    Row(
-//        modifier = Modifier.fillMaxWidth(),
-//        verticalAlignment = Alignment.CenterVertically,
-//    ) {
-// //        for (l in 1..leg.line) {
-//
-//    }
-// //    }
-// }
-
 @Composable
-private fun DrawLineProductImage(lineProductIcon: Int, lineProductColor: Color, lineNameIcon: Int) {
-    // 0 means ignore don't display Icon if no product is found
-    if (lineProductIcon != 0 && lineNameIcon != 0) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
+private fun DrawLineProductImage(
+    leg: Leg,
+    viewState: State<JourneysState>,
+    onEvent: suspend (JourneysEvent) -> Unit,
+    indexLeg: Int,
+) {
+    var expandedItemIndex by remember { mutableStateOf(-1) }
+    Row(
+        modifier = Modifier.fillMaxWidth()
+            .clickable {
+                expandedItemIndex = if (indexLeg == expandedItemIndex) -1 else indexLeg
+                CoroutineScope(Dispatchers.IO).launch {
+                    onEvent.invoke(
+                        JourneysEvent.TripQueryEvent(
+                            leg.tripId ?: "",
+                        ),
+                    )
+                }
+            },
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        val lineProductIcon = leg.line?.product?.getLineProductIcon() ?: 0
+        val lineProductColor = leg.line?.product?.getLineProductColor() ?: Color.Transparent
+        val lineNameIcon = leg.line?.name?.getLineNameIcon() ?: 0
+        DrawLineProductIcons(lineProductIcon, lineNameIcon)
+        Canvas(
+            modifier = Modifier
+                .weight(1f)
+                .height(1.dp),
         ) {
-            DrawLineProductIcons(lineProductIcon, lineNameIcon)
-            Canvas(
-                modifier = Modifier
-                    .weight(1f)
-                    .height(1.dp),
-            ) {
-                drawLine(
-                    color = lineProductColor,
-                    start = Offset(0f, center.y),
-                    end = Offset(size.width, center.y),
-                    strokeWidth = Stroke.DefaultMiter,
-                )
-            }
+            drawLine(
+                color = lineProductColor,
+                start = Offset(0f, center.y),
+                end = Offset(size.width, center.y),
+                strokeWidth = Stroke.DefaultMiter,
+            )
         }
+    }
+    if (indexLeg == expandedItemIndex) {
+        StopoversColumn(
+            viewState = viewState,
+            onEvent = onEvent,
+        )
     }
 }
 
 @Composable
 fun DrawLineProductIcons(lineProductIcon: Int, lineNameIcon: Int) {
-    Image(
-        modifier = Modifier.size(32.dp),
-        painter = painterResource(id = lineProductIcon),
-        contentDescription = null,
-    )
-    Image(
-        modifier = Modifier.size(32.dp),
-        painter = painterResource(id = lineNameIcon),
-        contentDescription = null,
-    )
+    // 0 means ignore don't display Icon if no product is found
+    if (lineProductIcon != 0 && lineNameIcon != 0) {
+        Image(
+            modifier = Modifier.size(32.dp),
+            painter = painterResource(id = lineProductIcon),
+            contentDescription = null,
+        )
+        Image(
+            modifier = Modifier.size(32.dp),
+            painter = painterResource(id = lineNameIcon),
+            contentDescription = null,
+        )
+    }
 }
 
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
@@ -189,6 +163,6 @@ fun LegsColumnPreview() {
     LegsColumn(
         viewState = viewState,
         onEvent = {},
-        journey = journey1,
+        legs = legs,
     )
 }
