@@ -124,26 +124,26 @@ fun StopsColumn(
 //                        logger.debug("destinLocationId: $destinLocationId")
 //                        logger.debug("destinLocationLat: $originLocationId")
 //                        logger.debug("originLocationId: $destinLocationLong")
-//                        journeysEvent.invoke(
-//                            JourneysEvent.JourneyQueryEvent(
-//                                from = originLocationId.toString(),
-//                                to = destinLocationId.toString(),
-//                                toLatitude = destinLocationLat.toDouble(),
-//                                toLongitude = destinLocationLong.toDouble(),
-//                            ),
-//                        )
+                        journeysEvent.invoke(
+                            JourneysEvent.JourneyQueryEvent(
+                                from = originLocationId.toString(),
+                                to = destinLocationId.toString(),
+                                toLatitude = destinLocationLat.toDouble(),
+                                toLongitude = destinLocationLong.toDouble(),
+                            ),
+                        )
 
                         // ------------------------------ //
                         // Hardcoded Values for Debugging //
 
-                        journeysEvent.invoke(
-                            JourneysEvent.JourneyQueryEvent(
-                                "900064301",
-                                "900003200",
-                                52.525607,
-                                13.369072,
-                            ),
-                        )
+//                        journeysEvent.invoke(
+//                            JourneysEvent.JourneyQueryEvent(
+//                                "900064301",
+//                                "900003200",
+//                                52.525607,
+//                                13.369072,
+//                            ),
+//                        )
                     }
                 },
                 modifier = Modifier

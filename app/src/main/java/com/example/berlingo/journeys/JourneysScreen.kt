@@ -16,6 +16,8 @@ import com.example.berlingo.journeys.JourneysState
 import com.example.berlingo.journeys.legs.stops.StopsColumn
 import com.example.berlingo.journeys.legs.stops.StopsEvent
 import com.example.berlingo.journeys.legs.stops.StopsState
+import com.example.berlingo.trips.TripsEvent
+import com.example.berlingo.trips.TripsState
 
 private val logger: BaseLogger = FactoryLogger.getLoggerCompose("JourneysScreen()")
 
@@ -27,11 +29,9 @@ fun JourneysScreen(
     journeysEvent: suspend (JourneysEvent) -> Unit,
     stopsState: StopsState,
     stopsEvent: suspend (StopsEvent) -> Unit,
+    tripsState: TripsState,
+    tripsEvent: suspend (TripsEvent) -> Unit,
 ) {
-    logger.debug("originLocationId:")
-//    val stopsViewModel = hiltViewModel<StopsViewModel>()
-//    val stopsState = stopsViewModel.state.collectAsState().value
-//    val stopsEvent = stopsViewModel::handleEvent
     Surface(color = Color.Gray, modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -45,6 +45,8 @@ fun JourneysScreen(
             JourneysColumn(
                 journeysState,
                 journeysEvent,
+                tripsState,
+                tripsEvent,
             )
         }
     }

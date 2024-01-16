@@ -38,6 +38,8 @@ import com.example.berlingo.journeys.JourneysState
 import com.example.berlingo.journeys.JourneysState.*
 import com.example.berlingo.journeys.network.responses.Journey
 import com.example.berlingo.journeys.network.responses.Leg
+import com.example.berlingo.trips.TripsEvent
+import com.example.berlingo.trips.TripsState
 
 private val logger: BaseLogger = FactoryLogger.getLoggerCompose("JourneysColumn()")
 
@@ -45,18 +47,22 @@ private val logger: BaseLogger = FactoryLogger.getLoggerCompose("JourneysColumn(
 fun JourneysColumn(
     journeysState: JourneysState,
     journeyEvent: suspend (JourneysEvent) -> Unit,
+    tripsState: TripsState,
+    tripsEvent: suspend (TripsEvent) -> Unit,
 ) {
     when (journeysState) {
         is Initial -> {}
         is Loading -> LoadingScreen()
         is Error -> ErrorScreen(message = journeysState.message)
-        is Success -> DisplayJourneys(journeysState.data, journeyEvent)
+        is Success -> DisplayJourneys(journeysState.data, journeyEvent, tripsState, tripsEvent)
     }
 }
 
 @Composable fun DisplayJourneys(
     journeys: Map<Journey, List<Leg>>,
     journeyEvent: suspend (JourneysEvent) -> Unit,
+    tripsState: TripsState,
+    tripsEvent: suspend (TripsEvent) -> Unit,
 ) {
     Box(modifier = Modifier.fillMaxHeight()) {
         LazyColumn(
@@ -81,7 +87,7 @@ fun JourneysColumn(
                         .padding(16.dp),
                     text = "${journey.legs?.get(0)?.departure?.getDepartureTime()}",
                 )
-                DrawLegsLineWithIcons(legs, journeys, journeyEvent, indexJourney)
+                DrawLegsLineWithIcons(legs, tripsState, tripsEvent, indexJourney)
             }
         }
     }
@@ -90,8 +96,8 @@ fun JourneysColumn(
 @Composable
 private fun DrawLegsLineWithIcons(
     legs: List<Leg>?,
-    journeys: Map<Journey, List<Leg>>,
-    journeyEvent: suspend (JourneysEvent) -> Unit,
+    tripsState: TripsState,
+    tripsEvent: suspend (TripsEvent) -> Unit,
     indexJourney: Int,
 ) {
     var expandedItemIndex by remember { mutableStateOf(-1) }
@@ -128,6 +134,8 @@ private fun DrawLegsLineWithIcons(
     if (indexJourney == expandedItemIndex) {
         LegsColumn(
             legs = legs,
+            tripsState,
+            tripsEvent,
         )
     }
 }

@@ -1,7 +1,13 @@
 package com.example.berlingo.trips
 
-sealed class TripsState<out T> {
-    object Loading : TripsState<Nothing>()
-    data class Success<out T>(val data: T) : TripsState<T>()
-    data class Error(val exception: Throwable) : TripsState<Nothing>()
+import com.example.berlingo.trips.network.responses.Trip
+
+sealed class TripsState() {
+    object Initial : TripsState()
+    object Loading : TripsState()
+    data class Success(
+        val tripsData: List<Trip> = emptyList(),
+        val tripData: Trip? = null,
+    ) : TripsState()
+    data class Error(val message: String) : TripsState()
 }

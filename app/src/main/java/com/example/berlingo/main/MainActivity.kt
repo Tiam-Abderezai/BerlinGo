@@ -27,6 +27,7 @@ import com.example.berlingo.journeys.legs.stops.StopsViewModel
 import com.example.berlingo.map.MapsScreen
 import com.example.berlingo.map.MapsViewModel
 import com.example.berlingo.routes.JourneysScreen
+import com.example.berlingo.trips.TripsViewModel
 import com.example.berlingo.ui.theme.BerlinGoTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -108,12 +109,16 @@ fun NavigationHost(navController: NavHostController) {
     val stopsState = stopsViewModel.state.collectAsState().value
     val stopsEvent = stopsViewModel::handleEvent
 
+    val tripsViewModel = hiltViewModel<TripsViewModel>()
+    val tripsState = tripsViewModel.state.collectAsState().value
+    val tripsEvent = tripsViewModel::handleEvent
+
     val mapsViewModel = hiltViewModel<MapsViewModel>()
     val mapsState = mapsViewModel.state.collectAsState().value
     val mapsEvent = mapsViewModel::handleEvent
 
     NavHost(navController, startDestination = "journeys") {
-        composable("journeys") { JourneysScreen(journeysState = journeysState, journeysEvent = journeysEvent, stopsState = stopsState, stopsEvent = stopsEvent) }
+        composable("journeys") { JourneysScreen(journeysState = journeysState, journeysEvent = journeysEvent, stopsState = stopsState, stopsEvent = stopsEvent, tripsState = tripsState, tripsEvent = tripsEvent) }
         composable("map") { MapsScreen(mapsState = mapsState, mapsEvent = mapsEvent, journeysState = journeysState, journeysEvent = journeysEvent, stopsState = stopsState, stopsEvent = stopsEvent) }
     }
 }
