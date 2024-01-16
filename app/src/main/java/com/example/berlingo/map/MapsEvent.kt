@@ -1,6 +1,6 @@
 package com.example.berlingo.map
 
-import com.example.berlingo.data.network.journeys.responses.Journey
+import com.example.berlingo.journeys.network.responses.Journey
 
 sealed class MapsEvent {
     data class DirectionsGet(

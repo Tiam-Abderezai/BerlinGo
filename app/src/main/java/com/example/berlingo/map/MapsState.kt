@@ -1,11 +1,10 @@
 package com.example.berlingo.map
 
-import com.example.berlingo.data.network.maps.responses.Route
-import com.google.maps.android.compose.MapProperties
+import com.example.berlingo.map.network.responses.Route
 
-class MapsState(
-    val properties: MapProperties? = MapProperties(),
-    val routes: List<Route>? = listOf(Route()),
-    val isLoading: Boolean? = false,
-    val isError: Boolean? = false,
-)
+sealed class MapsState {
+    object Initial : MapsState()
+    object Loading : MapsState()
+    data class Success(val data: List<Route>) : MapsState()
+    data class Error(val message: String) : MapsState()
+}
