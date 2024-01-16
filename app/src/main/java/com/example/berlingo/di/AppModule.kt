@@ -1,7 +1,9 @@
 package com.example.berlingo.di
 
-import com.example.berlingo.data.network.journeys.JourneysApi
-import com.example.berlingo.data.network.maps.MapsApi
+import com.example.berlingo.journeys.legs.stops.network.StopsApi
+import com.example.berlingo.journeys.network.JourneysApi
+import com.example.berlingo.map.network.MapsApi
+import com.example.berlingo.trips.network.TripsApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,13 +26,35 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideNetwork(): JourneysApi {
+    fun provideJourneysNetwork(): JourneysApi {
         return Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
             .baseUrl("https://v6.bvg.transport.rest/")
             .client(okHttpClient)
             .build()
             .create(JourneysApi::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideStopsNetwork(): StopsApi {
+        return Retrofit.Builder()
+            .addConverterFactory(GsonConverterFactory.create())
+            .baseUrl("https://v6.bvg.transport.rest/")
+            .client(okHttpClient)
+            .build()
+            .create(StopsApi::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideTripsApiNetwork(): TripsApi {
+        return Retrofit.Builder()
+            .addConverterFactory(GsonConverterFactory.create())
+            .baseUrl("https://v6.bvg.transport.rest/")
+            .client(okHttpClient)
+            .build()
+            .create(TripsApi::class.java)
     }
 
     @Singleton

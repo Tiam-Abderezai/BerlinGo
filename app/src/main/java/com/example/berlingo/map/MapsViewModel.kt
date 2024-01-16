@@ -5,12 +5,13 @@ import androidx.lifecycle.viewModelScope
 import com.example.berlingo.common.API_KEY_GOOGLE_MAPS
 import com.example.berlingo.common.logger.BaseLogger
 import com.example.berlingo.common.logger.FactoryLogger
-import com.example.berlingo.data.network.journeys.responses.Journey
-import com.example.berlingo.data.network.maps.MapsApiImpl
-import com.example.berlingo.data.network.maps.responses.Route
+import com.example.berlingo.journeys.network.responses.Journey
+import com.example.berlingo.map.network.MapsApiImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -21,7 +22,7 @@ class MapsViewModel @Inject constructor(
     private val mapsApiImpl: MapsApiImpl,
 ) : ViewModel() {
     private val _state = MutableStateFlow(MapsState())
-    val state = _state.asStateFlow()
+    val state: StateFlow<MapsState> = _state.asStateFlow()
 
     fun handleEvent(event: MapsEvent) {
         when (event) {
@@ -52,38 +53,38 @@ class MapsViewModel @Inject constructor(
         transitMode: String,
         language: String,
     ) {
-        val directions = mapsApiImpl.getDirection(
-            key = API_KEY_GOOGLE_MAPS,
-            origin = origin,
-            destination = destination,
-            mode = mode,
-            transitMode = transitMode,
-            language = language,
-        )
-        logger.debug("getDirection message:${directions.message}")
-        logger.debug("getDirection data:${directions.data} ")
-
-        _state.value = MapsState(routes = directions.data?.routes)
+        try {
+            val directions = mapsApiImpl.getDirection(
+                key = API_KEY_GOOGLE_MAPS,
+                origin = origin,
+                destination = destination,
+                mode = mode,
+                transitMode = transitMode,
+                language = language,
+            ).data?.routes ?: emptyList()
+            _state.update { it.copy(data = directions) }
+        } catch (e: Exception) {
+            _state.update { it.copy(errorMessage = e.message) }
+        }
     }
 
     private suspend fun getJourneyDirections(
         journey: Journey?,
     ) {
-        var directions: List<Route>? = emptyList()
-        journey?.legs?.forEach { leg ->
-            directions = mapsApiImpl.getDirection(
-                key = API_KEY_GOOGLE_MAPS,
-                origin = leg.origin?.name ?: "",
-                destination = leg.destination?.name ?: "",
-                mode = "transit",
-                transitMode = leg.line?.mode ?: "", // TODO Remove hardcoded value
-                language = "en", // TODO Remove hardcoded value
-            ).apply {
-                logger.debug("getJourneyDirections message:${this.message}")
-                logger.debug("getJourneyDirections data:${this.data} ")
-            }.data?.routes ?: emptyList()
+        try {
+            journey?.legs?.forEach { leg ->
+                val directions = mapsApiImpl.getDirection(
+                    key = API_KEY_GOOGLE_MAPS,
+                    origin = leg.origin?.name ?: "",
+                    destination = leg.destination?.name ?: "",
+                    mode = "transit",
+                    transitMode = leg.line?.mode ?: "", // TODO Remove hardcoded value
+                    language = "en", // TODO Remove hardcoded value
+                ).data?.routes ?: emptyList()
+                _state.update { it.copy(data = directions) }
+            }
+        } catch (e: Exception) {
+            _state.update { it.copy(errorMessage = e.message) }
         }
-
-        _state.value = MapsState(routes = directions)
     }
 }

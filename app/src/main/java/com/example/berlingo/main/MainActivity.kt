@@ -23,6 +23,7 @@ import com.example.berlingo.R
 import com.example.berlingo.common.logger.BaseLogger
 import com.example.berlingo.common.logger.FactoryLogger
 import com.example.berlingo.journeys.JourneysViewModel
+import com.example.berlingo.journeys.legs.stops.StopsViewModel
 import com.example.berlingo.map.MapsScreen
 import com.example.berlingo.map.MapsViewModel
 import com.example.berlingo.routes.JourneysScreen
@@ -100,15 +101,20 @@ fun BottomNavigationBar(navController: NavController) {
 @Composable
 fun NavigationHost(navController: NavHostController) {
     val journeysViewModel = hiltViewModel<JourneysViewModel>()
-    val journeysState = journeysViewModel.state.collectAsState()
+    val journeysState = journeysViewModel.state.collectAsState().value
+    val journeysEvent = journeysViewModel::handleEvent
+
+    val stopsViewModel = hiltViewModel<StopsViewModel>()
+    val stopsState = stopsViewModel.state.collectAsState().value
+    val stopsEvent = stopsViewModel::handleEvent
 
     val mapsViewModel = hiltViewModel<MapsViewModel>()
-    val mapsState = mapsViewModel.state.collectAsState()
-//    viewModel
+    val mapsState = mapsViewModel.state.collectAsState().value
+    val mapsEvent = mapsViewModel::handleEvent
 
     NavHost(navController, startDestination = "journeys") {
-        composable("journeys") { JourneysScreen(viewState = journeysState, onEvent = journeysViewModel::handleEvent) }
-        composable("map") { MapsScreen(mapsState = mapsState, journeysState = journeysState, onMapsEvent = mapsViewModel::handleEvent, onJourneysEvent = journeysViewModel::handleEvent) }
+        composable("journeys") { JourneysScreen(journeysState = journeysState, journeysEvent = journeysEvent, stopsState = stopsState, stopsEvent = stopsEvent) }
+        composable("map") { MapsScreen(mapsState = mapsState, mapsEvent = mapsEvent, journeysState = journeysState, journeysEvent = journeysEvent, stopsState = stopsState, stopsEvent = stopsEvent) }
     }
 }
 

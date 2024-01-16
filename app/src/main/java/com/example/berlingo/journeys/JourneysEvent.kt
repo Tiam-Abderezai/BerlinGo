@@ -7,11 +7,7 @@ sealed class JourneysEvent {
         val toLatitude: Double,
         val toLongitude: Double,
     ) : JourneysEvent()
-    data class TripQueryEvent(
-        val tripId: String,
-    ) : JourneysEvent()
 
-    data class StopsQueryEvent(
-        val name: String,
-    ) : JourneysEvent()
+
+
 }
