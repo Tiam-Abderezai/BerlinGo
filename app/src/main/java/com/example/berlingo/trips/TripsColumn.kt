@@ -15,7 +15,6 @@ import com.example.berlingo.common.logger.BaseLogger
 import com.example.berlingo.common.logger.FactoryLogger
 import com.example.berlingo.common.utils.ErrorScreen
 import com.example.berlingo.common.utils.LoadingScreen
-import com.example.berlingo.trips.TripsEvent
 import com.example.berlingo.trips.TripsState
 import com.example.berlingo.trips.network.responses.Trip
 import com.example.berlingo.ui.theme.DarkGray
@@ -26,33 +25,39 @@ private val logger: BaseLogger = FactoryLogger.getLoggerCompose("StopoversColumn
 @Composable
 fun TripsColumn(
     tripsState: TripsState,
-    tripsEvent: suspend (TripsEvent) -> Unit,
 ) {
     when (tripsState) {
         is TripsState.Initial -> {}
         is TripsState.Loading -> LoadingScreen()
-        is TripsState.Error -> ErrorScreen(message = tripsState.message ?: "Unknown Error")
-        is TripsState.Success -> DisplayTrips(tripsState.tripData, tripsEvent)
+        is TripsState.Error -> ErrorScreen(message = tripsState.message)
+        is TripsState.Success -> DisplayTrips(
+            tripsState.stopoversData ?: emptyList(),
+        )
     }
 }
 
 @Composable
-private fun DisplayTrips(trip: Trip?, tripsEvent: suspend (TripsEvent) -> Unit) {
+private fun DisplayTrips(
+    stopovers: List<Trip.Stopover?>,
+) {
     Box(modifier = Modifier.heightIn(max = 200.dp)) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 32.dp),
         ) {
-            items(trip?.stopovers?.toList() ?: emptyList()) { stopovers ->
-                logger.debug("trip.stopovers === $stopovers}")
-                Text(
-                    "${stopovers.departure?.getDepartureTime()} - ${stopovers.stop?.name}",
-                    color = if (isSystemInDarkTheme()) LightGray else DarkGray,
-                    modifier = Modifier
-                        .padding(4.dp)
-                        .clickable { logger.debug("trip.stopovers CLICKED}") },
-                )
+            items(stopovers.toList()) { stopover ->
+                val departureNotNull = !stopover?.departure.isNullOrEmpty()
+                val stopNameNotNull = !stopover?.stop?.name.isNullOrEmpty()
+                if (departureNotNull && stopNameNotNull) {
+                    Text(
+                        "${stopover?.departure?.getDepartureTime()} - ${stopover?.stop?.name}",
+                        color = if (isSystemInDarkTheme()) LightGray else DarkGray,modifier = Modifier
+                            .padding(4.dp)
+                            .clickable { logger.debug("trip.stopovers CLICKED}") },
+
+                    )
+                }
             }
         }
     }

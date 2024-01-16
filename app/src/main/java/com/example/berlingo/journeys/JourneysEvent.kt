@@ -7,7 +7,4 @@ sealed class JourneysEvent {
         val toLatitude: Double,
         val toLongitude: Double,
     ) : JourneysEvent()
-
-
-
 }
