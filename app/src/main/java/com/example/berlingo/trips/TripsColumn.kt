@@ -52,7 +52,8 @@ private fun DisplayTrips(
                 if (departureNotNull && stopNameNotNull) {
                     Text(
                         "${stopover?.departure?.getDepartureTime()} - ${stopover?.stop?.name}",
-                        color = if (isSystemInDarkTheme()) LightGray else DarkGray,modifier = Modifier
+                        color = if (isSystemInDarkTheme()) LightGray else DarkGray,
+                        modifier = Modifier
                             .padding(4.dp)
                             .clickable { logger.debug("trip.stopovers CLICKED}") },
 
