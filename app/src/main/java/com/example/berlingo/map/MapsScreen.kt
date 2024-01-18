@@ -1,5 +1,6 @@
 package com.example.berlingo.map
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,6 +23,8 @@ import com.example.berlingo.journeys.legs.stops.StopsState
 import com.example.berlingo.map.MapsState.*
 import com.example.berlingo.map.columns.MapsJourneysColumn
 import com.example.berlingo.map.network.responses.Route
+import com.example.berlingo.ui.theme.DarkGray
+import com.example.berlingo.ui.theme.LightGray
 
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
@@ -30,21 +33,6 @@ import com.google.maps.android.compose.Polyline
 import com.google.maps.android.compose.rememberCameraPositionState
 
 private val logger: BaseLogger = FactoryLogger.getLoggerCompose("MapsScreen()")
-
-// @Composable
-// fun MapsScreenMain(
-//    mapsState: MapsState<List<Route>>,
-//    mapsEvent: suspend (MapsEvent) -> Unit,
-//    journeysState: JourneysState<Map<Journey, List<Leg>>>,
-//    journeysEvent: suspend (JourneysEvent) -> Unit,
-// ) {
-//    when (mapsState) {
-//        is MapsState.Loading -> LoadingScreen()
-//        is MapsState.Success -> MapsScreen(mapsState.data, mapsEvent, journeysState, journeysEvent)
-//        is MapsState.Error -> ErrorScreen(mapsState.exception)
-//    }
-// }
-
 @Composable
 fun MapsScreen(
     mapsState: MapsState,
@@ -54,10 +42,8 @@ fun MapsScreen(
     stopsState: StopsState,
     stopsEvent: suspend (StopsEvent) -> Unit,
 ) {
-//    val stopsViewModel = hiltViewModel<StopsViewModel>()
-//    val stopsState = stopsViewModel.state.collectAsState().value
-//    val stopsEvent = stopsViewModel::handleEvent
-    Surface(color = Color.Transparent, modifier = Modifier.fillMaxSize()) {
+    val backgroundColor = if (isSystemInDarkTheme()) DarkGray else LightGray
+    Surface(color = backgroundColor, modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier.fillMaxHeight(),
         ) {
@@ -110,22 +96,8 @@ private fun DisplayGoogleMaps(routes: List<Route>) {
             position = berlinCameraPosition
         },
     ) {
-        //        val steps = mapsState.value.routes?.get(0)?.legs?.get(0)?.steps
-        val latNE = routes[0].bounds?.northeast?.lat ?: 0.0
-        val lngNE = routes[0].bounds?.northeast?.lng ?: 0.0
-        val latSW = routes[0].bounds?.southwest?.lat ?: 0.0
-        val lngSW = routes[0].bounds?.southwest?.lng ?: 0.0
-
-        val latLingNE = LatLng(latNE, lngNE)
-        val latLingSW = LatLng(latSW, lngSW)
-        val latLingList = listOf(latLingNE, latLingSW)
-
         val points = routes[0].polyline?.points ?: ""
         val polyLine = points.decodePolyline()
-
-        //                logger.debug("points: $points")
-        //                logger.debug("polyLine: $polyLine")
-
         Polyline(
             points = polyLine,
             color = Color.Blue,
