@@ -8,9 +8,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -25,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.berlingo.R
 import com.example.berlingo.common.logger.BaseLogger
@@ -78,7 +82,17 @@ fun StopsColumn(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top,
     ) {
+        val backgroundColor = if (isSystemInDarkTheme()) DarkGray else LightGray
+        val labelColor = if (isSystemInDarkTheme()) LightGray else DarkGray
         TextField(
+            label = { Text(text = "A", color = labelColor, fontWeight = FontWeight.SemiBold) },
+            modifier = Modifier
+                .background(color = backgroundColor)
+                .fillMaxWidth()
+                .padding(4.dp)
+                .onFocusChanged { focusState ->
+                    textFieldOriginFocused = focusState.isFocused
+                },
             value = originStopName,
             onValueChange = { query ->
                 originStopName = query
@@ -90,16 +104,15 @@ fun StopsColumn(
                     )
                 }
             },
-            label = { Text("A", color = if (isSystemInDarkTheme()) LightGray else DarkGray) },
-            modifier = Modifier
-                .background(color = if (isSystemInDarkTheme()) DarkGray else LightGray)
-                .fillMaxWidth()
-                .padding(8.dp)
-                .onFocusChanged { focusState ->
-                    textFieldOriginFocused = focusState.isFocused
-                },
         )
         TextField(
+            modifier = Modifier
+                .background(color = backgroundColor)
+                .fillMaxWidth()
+                .padding(4.dp)
+                .onFocusChanged { focusState ->
+                    textFieldDestinationFocused = focusState.isFocused
+                },
             value = destinStopName,
             onValueChange = { query ->
                 destinStopName = query
@@ -109,19 +122,12 @@ fun StopsColumn(
                     )
                 }
             },
-            label = { Text("B", color = if (isSystemInDarkTheme()) LightGray else DarkGray) },
-            modifier = Modifier
-                .background(color = if (isSystemInDarkTheme()) DarkGray else LightGray)
-                .fillMaxWidth()
-                .padding(8.dp)
-                .onFocusChanged { focusState ->
-                    textFieldDestinationFocused = focusState.isFocused
-                },
+            label = { Text("B", color = labelColor, fontWeight = FontWeight.SemiBold) },
         )
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
+                .padding(4.dp),
         ) {
             Button(
                 onClick = {
@@ -154,12 +160,15 @@ fun StopsColumn(
                     }
                 },
                 modifier = Modifier
-                    .padding(8.dp)
-                    .align(Alignment.CenterEnd),
-
+                    .fillMaxWidth()
+                    .height(64.dp)
+                    .align(Alignment.Center),
+                shape = RoundedCornerShape(8.dp),
             ) {
                 Icon(
+                    modifier = Modifier.size(64.dp),
                     painter = painterResource(id = R.drawable.icon_search),
+                    tint = labelColor,
                     contentDescription = null,
                 )
             }
@@ -175,6 +184,7 @@ fun StopsColumn(
 
 @Composable
 fun DisplayStops(stopsState: List<Stop>, stopsEvent: suspend (StopsEvent) -> Unit) {
+    val textColor = if (isSystemInDarkTheme()) Color.White else Color.Black
     LazyColumn {
         items(stopsState ?: emptyList()) { stop ->
             Text(
@@ -206,7 +216,7 @@ fun DisplayStops(stopsState: List<Stop>, stopsEvent: suspend (StopsEvent) -> Uni
                     }
                 },
                 text = stop.name ?: "",
-                color = if (isSystemInDarkTheme()) Color.White else Color.Black,
+                color = textColor,
             )
         }
     }
