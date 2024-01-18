@@ -28,12 +28,9 @@ import com.example.berlingo.common.extensions.getLineProductColor
 import com.example.berlingo.common.extensions.getLineProductIcon
 import com.example.berlingo.common.logger.BaseLogger
 import com.example.berlingo.common.logger.FactoryLogger
-import com.example.berlingo.common.utils.ErrorScreen
-import com.example.berlingo.common.utils.LoadingScreen
 import com.example.berlingo.journeys.network.responses.Leg
 import com.example.berlingo.trips.TripsEvent
 import com.example.berlingo.trips.TripsState
-import com.example.berlingo.trips.TripsState.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -84,7 +81,8 @@ private fun DrawLineProductImageLegs(
                 CoroutineScope(Dispatchers.IO).launch {
                     tripsEvent.invoke(
                         TripsEvent.TripQueryEvent(
-                            leg.tripId ?: "",
+                            tripId = leg.tripId ?: "",
+                            leg = leg,
                         ),
                     )
                 }
@@ -111,7 +109,6 @@ private fun DrawLineProductImageLegs(
     if (indexLeg == expandedItemIndex) {
         TripsColumn(
             tripsState = tripsState,
-            tripsEvent = tripsEvent,
         )
     }
 }

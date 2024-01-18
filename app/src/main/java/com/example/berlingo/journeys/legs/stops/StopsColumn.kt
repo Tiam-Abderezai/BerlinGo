@@ -126,6 +126,7 @@ fun StopsColumn(
             Button(
                 onClick = {
                     CoroutineScope(Dispatchers.IO).launch {
+//                        if (destinLocationLat.isNotEmpty()) {
 //                        logger.debug("originLocationId: $originLocationId")
 //                        logger.debug("destinLocationId: $destinLocationId")
 //                        logger.debug("destinLocationLat: $originLocationId")
@@ -141,7 +142,7 @@ fun StopsColumn(
 
                         // ------------------------------ //
                         // Hardcoded Values for Debugging //
-
+//                        }
 //                        journeysEvent.invoke(
 //                            JourneysEvent.JourneyQueryEvent(
 //                                "900064301",
