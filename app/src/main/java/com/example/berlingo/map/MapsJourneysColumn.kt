@@ -3,6 +3,7 @@ package com.example.berlingo.map.columns
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -34,6 +35,8 @@ import com.example.berlingo.journeys.JourneysState
 import com.example.berlingo.journeys.network.responses.Journey
 import com.example.berlingo.journeys.network.responses.Leg
 import com.example.berlingo.map.MapsEvent
+import com.example.berlingo.ui.theme.DarkGray
+import com.example.berlingo.ui.theme.LightGray
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -55,27 +58,29 @@ fun MapsJourneysColumn(
 
 @Composable
 private fun DisplayMapJourneys(journeys: Map<Journey, List<Leg>>, mapsEvent: suspend (MapsEvent) -> Unit) {
-    Box(modifier = Modifier.heightIn(100.dp)) {
+    Box(modifier = Modifier.height(228.dp)) {
+        val textColor = if (isSystemInDarkTheme()) LightGray else DarkGray
         LazyColumn(
             modifier = Modifier
-                .fillMaxHeight(0.2f),
+                .fillMaxHeight(1f),
         ) {
             itemsIndexed(journeys.keys.toList()) { indexJourney, journey ->
                 val legs = journey.legs
-                logger.debug("Journey: ${journeys?.size}")
+                logger.debug("Journey: ${journeys.size}")
                 logger.debug("Legs: ${journey.legs}")
                 logger.debug("TripIds: ${journey.legs?.get(0)?.tripId}")
                 Divider(
                     modifier = Modifier.padding(vertical = 8.dp),
                     color = Color.Black,
-                    thickness = 0.5.dp,
+                    thickness = 0.8.dp,
                 )
-                Text(
-//                    modifier = Modifier
-//                        .padding(16.dp),
-                    text = "${journey.legs?.get(0)?.departure?.getDepartureTime()}",
-                )
-                DrawLegsLineWithIcons(journey, legs, mapsEvent)
+                Row() {
+                    Text(
+                        text = "${journey.legs?.get(0)?.departure?.getDepartureTime()}",
+                        color = textColor,
+                    )
+                    DrawLegsLineWithIcons(journey, legs, mapsEvent)
+                }
             }
         }
     }
@@ -89,7 +94,7 @@ fun DrawLegsLineWithIcons(
 ) {
     Row(
         modifier = Modifier
-            .heightIn(50.dp)
+            .heightIn(1.dp)
             .clickable {
                 CoroutineScope(Dispatchers.IO).launch {
                     mapsEvent.invoke(

@@ -3,6 +3,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -36,7 +37,10 @@ import com.example.berlingo.common.utils.ErrorScreen
 import com.example.berlingo.common.utils.LoadingScreen
 import com.example.berlingo.journeys.JourneysEvent
 import com.example.berlingo.journeys.JourneysState
-import com.example.berlingo.journeys.JourneysState.*
+import com.example.berlingo.journeys.JourneysState.Error
+import com.example.berlingo.journeys.JourneysState.Initial
+import com.example.berlingo.journeys.JourneysState.Loading
+import com.example.berlingo.journeys.JourneysState.Success
 import com.example.berlingo.journeys.network.responses.Journey
 import com.example.berlingo.journeys.network.responses.Leg
 import com.example.berlingo.trips.TripsEvent
@@ -68,6 +72,7 @@ fun JourneysColumn(
     tripsEvent: suspend (TripsEvent) -> Unit,
 ) {
     Box(modifier = Modifier.fillMaxHeight()) {
+        val textColor = if (isSystemInDarkTheme()) LightGray else DarkGray
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize(),
@@ -81,15 +86,15 @@ fun JourneysColumn(
                 Divider(
                     modifier = Modifier.padding(vertical = 8.dp),
                     color = Color.Black,
-                    thickness = 0.5.dp,
+                    thickness = 0.8.dp,
                 )
-                Text(
-                    modifier = Modifier
-                        .padding(16.dp),
-                    text = "${journey.legs?.get(0)?.departure?.getDepartureTime()}",
-                    color = if (isSystemInDarkTheme()) LightGray else DarkGray,
-                )
-                DrawLegsLineWithIcons(legs, tripsState, tripsEvent, indexJourney)
+                Row() {
+                    Text(
+                        text = "${journey.legs?.get(0)?.departure?.getDepartureTime()}",
+                        color = textColor,
+                    )
+                    DrawLegsLineWithIcons(legs, tripsState, tripsEvent, indexJourney)
+                }
             }
         }
     }
@@ -103,39 +108,41 @@ private fun DrawLegsLineWithIcons(
     indexJourney: Int,
 ) {
     var expandedItemIndex by remember { mutableStateOf(-1) }
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable {
-                expandedItemIndex = if (indexJourney == expandedItemIndex) -1 else indexJourney
-            },
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        legs?.forEach { leg ->
-            val lineProductIcon = leg.line?.product?.getLineProductIcon() ?: 0
-            val lineProductColor = leg.line?.product?.getLineProductColor() ?: Color.Transparent
-            val lineNameIcon = leg.line?.name?.getLineNameIcon() ?: 0
-            DrawLineProductImageJourneys(lineProductIcon, lineNameIcon)
-            Canvas(
-                modifier = Modifier
-                    .weight(1f)
-                    .height(1.dp),
-            ) {
-                drawLine(
-                    color = lineProductColor,
-                    start = Offset(0f, center.y),
-                    end = Offset(size.width, center.y),
-                    strokeWidth = Stroke.DefaultMiter,
-                )
+    Column() {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable {
+                    expandedItemIndex = if (indexJourney == expandedItemIndex) -1 else indexJourney
+                },
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            legs?.forEach { leg ->
+                val lineProductIcon = leg.line?.product?.getLineProductIcon() ?: 0
+                val lineProductColor = leg.line?.product?.getLineProductColor() ?: Color.Transparent
+                val lineNameIcon = leg.line?.name?.getLineNameIcon() ?: 0
+                DrawLineProductImageJourneys(lineProductIcon, lineNameIcon)
+                Canvas(
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(1.dp),
+                ) {
+                    drawLine(
+                        color = lineProductColor,
+                        start = Offset(0f, center.y),
+                        end = Offset(size.width, center.y),
+                        strokeWidth = Stroke.DefaultMiter,
+                    )
+                }
             }
         }
-    }
-    if (indexJourney == expandedItemIndex) {
-        LegsColumn(
-            legs = legs,
-            tripsState,
-            tripsEvent,
-        )
+        if (indexJourney == expandedItemIndex) {
+            LegsColumn(
+                legs = legs,
+                tripsState,
+                tripsEvent,
+            )
+        }
     }
 }
 

@@ -4,7 +4,12 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
@@ -12,7 +17,10 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
@@ -58,28 +66,40 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun BottomNavigationBar(navController: NavController) {
-    val screens = listOf(Screen.Journeys, Screen.Maps)
-    val route = navController.currentBackStackEntryAsState().value?.destination?.route
-    val selectedItemBackgroundColor = if (isSystemInDarkTheme()) LightGray else DarkGray
-    val unselectedItemBackgroundColor = if (isSystemInDarkTheme()) DarkGray else LightGray
-    BottomNavigation(backgroundColor = LightBlue) {
-        screens.forEach { screen ->
-            val isSelected = screen.route == route
-            BottomNavigationItem(
-                icon = {
-                    Icon(
-                        painter = when (screen) {
-                            Screen.Journeys -> painterResource(id = R.drawable.icon_routes)
-                            Screen.Maps -> painterResource(id = R.drawable.icon_map)
-                        },
-                        contentDescription = "$route screen",
-                    )
-                },
-                selected = isSelected,
-                onClick = { if (!isSelected) navController.navigate(screen.route) },
-                selectedContentColor = selectedItemBackgroundColor,
-                unselectedContentColor = unselectedItemBackgroundColor,
-            )
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(4.dp),
+    ) {
+        val screens = listOf(Screen.Journeys, Screen.Maps)
+        val route = navController.currentBackStackEntryAsState().value?.destination?.route
+        val selectedItemBackgroundColor = LightGray
+        val unselectedItemBackgroundColor = DarkGray
+        BottomNavigation(
+            modifier = Modifier.height(64.dp)
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(8.dp)),
+            backgroundColor = LightBlue,
+        ) {
+            screens.forEach { screen ->
+                val isSelected = screen.route == route
+                BottomNavigationItem(
+                    icon = {
+                        Icon(
+                            modifier = Modifier.size(48.dp),
+                            painter = when (screen) {
+                                Screen.Journeys -> painterResource(id = R.drawable.icon_journeys)
+                                Screen.Maps -> painterResource(id = R.drawable.icon_maps)
+                            },
+                            contentDescription = "$route screen",
+                        )
+                    },
+                    selected = isSelected,
+                    onClick = { if (!isSelected) navController.navigate(screen.route) },
+                    selectedContentColor = selectedItemBackgroundColor,
+                    unselectedContentColor = unselectedItemBackgroundColor,
+                )
+            }
         }
     }
 }

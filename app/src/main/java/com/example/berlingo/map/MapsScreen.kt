@@ -1,12 +1,13 @@
 package com.example.berlingo.map
 
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.height
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -20,12 +21,14 @@ import com.example.berlingo.journeys.JourneysState
 import com.example.berlingo.journeys.legs.stops.StopsColumn
 import com.example.berlingo.journeys.legs.stops.StopsEvent
 import com.example.berlingo.journeys.legs.stops.StopsState
-import com.example.berlingo.map.MapsState.*
+import com.example.berlingo.map.MapsState.Error
+import com.example.berlingo.map.MapsState.Initial
+import com.example.berlingo.map.MapsState.Loading
+import com.example.berlingo.map.MapsState.Success
 import com.example.berlingo.map.columns.MapsJourneysColumn
 import com.example.berlingo.map.network.responses.Route
 import com.example.berlingo.ui.theme.DarkGray
 import com.example.berlingo.ui.theme.LightGray
-
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
@@ -44,9 +47,7 @@ fun MapsScreen(
 ) {
     val backgroundColor = if (isSystemInDarkTheme()) DarkGray else LightGray
     Surface(color = backgroundColor, modifier = Modifier.fillMaxSize()) {
-        Column(
-            modifier = Modifier.fillMaxHeight(),
-        ) {
+        Column() {
             StopsColumn(
                 journeysState,
                 journeysEvent,
@@ -87,22 +88,27 @@ fun MapsScreen(
 
 @Composable
 private fun DisplayGoogleMaps(routes: List<Route>) {
-    val berlinLat = 52.5200
-    val berlinLng = 13.4050
-    val berlinCameraPosition = CameraPosition.fromLatLngZoom(LatLng(berlinLat, berlinLng), 10f)
-    GoogleMap(
-        modifier = Modifier.heightIn(800.dp),
-        cameraPositionState = rememberCameraPositionState {
-            position = berlinCameraPosition
-        },
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier.height(300.dp),
     ) {
-        val points = routes[0].polyline?.points ?: ""
-        val polyLine = points.decodePolyline()
-        Polyline(
-            points = polyLine,
-            color = Color.Blue,
-            width = 5f,
-        )
+        val berlinLat = 52.5200
+        val berlinLng = 13.4050
+        val berlinCameraPosition = CameraPosition.fromLatLngZoom(LatLng(berlinLat, berlinLng), 10f)
+        GoogleMap(
+            modifier = Modifier.height(400.dp),
+            cameraPositionState = rememberCameraPositionState {
+                position = berlinCameraPosition
+            },
+        ) {
+            val points = routes[0].polyline?.points ?: ""
+            val polyLine = points.decodePolyline()
+            Polyline(
+                points = polyLine,
+                color = Color.Blue,
+                width = 5f,
+            )
+        }
     }
 }
 // @Preview
