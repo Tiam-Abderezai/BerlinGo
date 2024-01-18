@@ -1,4 +1,5 @@
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
@@ -8,7 +9,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.berlingo.common.extensions.getDepartureTime
 import com.example.berlingo.common.logger.BaseLogger
@@ -18,6 +18,8 @@ import com.example.berlingo.common.utils.LoadingScreen
 import com.example.berlingo.trips.TripsEvent
 import com.example.berlingo.trips.TripsState
 import com.example.berlingo.trips.network.responses.Trip
+import com.example.berlingo.ui.theme.DarkGray
+import com.example.berlingo.ui.theme.LightGray
 
 private val logger: BaseLogger = FactoryLogger.getLoggerCompose("StopoversColumn()")
 
@@ -46,10 +48,10 @@ private fun DisplayTrips(trip: Trip?, tripsEvent: suspend (TripsEvent) -> Unit) 
                 logger.debug("trip.stopovers === $stopovers}")
                 Text(
                     "${stopovers.departure?.getDepartureTime()} - ${stopovers.stop?.name}",
+                    color = if (isSystemInDarkTheme()) LightGray else DarkGray,
                     modifier = Modifier
                         .padding(4.dp)
                         .clickable { logger.debug("trip.stopovers CLICKED}") },
-                    fontWeight = FontWeight.Light,
                 )
             }
         }

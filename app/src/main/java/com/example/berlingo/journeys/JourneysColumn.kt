@@ -1,6 +1,7 @@
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -40,6 +41,8 @@ import com.example.berlingo.journeys.network.responses.Journey
 import com.example.berlingo.journeys.network.responses.Leg
 import com.example.berlingo.trips.TripsEvent
 import com.example.berlingo.trips.TripsState
+import com.example.berlingo.ui.theme.DarkGray
+import com.example.berlingo.ui.theme.LightGray
 
 private val logger: BaseLogger = FactoryLogger.getLoggerCompose("JourneysColumn()")
 
@@ -70,8 +73,6 @@ fun JourneysColumn(
                 .fillMaxSize(),
         ) {
             itemsIndexed(journeys.keys.toList()) { indexJourney, journey ->
-                val origin = journey.legs?.get(0)?.origin
-                val line = journey.legs?.get(0)?.line
                 val legs = journey.legs
 
                 logger.debug("Journey: $journeys")
@@ -86,6 +87,7 @@ fun JourneysColumn(
                     modifier = Modifier
                         .padding(16.dp),
                     text = "${journey.legs?.get(0)?.departure?.getDepartureTime()}",
+                    color = if (isSystemInDarkTheme()) LightGray else DarkGray,
                 )
                 DrawLegsLineWithIcons(legs, tripsState, tripsEvent, indexJourney)
             }
@@ -114,9 +116,6 @@ private fun DrawLegsLineWithIcons(
             val lineProductColor = leg.line?.product?.getLineProductColor() ?: Color.Transparent
             val lineNameIcon = leg.line?.name?.getLineNameIcon() ?: 0
             DrawLineProductImageJourneys(lineProductIcon, lineNameIcon)
-            logger.debug("line?.name: ${leg.line?.name}")
-            logger.debug("lineProductIcon: $lineProductIcon")
-            logger.debug("lineNameIcon: $lineNameIcon")
             Canvas(
                 modifier = Modifier
                     .weight(1f)

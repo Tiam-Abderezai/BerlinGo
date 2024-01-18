@@ -2,13 +2,12 @@ package com.example.berlingo.routes
 
 import JourneysColumn
 import android.annotation.SuppressLint
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import com.example.berlingo.common.logger.BaseLogger
 import com.example.berlingo.common.logger.FactoryLogger
 import com.example.berlingo.journeys.JourneysEvent
@@ -18,11 +17,12 @@ import com.example.berlingo.journeys.legs.stops.StopsEvent
 import com.example.berlingo.journeys.legs.stops.StopsState
 import com.example.berlingo.trips.TripsEvent
 import com.example.berlingo.trips.TripsState
+import com.example.berlingo.ui.theme.DarkGray
+import com.example.berlingo.ui.theme.LightGray
 
 private val logger: BaseLogger = FactoryLogger.getLoggerCompose("JourneysScreen()")
 
 @SuppressLint("CoroutineCreationDuringComposition")
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun JourneysScreen(
     journeysState: JourneysState,
@@ -32,7 +32,8 @@ fun JourneysScreen(
     tripsState: TripsState,
     tripsEvent: suspend (TripsEvent) -> Unit,
 ) {
-    Surface(color = Color.Gray, modifier = Modifier.fillMaxSize()) {
+    val backgroundColor = if (isSystemInDarkTheme()) DarkGray else LightGray
+    Surface(color = backgroundColor, modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier.fillMaxSize(),
         ) {

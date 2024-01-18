@@ -1,7 +1,9 @@
 package com.example.berlingo.journeys.legs.stops
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -33,6 +35,8 @@ import com.example.berlingo.journeys.JourneysEvent
 import com.example.berlingo.journeys.JourneysState
 import com.example.berlingo.journeys.legs.stops.StopsState.*
 import com.example.berlingo.journeys.legs.stops.network.responses.Stop
+import com.example.berlingo.ui.theme.DarkGray
+import com.example.berlingo.ui.theme.LightGray
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -86,8 +90,9 @@ fun StopsColumn(
                     )
                 }
             },
-            label = { Text("A") },
+            label = { Text("A", color = if (isSystemInDarkTheme()) LightGray else DarkGray) },
             modifier = Modifier
+                .background(color = if (isSystemInDarkTheme()) DarkGray else LightGray)
                 .fillMaxWidth()
                 .padding(8.dp)
                 .onFocusChanged { focusState ->
@@ -104,8 +109,9 @@ fun StopsColumn(
                     )
                 }
             },
-            label = { Text("B") },
+            label = { Text("B", color = if (isSystemInDarkTheme()) LightGray else DarkGray) },
             modifier = Modifier
+                .background(color = if (isSystemInDarkTheme()) DarkGray else LightGray)
                 .fillMaxWidth()
                 .padding(8.dp)
                 .onFocusChanged { focusState ->
@@ -199,7 +205,7 @@ fun DisplayStops(stopsState: List<Stop>, stopsEvent: suspend (StopsEvent) -> Uni
                     }
                 },
                 text = stop.name ?: "",
-                color = Color.Yellow,
+                color = if (isSystemInDarkTheme()) Color.White else Color.Black,
             )
         }
     }

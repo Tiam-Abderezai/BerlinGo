@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
@@ -11,13 +12,13 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.berlingo.R
 import com.example.berlingo.common.logger.BaseLogger
@@ -29,6 +30,9 @@ import com.example.berlingo.map.MapsViewModel
 import com.example.berlingo.routes.JourneysScreen
 import com.example.berlingo.trips.TripsViewModel
 import com.example.berlingo.ui.theme.BerlinGoTheme
+import com.example.berlingo.ui.theme.DarkGray
+import com.example.berlingo.ui.theme.LightBlue
+import com.example.berlingo.ui.theme.LightGray
 import dagger.hilt.android.AndroidEntryPoint
 
 private val logger: BaseLogger = FactoryLogger.getLoggerKClass(MainActivity::class)
@@ -40,7 +44,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            BerlinGoTheme {
+            BerlinGoTheme(dynamicColor = false) {
                 val navController = rememberNavController()
                 Scaffold(
                     bottomBar = { BottomNavigationBar(navController) },
@@ -54,48 +58,29 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun BottomNavigationBar(navController: NavController) {
-    BottomNavigation(
-        backgroundColor = Color.Blue,
-        contentColor = Color.White,
-    ) {
-        val currentRoute = currentRoute(navController)
-//      Tab: Journeys
-        BottomNavigationItem(
-            selected = currentRoute == "journeys",
-            selectedContentColor = Color.Green,
-            onClick = {
-                navController.navigate("journeys") {
-                    popUpTo(navController.graph.startDestinationId)
-                    launchSingleTop = true
-                }
-            },
-            icon =
-            {
-                Icon(
-                    painter = painterResource(id = R.drawable.icon_routes),
-                    contentDescription = null,
-                )
-            },
-        )
-//      Tab: Map
-        BottomNavigationItem(
-            selected = currentRoute == "map",
-            selectedContentColor = Color.Green,
-            onClick = {
-                navController.navigate("map") {
-                    popUpTo(navController.graph.startDestinationId)
-                    launchSingleTop = true
-                }
-            },
-            icon =
-            {
-                Icon(
-                    painter = painterResource(id = R.drawable.icon_map),
-                    contentDescription = null,
-                )
-            },
-        )
-//        }
+    val screens = listOf(Screen.Journeys, Screen.Maps)
+    val route = navController.currentBackStackEntryAsState().value?.destination?.route
+    val selectedItemBackgroundColor = if (isSystemInDarkTheme()) LightGray else DarkGray
+    val unselectedItemBackgroundColor = if (isSystemInDarkTheme()) DarkGray else LightGray
+    BottomNavigation(backgroundColor = LightBlue) {
+        screens.forEach { screen ->
+            val isSelected = screen.route == route
+            BottomNavigationItem(
+                icon = {
+                    Icon(
+                        painter = when (screen) {
+                            Screen.Journeys -> painterResource(id = R.drawable.icon_routes)
+                            Screen.Maps -> painterResource(id = R.drawable.icon_map)
+                        },
+                        contentDescription = "$route screen",
+                    )
+                },
+                selected = isSelected,
+                onClick = { if (!isSelected) navController.navigate(screen.route) },
+                selectedContentColor = selectedItemBackgroundColor,
+                unselectedContentColor = unselectedItemBackgroundColor,
+            )
+        }
     }
 }
 
@@ -117,12 +102,31 @@ fun NavigationHost(navController: NavHostController) {
     val mapsState = mapsViewModel.state.collectAsState().value
     val mapsEvent = mapsViewModel::handleEvent
 
-    NavHost(navController, startDestination = "journeys") {
-        composable("journeys") { JourneysScreen(journeysState = journeysState, journeysEvent = journeysEvent, stopsState = stopsState, stopsEvent = stopsEvent, tripsState = tripsState, tripsEvent = tripsEvent) }
-        composable("map") { MapsScreen(mapsState = mapsState, mapsEvent = mapsEvent, journeysState = journeysState, journeysEvent = journeysEvent, stopsState = stopsState, stopsEvent = stopsEvent) }
+    NavHost(navController, startDestination = Screen.Journeys.route) {
+        composable(Screen.Journeys.route) {
+            JourneysScreen(
+                journeysState = journeysState,
+                journeysEvent = journeysEvent,
+                stopsState = stopsState,
+                stopsEvent = stopsEvent,
+                tripsState = tripsState,
+                tripsEvent = tripsEvent,
+            )
+        }
+        composable(Screen.Maps.route) {
+            MapsScreen(
+                mapsState = mapsState,
+                mapsEvent = mapsEvent,
+                journeysState = journeysState,
+                journeysEvent = journeysEvent,
+                stopsState = stopsState,
+                stopsEvent = stopsEvent,
+            )
+        }
     }
 }
 
-fun currentRoute(navController: NavController): String? {
-    return navController.currentBackStackEntry?.destination?.route
+sealed class Screen(val route: String) {
+    object Journeys : Screen("journeys")
+    object Maps : Screen("Maps")
 }
