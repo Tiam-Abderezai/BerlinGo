@@ -10,11 +10,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.berlingo.common.extensions.getDepartureTime
+import com.example.berlingo.common.extensions.convertEpochTime
 import com.example.berlingo.common.logger.BaseLogger
 import com.example.berlingo.common.logger.FactoryLogger
-import com.example.berlingo.common.utils.ErrorScreen
-import com.example.berlingo.common.utils.LoadingScreen
+import com.example.berlingo.common.components.ErrorScreen
+import com.example.berlingo.common.components.LoadingScreen
 import com.example.berlingo.trips.TripsState
 import com.example.berlingo.trips.network.responses.Trip
 import com.example.berlingo.ui.theme.DarkGray
@@ -51,7 +51,7 @@ private fun DisplayTrips(
                 val stopNameNotNull = !stopover?.stop?.name.isNullOrEmpty()
                 if (departureNotNull && stopNameNotNull) {
                     Text(
-                        "${stopover?.departure?.getDepartureTime()} - ${stopover?.stop?.name}",
+                        "${stopover?.departure?.convertEpochTime()} - ${stopover?.stop?.name}",
                         color = if (isSystemInDarkTheme()) LightGray else DarkGray,
                         modifier = Modifier
                             .padding(4.dp)

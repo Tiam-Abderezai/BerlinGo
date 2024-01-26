@@ -33,8 +33,8 @@ import androidx.compose.ui.unit.dp
 import com.example.berlingo.R
 import com.example.berlingo.common.logger.BaseLogger
 import com.example.berlingo.common.logger.FactoryLogger
-import com.example.berlingo.common.utils.ErrorScreen
-import com.example.berlingo.common.utils.LoadingScreen
+import com.example.berlingo.common.components.ErrorScreen
+import com.example.berlingo.common.components.LoadingScreen
 import com.example.berlingo.journeys.JourneysEvent
 import com.example.berlingo.journeys.JourneysState
 import com.example.berlingo.journeys.legs.stops.StopsState.*

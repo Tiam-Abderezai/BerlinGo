@@ -11,8 +11,12 @@ fun String.replaceWhiteSpaceWithPlus(): String {
     return this.replace(" ", "+")
 }
 
-fun String.getDepartureTime(): String? {
+fun String.convertEpochTime(): String? {
     return if (this.length >= 16 && this[10] == 'T') this.substring(11, 16) else null
+}
+
+fun String.convertEpochDate(): String? {
+    return if (this.length >= 16 && this[10] == 'T') this.substring(0, 10) else null
 }
 
 fun String.decodePolyline(): List<LatLng> {

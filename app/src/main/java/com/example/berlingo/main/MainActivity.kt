@@ -7,7 +7,6 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BottomNavigation
@@ -66,11 +65,7 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun BottomNavigationBar(navController: NavController) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(4.dp),
-    ) {
+    Box() {
         val screens = listOf(Screen.Journeys, Screen.Maps)
         val route = navController.currentBackStackEntryAsState().value?.destination?.route
         val selectedItemBackgroundColor = LightGray
@@ -86,7 +81,7 @@ fun BottomNavigationBar(navController: NavController) {
                 BottomNavigationItem(
                     icon = {
                         Icon(
-                            modifier = Modifier.size(48.dp),
+                            modifier = Modifier.size(64.dp),
                             painter = when (screen) {
                                 Screen.Journeys -> painterResource(id = R.drawable.icon_journeys)
                                 Screen.Maps -> painterResource(id = R.drawable.icon_maps)

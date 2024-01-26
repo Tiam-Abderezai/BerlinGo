@@ -1,4 +1,4 @@
-package com.example.berlingo.common.utils
+package com.example.berlingo.common.components
 
 import androidx.compose.foundation.background
 import androidx.compose.material.Text

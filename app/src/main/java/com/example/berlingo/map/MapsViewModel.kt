@@ -52,20 +52,20 @@ class MapsViewModel @Inject constructor(
         transitMode: String,
         language: String,
     ) {
-        try {
-            _state.value = MapsState.Loading
-            val directions = mapsApiImpl.getDirection(
-                key = API_KEY_GOOGLE_MAPS,
-                origin = origin,
-                destination = destination,
-                mode = mode,
-                transitMode = transitMode,
-                language = language,
-            ).data?.routes ?: emptyList()
-            _state.value = MapsState.Success(data = directions)
-        } catch (e: Exception) {
-            _state.value = MapsState.Error(e.message ?: "Unknown Error")
-        }
+//        try {
+//            _state.value = MapsState.Loading
+//            val directions = mapsApiImpl.getDirection(
+//                key = API_KEY_GOOGLE_MAPS,
+//                origin = origin,
+//                destination = destination,
+//                mode = mode,
+//                transitMode = transitMode,
+//                language = language,
+//            ).data?.routes ?: emptyList()
+//            _state.value = MapsState.Success(data = directions)
+//        } catch (e: Exception) {
+//            _state.value = MapsState.Error(e.message ?: "Unknown Error")
+//        }
     }
 
     private suspend fun getJourneyDirections(
