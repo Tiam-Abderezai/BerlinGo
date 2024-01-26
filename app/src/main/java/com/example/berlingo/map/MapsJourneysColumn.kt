@@ -23,14 +23,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.example.berlingo.common.extensions.getDepartureTime
+import com.example.berlingo.common.extensions.convertEpochTime
 import com.example.berlingo.common.extensions.getLineNameIcon
 import com.example.berlingo.common.extensions.getLineProductColor
 import com.example.berlingo.common.extensions.getLineProductIcon
 import com.example.berlingo.common.logger.BaseLogger
 import com.example.berlingo.common.logger.FactoryLogger
-import com.example.berlingo.common.utils.ErrorScreen
-import com.example.berlingo.common.utils.LoadingScreen
+import com.example.berlingo.common.components.ErrorScreen
+import com.example.berlingo.common.components.LoadingScreen
 import com.example.berlingo.journeys.JourneysState
 import com.example.berlingo.journeys.network.responses.Journey
 import com.example.berlingo.journeys.network.responses.Leg
@@ -52,7 +52,7 @@ fun MapsJourneysColumn(
         is JourneysState.Initial -> {}
         is JourneysState.Loading -> LoadingScreen()
         is JourneysState.Error -> ErrorScreen(message = journeysState.message)
-        is JourneysState.Success -> DisplayMapJourneys(journeysState.data, mapsEvent)
+        is JourneysState.Success -> DisplayMapJourneys(journeysState.journeys, mapsEvent)
     }
 }
 
@@ -76,7 +76,7 @@ private fun DisplayMapJourneys(journeys: Map<Journey, List<Leg>>, mapsEvent: sus
                 )
                 Row() {
                     Text(
-                        text = "${journey.legs?.get(0)?.departure?.getDepartureTime()}",
+                        text = "${journey.legs?.get(0)?.departure?.convertEpochTime()}",
                         color = textColor,
                     )
                     DrawLegsLineWithIcons(journey, legs, mapsEvent)

@@ -11,11 +11,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.example.berlingo.common.components.ErrorScreen
+import com.example.berlingo.common.components.LoadingScreen
 import com.example.berlingo.common.extensions.decodePolyline
 import com.example.berlingo.common.logger.BaseLogger
 import com.example.berlingo.common.logger.FactoryLogger
-import com.example.berlingo.common.utils.ErrorScreen
-import com.example.berlingo.common.utils.LoadingScreen
 import com.example.berlingo.journeys.JourneysEvent
 import com.example.berlingo.journeys.JourneysState
 import com.example.berlingo.journeys.legs.stops.StopsColumn

@@ -1,7 +1,9 @@
 package com.example.berlingo.journeys.network.responses
 
 import com.example.berlingo.journeys.legs.stops.network.responses.Location
+import com.google.gson.annotations.SerializedName
 import java.math.BigDecimal
+import java.time.OffsetDateTime
 
 data class JourneysResponse(
     val journeys: List<Journey>,
@@ -30,6 +32,8 @@ data class Leg(
     val departurePlatform: String? = "",
     val plannedDeparturePlatform: String? = "",
     val departurePrognosisType: String? = "",
+    val cancelled: Boolean? = false,
+    val remarks: List<Remark>? = emptyList()
 )
 
 data class Origin(
@@ -81,4 +85,28 @@ data class Products(
     val ferry: Boolean,
     val express: Boolean,
     val regional: Boolean,
+)
+data class Remark(
+    val id: String? = "",
+    val type: String? = "",
+    val code: String? = "",
+    val text: String? = "",
+    val summary: String? = "",
+    val icon: Icon? = Icon(),
+    val priority: Int? = 0,
+    val products: Products? = null,
+    val company: String? = "",
+    val category: Categories? = null,
+    val validFrom: String? = "",
+    val validUntil: String? = "",
+    val modified: String? = "",
+)
+
+data class Categories(
+    @SerializedName("0")
+    val zero: Int? = 0,
+)
+data class Icon(
+    val type: String? = "",
+    val title: String? = "",
 )

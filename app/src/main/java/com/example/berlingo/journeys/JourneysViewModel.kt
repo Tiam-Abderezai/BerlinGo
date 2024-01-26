@@ -5,6 +5,7 @@ import com.example.berlingo.common.logger.BaseLogger
 import com.example.berlingo.common.logger.FactoryLogger
 import com.example.berlingo.journeys.network.JourneysApiImpl
 import com.example.berlingo.journeys.network.responses.Leg
+import com.example.berlingo.journeys.network.responses.Remark
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -47,10 +48,29 @@ class JourneysViewModel @Inject constructor(
                 legs = journey.legs?.associateWith { it.tripId ?: "" } ?: emptyMap()
                 journey.legs ?: emptyList()
             } ?: emptyMap()
-            logger.debug("response: ${response.data?.journeys}")
-            logger.debug("journeys: $journeys")
-            logger.debug("legs: $legs")
-            _state.value = JourneysState.Success(data = journeys)
+
+            var warningRemark = Remark()
+            val remarks = legs.map { leg ->
+                leg.key.remarks?.map { remark ->
+                    if (remark.type?.contains("warning") == true) {
+                        warningRemark = remark
+                    }
+                }
+            }
+
+            logger.debug("response message: ${response.message}")
+//            logger.debug("warningRemark text: ${ warningRemark.text} ")
+//            logger.debug("warningRemark summary: ${ warningRemark.summary} ")
+//            logger.debug("warningRemark priority: ${ warningRemark.priority} ")
+//            logger.debug("warningRemark category: ${ warningRemark.category} ")
+//            logger.debug("warningRemark icon: ${ warningRemark.icon} ")
+//            logger.debug("warningRemark company: ${ warningRemark.company} ")
+//            logger.debug("warningRemark validFrom: ${ warningRemark.validFrom} ")
+//            logger.debug("warningRemark validUntil: ${ warningRemark.validUntil} ")
+//            logger.debug("warningRemark products: ${ warningRemark.products} ")
+//            logger.debug("journeys: $journeys")
+//            logger.debug("legs: $legs")
+            _state.value = JourneysState.Success(journeys = journeys, warningRemark = warningRemark)
         } catch (e: Exception) {
             _state.value = JourneysState.Error(message = e.message ?: "Unknown Error")
         }
