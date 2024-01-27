@@ -4,6 +4,7 @@ import com.example.berlingo.common.logger.BaseLogger
 import com.example.berlingo.common.logger.FactoryLogger
 import com.example.berlingo.data.network.Resource
 import com.example.berlingo.journeys.network.responses.JourneysResponse
+import java.util.Locale
 import javax.inject.Inject
 
 private val logger: BaseLogger = FactoryLogger.getLoggerKClass(JourneysApiImpl::class)
@@ -15,9 +16,11 @@ class JourneysApiImpl @Inject constructor(
     override suspend fun getJourneys(from: String, toId: String, toLatitude: Double, toLongitude: Double): Resource<JourneysResponse> {
         return try {
             val response = journeysApi.getJourneys(from = from, toId = toId, toLatitude = toLatitude, toLongitude = toLongitude)
+
             logger.debug("getJourneys: ${response.raw()}")
 
             if (response.isSuccessful) {
+                logger.debug("Locale.getDefault().language: ${Locale.getDefault().language}")
                 logger.debug("getJourneys: ${response.raw().body} ")
 
                 response.body()?.let {
