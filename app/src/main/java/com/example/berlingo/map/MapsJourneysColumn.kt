@@ -5,11 +5,11 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -22,15 +22,19 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import com.example.berlingo.R
+import com.example.berlingo.common.components.ErrorScreen
+import com.example.berlingo.common.components.LoadingScreen
+import com.example.berlingo.common.extensions.calculateDelay
 import com.example.berlingo.common.extensions.convertEpochTime
 import com.example.berlingo.common.extensions.getLineNameIcon
 import com.example.berlingo.common.extensions.getLineProductColor
 import com.example.berlingo.common.extensions.getLineProductIcon
 import com.example.berlingo.common.logger.BaseLogger
 import com.example.berlingo.common.logger.FactoryLogger
-import com.example.berlingo.common.components.ErrorScreen
-import com.example.berlingo.common.components.LoadingScreen
 import com.example.berlingo.journeys.JourneysState
 import com.example.berlingo.journeys.network.responses.Journey
 import com.example.berlingo.journeys.network.responses.Leg
@@ -66,21 +70,43 @@ private fun DisplayMapJourneys(journeys: Map<Journey, List<Leg>>, mapsEvent: sus
         ) {
             itemsIndexed(journeys.keys.toList()) { indexJourney, journey ->
                 val legs = journey.legs
+                val plannedDeparture =
+                    journey.legs?.get(0)?.plannedDeparture?.convertEpochTime().toString()
+                val departure = journey.legs?.get(0)?.departure?.convertEpochTime().toString()
+                val departureDelay = journey.legs?.get(0)?.departureDelay?.calculateDelay()
+                val cancelled = journey.legs?.get(0)?.cancelled
+
                 logger.debug("Journey: ${journeys.size}")
                 logger.debug("Legs: ${journey.legs}")
                 logger.debug("TripIds: ${journey.legs?.get(0)?.tripId}")
-                Divider(
-                    modifier = Modifier.padding(vertical = 8.dp),
-                    color = Color.Black,
-                    thickness = 0.8.dp,
-                )
                 Row() {
-                    Text(
-                        text = "${journey.legs?.get(0)?.departure?.convertEpochTime()}",
-                        color = textColor,
-                    )
+                    if (cancelled == false) {
+                        Column() {
+                            Text(
+                                text = plannedDeparture,
+                                color = textColor,
+                            )
+                            if (departureDelay != 0 && departureDelay != null) {
+                                Text(
+                                    text = departure,
+                                    color = Color.Red,
+                                )
+                                Text(
+                                    text = "($departureDelay)",
+                                    color = Color.Red,
+                                )
+                            }
+                        }
+                    } else {
+                        Text(
+                            text = plannedDeparture,
+                            color = Color.Red,
+                            style = TextStyle(textDecoration = TextDecoration.LineThrough),
+                        )
+                    }
                     DrawLegsLineWithIcons(journey, legs, mapsEvent)
                 }
+                Divider()
             }
         }
     }
@@ -107,9 +133,13 @@ fun DrawLegsLineWithIcons(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         legs?.forEach { leg ->
-            val lineProductIcon = leg.line?.product?.getLineProductIcon() ?: 0
-            val lineProductColor = leg.line?.product?.getLineProductColor() ?: Color.Transparent
-            val lineNameIcon = leg.line?.name?.getLineNameIcon() ?: 0
+            val line = leg.line
+            val product = line?.product
+            val walking = leg.walking
+            val lineProductIcon =
+                if (walking == true) R.drawable.icon_change_station else product?.getLineProductIcon() ?: 0
+            val lineProductColor = if (walking == true) Color.Black else product?.getLineProductColor() ?: Color.Transparent
+            val lineNameIcon = if (walking == true) R.drawable.icon_walking else line?.name?.getLineNameIcon() ?: 0
             DrawLineProductImage(lineProductIcon, lineNameIcon)
             logger.debug("line?.name: ${leg.line?.name}")
             logger.debug("lineProductIcon: $lineProductIcon")

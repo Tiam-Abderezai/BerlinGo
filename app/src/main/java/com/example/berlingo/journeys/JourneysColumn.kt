@@ -107,7 +107,6 @@ fun DisplayJourneys(
                 val departure = journey.legs?.get(0)?.departure?.convertEpochTime().toString()
                 val departureDelay = journey.legs?.get(0)?.departureDelay?.calculateDelay()
                 val cancelled = journey.legs?.get(0)?.cancelled
-
                 logger.debug("departureDelay: $departureDelay")
                 logger.debug("Journey: $journeys")
                 logger.debug("Legs: ${journey.legs}")
@@ -121,7 +120,7 @@ fun DisplayJourneys(
                             )
                             if (departureDelay != 0 && departureDelay != null) {
                                 Text(
-                                    text = "$departure",
+                                    text = departure,
                                     color = Color.Red,
                                 )
                                 Text(
@@ -157,15 +156,16 @@ private fun DrawLegsLineWithIcons(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable {
-                    expandedItemIndex = if (indexJourney == expandedItemIndex) -1 else indexJourney
-                },
+                .clickable { expandedItemIndex = if (indexJourney == expandedItemIndex) -1 else indexJourney },
             verticalAlignment = Alignment.CenterVertically,
         ) {
             legs?.forEach { leg ->
-                val lineProductIcon = leg.line?.product?.getLineProductIcon() ?: 0
-                val lineProductColor = leg.line?.product?.getLineProductColor() ?: Color.Transparent
-                val lineNameIcon = leg.line?.name?.getLineNameIcon() ?: 0
+                val line = leg.line
+                val product = line?.product
+                val walking = leg.walking
+                val lineProductIcon = if (walking == true) R.drawable.icon_change_station else product?.getLineProductIcon() ?: 0
+                val lineProductColor = if (walking == true) Color.Black else product?.getLineProductColor() ?: Color.Transparent
+                val lineNameIcon = if (walking == true) R.drawable.icon_walking else line?.name?.getLineNameIcon() ?: 0
                 DrawLineProductImageJourneys(lineProductIcon, lineNameIcon)
                 Canvas(
                     modifier = Modifier

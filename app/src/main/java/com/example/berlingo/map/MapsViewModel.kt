@@ -82,7 +82,7 @@ class MapsViewModel @Inject constructor(
                     transitMode = leg.line?.mode ?: "", // TODO Remove hardcoded value
                     language = "en", // TODO Remove hardcoded value
                 ).data?.routes ?: emptyList()
-                _state.value = MapsState.Success(data = directions)
+                _state.value = MapsState.Success(directions = directions)
             }
         } catch (e: Exception) {
             _state.value = MapsState.Error(message = e.message ?: "Unknown Error")

@@ -36,6 +36,7 @@ import com.google.maps.android.compose.Polyline
 import com.google.maps.android.compose.rememberCameraPositionState
 
 private val logger: BaseLogger = FactoryLogger.getLoggerCompose("MapsScreen()")
+
 @Composable
 fun MapsScreen(
     mapsState: MapsState,
@@ -47,6 +48,7 @@ fun MapsScreen(
 ) {
     val backgroundColor = if (isSystemInDarkTheme()) DarkGray else LightGray
     Surface(color = backgroundColor, modifier = Modifier.fillMaxSize()) {
+//        Box() {
         Column() {
             StopsColumn(
                 journeysState,
@@ -58,7 +60,7 @@ fun MapsScreen(
                 journeysState,
                 mapsEvent,
             )
-
+//            }
             // ------------------------------ //
             // Hardcoded Values for Debugging //
 
@@ -77,17 +79,19 @@ fun MapsScreen(
 //            }
 //            logger.debug("Directions: ${mapsState.value.routes}")
             when (mapsState) {
-                is Initial -> {}
+                is Initial -> {
+                    MapComponent(emptyList())
+                }
                 is Loading -> LoadingScreen()
                 is Error -> ErrorScreen(message = mapsState.message)
-                is Success -> DisplayGoogleMaps(routes = mapsState.data)
+                is Success -> MapComponent(directions = mapsState.directions)
             }
         }
     }
 }
 
 @Composable
-private fun DisplayGoogleMaps(routes: List<Route>) {
+private fun MapComponent(directions: List<Route>) {
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier.height(300.dp),
@@ -101,13 +105,15 @@ private fun DisplayGoogleMaps(routes: List<Route>) {
                 position = berlinCameraPosition
             },
         ) {
-            val points = routes[0].polyline?.points ?: ""
-            val polyLine = points.decodePolyline()
-            Polyline(
-                points = polyLine,
-                color = Color.Blue,
-                width = 5f,
-            )
+            if (directions.isNotEmpty()) {
+                val points = directions[0].polyline?.points ?: ""
+                val polyLine = points.decodePolyline()
+                Polyline(
+                    points = polyLine,
+                    color = Color.Blue,
+                    width = 5f,
+                )
+            }
         }
     }
 }

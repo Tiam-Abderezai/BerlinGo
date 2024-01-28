@@ -3,7 +3,6 @@ package com.example.berlingo.journeys.network.responses
 import com.example.berlingo.journeys.legs.stops.network.responses.Location
 import com.google.gson.annotations.SerializedName
 import java.math.BigDecimal
-import java.time.OffsetDateTime
 
 data class JourneysResponse(
     val journeys: List<Journey>,
@@ -33,7 +32,10 @@ data class Leg(
     val plannedDeparturePlatform: String? = "",
     val departurePrognosisType: String? = "",
     val cancelled: Boolean? = false,
-    val remarks: List<Remark>? = emptyList()
+    val remarks: List<Remark>? = emptyList(),
+    val public: Boolean? = false,
+    val walking: Boolean? = false,
+    val distance: Int? = 0
 )
 
 data class Origin(
