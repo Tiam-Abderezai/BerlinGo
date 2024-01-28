@@ -1,4 +1,3 @@
-
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -23,6 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.example.berlingo.R
 import com.example.berlingo.common.extensions.getLineNameIcon
 import com.example.berlingo.common.extensions.getLineProductColor
 import com.example.berlingo.common.extensions.getLineProductIcon
@@ -51,15 +51,7 @@ fun LegsColumn(
         ) {
             itemsIndexed(legs ?: emptyList()) { indexLeg, leg ->
                 val line = legs?.get(indexLeg)?.line
-                val lineProductIcon = line?.product?.getLineProductIcon() ?: 0
-                val lineProductColor = line?.product?.getLineProductColor() ?: Color.Transparent
-                val lineNameIcon = line?.name?.getLineNameIcon() ?: 0
-
-                // 0 means ignore don't display Icon if no product is found
                 logger.debug("line name: ${line?.name}")
-                logger.debug("lineProductIcon: $lineProductIcon")
-                logger.debug("lineNameIcon: $lineNameIcon")
-                val tripId = leg.tripId ?: ""
                 DrawLineProductImageLegs(leg, indexLeg, tripsState, tripsEvent)
             }
         }
@@ -74,9 +66,19 @@ private fun DrawLineProductImageLegs(
     tripsEvent: suspend (TripsEvent) -> Unit,
 ) {
     var expandedItemIndex by remember { mutableStateOf(-1) }
+    val line = leg.line
+    val product = line?.product
+    val walking = leg.walking
+    val lineProductIcon =
+        if (walking == true) R.drawable.icon_change_station else product?.getLineProductIcon() ?: 0
+    val lineProductColor =
+        if (walking == true) Color.Black else product?.getLineProductColor() ?: Color.Transparent
+    val lineNameIcon =
+        if (walking == true) R.drawable.icon_walking else line?.name?.getLineNameIcon() ?: 0
     Row(
         modifier = Modifier.fillMaxWidth()
-            .clickable {
+            // Don't show trips if walking is true, because there is nothing to show
+            .clickable(walking == false) {
                 expandedItemIndex = if (indexLeg == expandedItemIndex) -1 else indexLeg
                 CoroutineScope(Dispatchers.IO).launch {
                     tripsEvent.invoke(
@@ -89,9 +91,6 @@ private fun DrawLineProductImageLegs(
             },
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        val lineProductIcon = leg.line?.product?.getLineProductIcon() ?: 0
-        val lineProductColor = leg.line?.product?.getLineProductColor() ?: Color.Transparent
-        val lineNameIcon = leg.line?.name?.getLineNameIcon() ?: 0
         DrawLineProductIcons(lineProductIcon, lineNameIcon)
         Canvas(
             modifier = Modifier
@@ -106,7 +105,8 @@ private fun DrawLineProductImageLegs(
             )
         }
     }
-    if (indexLeg == expandedItemIndex) {
+    // Don't show trips if walking is true, because there is nothing to show
+    if (indexLeg == expandedItemIndex && walking == false) {
         TripsColumn(
             tripsState = tripsState,
         )
