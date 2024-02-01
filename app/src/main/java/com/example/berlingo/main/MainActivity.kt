@@ -19,7 +19,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
@@ -28,6 +27,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.berlingo.R
+import com.example.berlingo.common.Dimensions.large
+import com.example.berlingo.common.Dimensions.smallXXX
 import com.example.berlingo.common.logger.BaseLogger
 import com.example.berlingo.common.logger.FactoryLogger
 import com.example.berlingo.journeys.JourneysViewModel
@@ -71,9 +72,9 @@ fun BottomNavigationBar(navController: NavController) {
         val selectedItemBackgroundColor = LightGray
         val unselectedItemBackgroundColor = DarkGray
         BottomNavigation(
-            modifier = Modifier.height(64.dp)
+            modifier = Modifier.height(large)
                 .fillMaxWidth()
-                .clip(RoundedCornerShape(8.dp)),
+                .clip(RoundedCornerShape(smallXXX)),
             backgroundColor = LightBlue,
         ) {
             screens.forEach { screen ->
@@ -81,7 +82,7 @@ fun BottomNavigationBar(navController: NavController) {
                 BottomNavigationItem(
                     icon = {
                         Icon(
-                            modifier = Modifier.size(64.dp),
+                            modifier = Modifier.size(large),
                             painter = when (screen) {
                                 Screen.Journeys -> painterResource(id = R.drawable.icon_journeys)
                                 Screen.Maps -> painterResource(id = R.drawable.icon_maps)

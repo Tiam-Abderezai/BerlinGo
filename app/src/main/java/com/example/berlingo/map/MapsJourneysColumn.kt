@@ -26,6 +26,9 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import com.example.berlingo.R
+import com.example.berlingo.common.Dimensions.medium
+import com.example.berlingo.common.Dimensions.small
+import com.example.berlingo.common.Dimensions.smallXXX
 import com.example.berlingo.common.components.ErrorScreen
 import com.example.berlingo.common.components.LoadingScreen
 import com.example.berlingo.common.extensions.calculateDelay
@@ -120,7 +123,7 @@ fun DrawLegsLineWithIcons(
 ) {
     Row(
         modifier = Modifier
-            .heightIn(1.dp)
+            .heightIn(small)
             .clickable {
                 CoroutineScope(Dispatchers.IO).launch {
                     mapsEvent.invoke(
@@ -147,7 +150,7 @@ fun DrawLegsLineWithIcons(
             Canvas(
                 modifier = Modifier
                     .weight(1f)
-                    .height(1.dp),
+                    .height(smallXXX),
             ) {
                 drawLine(
                     color = lineProductColor,
@@ -165,12 +168,12 @@ private fun DrawLineProductImage(lineProductIcon: Int, lineNameIcon: Int) {
     // 0 means ignore don't display Icon if no product is found
     if (lineProductIcon != 0 && lineNameIcon != 0) {
         Image(
-            modifier = Modifier.size(32.dp),
+            modifier = Modifier.size(medium),
             painter = painterResource(id = lineProductIcon),
             contentDescription = null,
         )
         Image(
-            modifier = Modifier.size(32.dp),
+            modifier = Modifier.size(medium),
             painter = painterResource(id = lineNameIcon),
             contentDescription = null,
         )

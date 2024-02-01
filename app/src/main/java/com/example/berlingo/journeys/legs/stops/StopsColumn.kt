@@ -29,12 +29,14 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import com.example.berlingo.R
-import com.example.berlingo.common.logger.BaseLogger
-import com.example.berlingo.common.logger.FactoryLogger
+import com.example.berlingo.common.Dimensions.large
+import com.example.berlingo.common.Dimensions.smallXX
+import com.example.berlingo.common.Dimensions.smallXXX
 import com.example.berlingo.common.components.ErrorScreen
 import com.example.berlingo.common.components.LoadingScreen
+import com.example.berlingo.common.logger.BaseLogger
+import com.example.berlingo.common.logger.FactoryLogger
 import com.example.berlingo.journeys.JourneysEvent
 import com.example.berlingo.journeys.JourneysState
 import com.example.berlingo.journeys.legs.stops.StopsState.*
@@ -89,7 +91,7 @@ fun StopsColumn(
             modifier = Modifier
                 .background(color = backgroundColor)
                 .fillMaxWidth()
-                .padding(4.dp)
+                .padding(smallXX)
                 .onFocusChanged { focusState ->
                     textFieldOriginFocused = focusState.isFocused
                 },
@@ -109,7 +111,7 @@ fun StopsColumn(
             modifier = Modifier
                 .background(color = backgroundColor)
                 .fillMaxWidth()
-                .padding(4.dp)
+                .padding(smallXX)
                 .onFocusChanged { focusState ->
                     textFieldDestinationFocused = focusState.isFocused
                 },
@@ -127,7 +129,7 @@ fun StopsColumn(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(4.dp),
+                .padding(smallXX),
         ) {
             Button(
                 onClick = {
@@ -161,12 +163,12 @@ fun StopsColumn(
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(64.dp)
+                    .height(large)
                     .align(Alignment.Center),
-                shape = RoundedCornerShape(8.dp),
+                shape = RoundedCornerShape(smallXXX),
             ) {
                 Icon(
-                    modifier = Modifier.size(64.dp),
+                    modifier = Modifier.size(large),
                     painter = painterResource(id = R.drawable.icon_search),
                     tint = labelColor,
                     contentDescription = null,
