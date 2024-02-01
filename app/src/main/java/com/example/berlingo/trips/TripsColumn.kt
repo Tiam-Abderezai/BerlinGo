@@ -10,11 +10,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.berlingo.common.Dimensions.medium
+import com.example.berlingo.common.Dimensions.smallXX
+import com.example.berlingo.common.components.ErrorScreen
+import com.example.berlingo.common.components.LoadingScreen
 import com.example.berlingo.common.extensions.convertEpochTime
 import com.example.berlingo.common.logger.BaseLogger
 import com.example.berlingo.common.logger.FactoryLogger
-import com.example.berlingo.common.components.ErrorScreen
-import com.example.berlingo.common.components.LoadingScreen
 import com.example.berlingo.trips.TripsState
 import com.example.berlingo.trips.network.responses.Trip
 import com.example.berlingo.ui.theme.DarkGray
@@ -44,7 +46,7 @@ private fun DisplayTrips(
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 32.dp),
+                .padding(start = medium),
         ) {
             items(stopovers.toList()) { stopover ->
                 val departureNotNull = !stopover?.departure.isNullOrEmpty()
@@ -54,7 +56,7 @@ private fun DisplayTrips(
                         "${stopover?.departure?.convertEpochTime()} - ${stopover?.stop?.name}",
                         color = if (isSystemInDarkTheme()) LightGray else DarkGray,
                         modifier = Modifier
-                            .padding(4.dp)
+                            .padding(smallXX)
                             .clickable { logger.debug("trip.stopovers CLICKED}") },
 
                     )

@@ -18,6 +18,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.example.berlingo.common.Dimensions.small
+import com.example.berlingo.common.Dimensions.smallXXX
 import com.example.berlingo.common.logger.BaseLogger
 import com.example.berlingo.common.logger.FactoryLogger
 import kotlinx.coroutines.delay
@@ -57,9 +59,9 @@ fun RandomDotsAnimation() {
                 ) {
                     CircularProgressIndicator(
                         modifier = Modifier
-                            .padding(1.dp)
+                            .padding(small)
                             .size(10.dp),
-                        strokeWidth = 8.dp,
+                        strokeWidth = smallXXX,
                         color = Color.Yellow,
                     )
                 }
@@ -86,9 +88,9 @@ fun RandomDotsAnimation() {
                 ) {
                     CircularProgressIndicator(
                         modifier = Modifier
-                            .padding(1.dp)
+                            .padding(small)
                             .size(10.dp),
-                        strokeWidth = 8.dp,
+                        strokeWidth = smallXXX,
                         color = Color.Yellow,
                     )
                 }
@@ -115,9 +117,9 @@ fun RandomDotsAnimation() {
                 ) {
                     CircularProgressIndicator(
                         modifier = Modifier
-                            .padding(1.dp)
+                            .padding(small)
                             .size(10.dp),
-                        strokeWidth = 8.dp,
+                        strokeWidth = smallXXX,
                         color = Color.Yellow,
                     )
                 }
@@ -144,9 +146,9 @@ fun RandomDotsAnimation() {
                 ) {
                     CircularProgressIndicator(
                         modifier = Modifier
-                            .padding(1.dp)
+                            .padding(small)
                             .size(10.dp),
-                        strokeWidth = 8.dp,
+                        strokeWidth = smallXXX,
                         color = Color.Yellow,
                     )
                 }
@@ -173,9 +175,9 @@ fun RandomDotsAnimation() {
                 ) {
                     CircularProgressIndicator(
                         modifier = Modifier
-                            .padding(1.dp)
+                            .padding(small)
                             .size(10.dp),
-                        strokeWidth = 8.dp,
+                        strokeWidth = smallXXX,
                         color = Color.Yellow,
                     )
                 }
@@ -202,9 +204,9 @@ fun RandomDotsAnimation() {
                 ) {
                     CircularProgressIndicator(
                         modifier = Modifier
-                            .padding(1.dp)
+                            .padding(small)
                             .size(10.dp),
-                        strokeWidth = 8.dp,
+                        strokeWidth = smallXXX,
                         color = Color.Yellow,
                     )
                 }
@@ -231,9 +233,9 @@ fun RandomDotsAnimation() {
                 ) {
                     CircularProgressIndicator(
                         modifier = Modifier
-                            .padding(1.dp)
+                            .padding(small)
                             .size(10.dp),
-                        strokeWidth = 8.dp,
+                        strokeWidth = smallXXX,
                         color = Color.Yellow,
                     )
                 }

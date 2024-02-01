@@ -23,6 +23,8 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.berlingo.R
+import com.example.berlingo.common.Dimensions.medium
+import com.example.berlingo.common.Dimensions.small
 import com.example.berlingo.common.extensions.getLineNameIcon
 import com.example.berlingo.common.extensions.getLineProductColor
 import com.example.berlingo.common.extensions.getLineProductIcon
@@ -47,7 +49,7 @@ fun LegsColumn(
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 32.dp),
+                .padding(start = medium),
         ) {
             itemsIndexed(legs ?: emptyList()) { indexLeg, leg ->
                 val line = legs?.get(indexLeg)?.line
@@ -95,7 +97,7 @@ private fun DrawLineProductImageLegs(
         Canvas(
             modifier = Modifier
                 .weight(1f)
-                .height(1.dp),
+                .height(small),
         ) {
             drawLine(
                 color = lineProductColor,
@@ -118,12 +120,12 @@ fun DrawLineProductIcons(lineProductIcon: Int, lineNameIcon: Int) {
     // 0 means ignore don't display Icon if no product is found
     if (lineProductIcon != 0 && lineNameIcon != 0) {
         Image(
-            modifier = Modifier.size(32.dp),
+            modifier = Modifier.size(medium),
             painter = painterResource(id = lineProductIcon),
             contentDescription = null,
         )
         Image(
-            modifier = Modifier.size(32.dp),
+            modifier = Modifier.size(medium),
             painter = painterResource(id = lineNameIcon),
             contentDescription = null,
         )

@@ -31,9 +31,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.berlingo.R
+import com.example.berlingo.common.Dimensions.medium
+import com.example.berlingo.common.Dimensions.small
+import com.example.berlingo.common.Dimensions.smallX
 import com.example.berlingo.common.components.Divider
 import com.example.berlingo.common.components.ErrorScreen
 import com.example.berlingo.common.components.LoadingScreen
@@ -81,7 +83,7 @@ fun JourneysColumn(
                     DisplayJourneys(journeysState.journeys, journeyEvent, tripsState, tripsEvent)
                 }
             }
-            Spacer(modifier = Modifier.height(3.dp))
+            Spacer(modifier = Modifier.height(smallX))
         }
     }
 }
@@ -170,7 +172,7 @@ private fun DrawLegsLineWithIcons(
                 Canvas(
                     modifier = Modifier
                         .weight(1f)
-                        .height(1.dp),
+                        .height(small),
                 ) {
                     drawLine(
                         color = lineProductColor,
@@ -196,12 +198,12 @@ private fun DrawLineProductImageJourneys(lineProductIcon: Int, lineNameIcon: Int
     // 0 means ignore don't display Icon if no product is found
     if (lineProductIcon != 0 && lineNameIcon != 0) {
         Image(
-            modifier = Modifier.size(32.dp),
+            modifier = Modifier.size(medium),
             painter = painterResource(id = lineProductIcon),
             contentDescription = null,
         )
         Image(
-            modifier = Modifier.size(32.dp),
+            modifier = Modifier.size(medium),
             painter = painterResource(id = lineNameIcon),
             contentDescription = null,
         )
@@ -224,7 +226,7 @@ fun DisplayWarningRemark(warningRemark: Remark) {
                 painterResource(id = R.drawable.icon_warning_amber),
                 contentDescription = null,
                 modifier = Modifier.background(color = Color.Yellow)
-                    .align(Alignment.CenterHorizontally).size(32.dp),
+                    .align(Alignment.CenterHorizontally).size(medium),
             )
             Text(
                 text = summary,
