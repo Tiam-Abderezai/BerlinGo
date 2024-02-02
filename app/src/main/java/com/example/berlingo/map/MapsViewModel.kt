@@ -25,18 +25,6 @@ class MapsViewModel @Inject constructor(
 
     fun handleEvent(event: MapsEvent) {
         when (event) {
-            is MapsEvent.DirectionsGet -> {
-                viewModelScope.launch {
-                    getDirection(
-                        event.origin,
-                        event.destination,
-                        event.mode,
-                        event.transitMode,
-                        event.language,
-                    )
-                }
-            }
-
             is MapsEvent.DirectionsJourneyGet -> {
                 viewModelScope.launch {
                     getJourneyDirections(event.journey)
@@ -45,45 +33,22 @@ class MapsViewModel @Inject constructor(
         }
     }
 
-    private suspend fun getDirection(
-        origin: String,
-        destination: String,
-        mode: String,
-        transitMode: String,
-        language: String,
-    ) {
-//        try {
-//            _state.value = MapsState.Loading
-//            val directions = mapsApiImpl.getDirection(
-//                key = API_KEY_GOOGLE_MAPS,
-//                origin = origin,
-//                destination = destination,
-//                mode = mode,
-//                transitMode = transitMode,
-//                language = language,
-//            ).data?.routes ?: emptyList()
-//            _state.value = MapsState.Success(data = directions)
-//        } catch (e: Exception) {
-//            _state.value = MapsState.Error(e.message ?: "Unknown Error")
-//        }
-    }
-
     private suspend fun getJourneyDirections(
         journey: Journey?,
     ) {
         try {
             _state.value = MapsState.Loading
-            journey?.legs?.forEach { leg ->
-                val directions = mapsApiImpl.getDirection(
+            val directions = journey?.legs?.map { leg ->
+                mapsApiImpl.getDirection(
                     key = API_KEY_GOOGLE_MAPS,
-                    origin = leg.origin?.name ?: "",
-                    destination = leg.destination?.name ?: "",
+                    origin = "${leg.origin?.location?.latitude},${leg.origin?.location?.longitude}",
+                    destination = "${leg.destination?.location?.latitude},${leg.destination?.location?.longitude}",
                     mode = "transit",
-                    transitMode = leg.line?.mode ?: "", // TODO Remove hardcoded value
+                    transitMode = leg.line?.mode ?: "",
                     language = "en", // TODO Remove hardcoded value
                 ).data?.routes ?: emptyList()
-                _state.value = MapsState.Success(directions = directions)
-            }
+            } ?: emptyList()
+            _state.value = MapsState.Success(directions = directions)
         } catch (e: Exception) {
             _state.value = MapsState.Error(message = e.message ?: "Unknown Error")
         }

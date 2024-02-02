@@ -48,7 +48,6 @@ fun MapsScreen(
 ) {
     val backgroundColor = if (isSystemInDarkTheme()) DarkGray else LightGray
     Surface(color = backgroundColor, modifier = Modifier.fillMaxSize()) {
-//        Box() {
         Column() {
             StopsColumn(
                 journeysState,
@@ -60,28 +59,8 @@ fun MapsScreen(
                 journeysState,
                 mapsEvent,
             )
-//            }
-            // ------------------------------ //
-            // Hardcoded Values for Debugging //
-
-//            LaunchedEffect(Unit) {
-//                CoroutineScope(Dispatchers.IO).launch {
-//                    onMapsEvent.invoke(
-//                        MapsEvent.DirectionsGet(
-//                            origin = "Berlin",
-//                            destination = "Paris",
-//                            mode = "transit",
-//                            transitMode = "bus",
-//                            language = "en",
-//                        ),
-//                    )
-//                }
-//            }
-//            logger.debug("Directions: ${mapsState.value.routes}")
             when (mapsState) {
-                is Initial -> {
-                    MapComponent(emptyList())
-                }
+                is Initial -> MapComponent(emptyList())
                 is Loading -> LoadingScreen()
                 is Error -> ErrorScreen(message = mapsState.message)
                 is Success -> MapComponent(directions = mapsState.directions)
@@ -91,7 +70,7 @@ fun MapsScreen(
 }
 
 @Composable
-private fun MapComponent(directions: List<Route>) {
+private fun MapComponent(directions: List<List<Route>>) {
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier.height(300.dp),
@@ -106,13 +85,17 @@ private fun MapComponent(directions: List<Route>) {
             },
         ) {
             if (directions.isNotEmpty()) {
-                val points = directions[0].polyline?.points ?: ""
-                val polyLine = points.decodePolyline()
-                Polyline(
-                    points = polyLine,
-                    color = Color.Blue,
-                    width = 5f,
-                )
+                directions.map { routes ->
+                    routes.map { route ->
+                        val points = route.polyline?.points ?: ""
+                        val polyLine = points.decodePolyline()
+                        Polyline(
+                            points = polyLine,
+                            color = Color.Blue,
+                            width = 5f,
+                        )
+                    }
+                }
             }
         }
     }
