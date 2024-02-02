@@ -19,13 +19,19 @@ fun String.convertEpochDate(): String? {
     return if (this.length >= 16 && this[10] == 'T') this.substring(0, 10) else null
 }
 
+/*
+decodePolyline() decodes a string-encoded polyline into a list of LatLng objects.
+It's commonly used to decode polylines provided by mapping services like Google Maps.
+The polyline encoding is a compact form of a list of coordinates.
+ */
 fun String.decodePolyline(): List<LatLng> {
+    // Initialization:
     val encoded = this
     val poly = mutableListOf<LatLng>()
     var index = 0
     var lat = 0
     var lng = 0
-
+    // Decoding loop:
     while (index < encoded.length) {
         var shift = 0
         var result = 0

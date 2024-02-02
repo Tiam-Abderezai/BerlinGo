@@ -50,8 +50,7 @@ data class Destination(
     val type: String? = "",
     val id: String? = "",
     val name: String? = "",
-    val latitude: BigDecimal? = BigDecimal.ZERO,
-    val longitude: BigDecimal? = BigDecimal.ZERO,
+    val location: Location?,
     val poi: Boolean? = false,
 )
 
