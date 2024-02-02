@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -24,10 +26,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import com.example.berlingo.R
 import com.example.berlingo.common.Dimensions.large
@@ -106,8 +111,10 @@ fun StopsColumn(
                     )
                 }
             },
+            trailingIcon = { if (originStopName.isNotEmpty())Icon(Icons.Filled.Clear, contentDescription = stringResource(R.string.clear_textfield), modifier = Modifier.clickable { originStopName = "" }) },
         )
         TextField(
+            label = { Text("B", color = labelColor, fontWeight = FontWeight.SemiBold) },
             modifier = Modifier
                 .background(color = backgroundColor)
                 .fillMaxWidth()
@@ -124,7 +131,7 @@ fun StopsColumn(
                     )
                 }
             },
-            label = { Text("B", color = labelColor, fontWeight = FontWeight.SemiBold) },
+            trailingIcon = { if (destinStopName.isNotEmpty())Icon(Icons.Filled.Clear, contentDescription = stringResource(R.string.clear_textfield), modifier = Modifier.clickable { destinStopName = "" }) },
         )
         Box(
             modifier = Modifier
@@ -186,11 +193,13 @@ fun StopsColumn(
     }
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun DisplayStops(stopsState: List<Stop>, stopsEvent: suspend (StopsEvent) -> Unit) {
     val textColor = if (isSystemInDarkTheme()) Color.White else Color.Black
     LazyColumn {
-        items(stopsState ?: emptyList()) { stop ->
+        items(stopsState) { stop ->
+            val keyboardController = LocalSoftwareKeyboardController.current
             Text(
                 modifier = Modifier.clickable {
                     if (textFieldOriginFocused) {
@@ -207,6 +216,7 @@ fun DisplayStops(stopsState: List<Stop>, stopsEvent: suspend (StopsEvent) -> Uni
                         destinLocationLong = stop.location?.longitude ?: ""
                         destinStop = stop
                     }
+                    keyboardController?.hide()
                     // TODO CLEAN THIS WORKAROUND
                     // Currently used to clear
                     // the list of Locations/Stops after
