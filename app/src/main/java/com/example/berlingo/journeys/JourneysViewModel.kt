@@ -32,8 +32,8 @@ class JourneysViewModel @Inject constructor(
     private suspend fun queryJourneys(
         from: String,
         toId: String,
-        toLatitude: Double,
-        toLongitude: Double,
+        toLatitude: String,
+        toLongitude: String,
     ) {
         try {
             _state.value = JourneysState.Loading

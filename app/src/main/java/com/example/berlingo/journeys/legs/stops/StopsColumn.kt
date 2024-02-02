@@ -133,23 +133,24 @@ fun StopsColumn(
         ) {
             Button(
                 onClick = {
-                    CoroutineScope(Dispatchers.IO).launch {
+                    if (originStopName.isNotBlank() && destinStopName.isNotBlank()) {
+                        CoroutineScope(Dispatchers.IO).launch {
 //                        if (destinLocationLat.isNotEmpty()) {
 //                        logger.debug("originLocationId: $originLocationId")
 //                        logger.debug("destinLocationId: $destinLocationId")
 //                        logger.debug("destinLocationLat: $originLocationId")
 //                        logger.debug("originLocationId: $destinLocationLong")
-                        journeysEvent.invoke(
-                            JourneysEvent.JourneyQueryEvent(
-                                from = originLocationId.toString(),
-                                to = destinLocationId.toString(),
-                                toLatitude = destinLocationLat.toDouble(),
-                                toLongitude = destinLocationLong.toDouble(),
-                            ),
-                        )
+                            journeysEvent.invoke(
+                                JourneysEvent.JourneyQueryEvent(
+                                    from = originLocationId.toString(),
+                                    to = destinLocationId.toString(),
+                                    toLatitude = destinLocationLat,
+                                    toLongitude = destinLocationLong,
+                                ),
+                            )
 
-                        // ------------------------------ //
-                        // Hardcoded Values for Debugging //
+                            // ------------------------------ //
+                            // Hardcoded Values for Debugging //
 //                        }
 //                        journeysEvent.invoke(
 //                            JourneysEvent.JourneyQueryEvent(
@@ -159,6 +160,7 @@ fun StopsColumn(
 //                                13.369072,
 //                            ),
 //                        )
+                        }
                     }
                 },
                 modifier = Modifier

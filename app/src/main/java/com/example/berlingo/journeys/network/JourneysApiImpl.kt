@@ -13,7 +13,7 @@ class JourneysApiImpl @Inject constructor(
     private val journeysApi: JourneysApi,
 ) : JourneysRepository {
 
-    override suspend fun getJourneys(from: String, toId: String, toLatitude: Double, toLongitude: Double): Resource<JourneysResponse> {
+    override suspend fun getJourneys(from: String, toId: String, toLatitude: String, toLongitude: String): Resource<JourneysResponse> {
         return try {
             val response = journeysApi.getJourneys(from = from, toId = toId, toLatitude = toLatitude, toLongitude = toLongitude)
 

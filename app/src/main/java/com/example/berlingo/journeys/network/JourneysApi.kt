@@ -11,8 +11,8 @@ interface JourneysApi {
     suspend fun getJourneys(
         @Query("from") from: String,
         @Query("to") toId: String,
-        @Query("to.latitude") toLatitude: Double,
-        @Query("to.longitude") toLongitude: Double,
+        @Query("to.latitude") toLatitude: String,
+        @Query("to.longitude") toLongitude: String,
         @Query("language") language: String = Locale.getDefault().language,
         @Query("results") results: Int = 10,
     ): Response<JourneysResponse>
