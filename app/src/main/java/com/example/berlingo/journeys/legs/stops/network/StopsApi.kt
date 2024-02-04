@@ -21,6 +21,12 @@ interface StopsApi {
         @Query("duration") duration: Int,
     ): Response<Stop>
 
+    @GET("locations/nearby?")
+    suspend fun getNearestStops(
+        @Query("latitude") latitude: String,
+        @Query("longitude") longitude: String,
+    ): Response<List<Stop>>
+
     @GET("stops/900360136/departures?duration=10&results=4&linesOfStops=true&remarks=true&language=en")
     suspend fun getDepartures(
         @Query("") searchQuery: String,

@@ -1,9 +1,12 @@
 package com.example.berlingo.main
 
 import android.annotation.SuppressLint
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -16,9 +19,12 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
@@ -29,6 +35,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.berlingo.R
 import com.example.berlingo.common.Dimensions.large
 import com.example.berlingo.common.Dimensions.smallXXX
+import com.example.berlingo.common.Permissions.Companion.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION
 import com.example.berlingo.common.logger.BaseLogger
 import com.example.berlingo.common.logger.FactoryLogger
 import com.example.berlingo.journeys.JourneysViewModel
@@ -44,13 +51,18 @@ import com.example.berlingo.ui.theme.LightGray
 import dagger.hilt.android.AndroidEntryPoint
 
 private val logger: BaseLogger = FactoryLogger.getLoggerKClass(MainActivity::class)
+val locationPermissionGranted = mutableStateOf(false)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Request User's Location Permission
+        getLocationPermission()
+
         setContent {
             BerlinGoTheme(dynamicColor = false) {
                 val navController = rememberNavController()
@@ -60,6 +72,33 @@ class MainActivity : ComponentActivity() {
                     NavigationHost(navController = navController)
                 }
             }
+        }
+    }
+    private fun getLocationPermission() {
+        if (ContextCompat.checkSelfPermission(
+                this,
+                android.Manifest.permission.ACCESS_FINE_LOCATION,
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            locationPermissionGranted.value = true // we already have the permission
+        } else {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
+                PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION,
+            )
+        }
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray,
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            locationPermissionGranted.value = true
         }
     }
 }

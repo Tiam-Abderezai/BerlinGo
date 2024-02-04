@@ -1,9 +1,11 @@
 package com.example.berlingo.journeys.legs.stops
 
+import android.location.Location
 import androidx.lifecycle.ViewModel
 import com.example.berlingo.common.logger.BaseLogger
 import com.example.berlingo.common.logger.FactoryLogger
 import com.example.berlingo.journeys.legs.stops.network.StopsApiImpl
+import com.example.berlingo.journeys.legs.stops.network.responses.Stop
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -21,13 +23,24 @@ class StopsViewModel @Inject constructor(
 
     suspend fun handleEvent(event: StopsEvent) {
         when (event) {
-            is StopsEvent.StopsQueryEvent -> {
-                queryStops(event.name)
+            is StopsEvent.GetStops -> {
+                getStops(event.name)
+            }
+
+            is StopsEvent.GetNearestStops -> {
+                getNearestStop(event.location)
+            }
+
+            is StopsEvent.EmptyNearestStop -> {
+                _state.value = StopsState.Success(nearestStop = Stop())
+            }
+            is StopsEvent.EmptyStops -> {
+                _state.value = StopsState.Success(stops = emptyList())
             }
         }
     }
 
-    private suspend fun queryStops(query: String) {
+    private suspend fun getStops(query: String) {
         try {
             _state.value = StopsState.Loading
             val stops = stopsApiImpl.getStops(false, addresses = false, query = query).data
@@ -36,21 +49,25 @@ class StopsViewModel @Inject constructor(
                     stop.name?.contains(query, ignoreCase = true) ?: false
                 }
             }
-            _state.value = StopsState.Success(data = stops ?: emptyList())
+            _state.value = StopsState.Success(stops = stops ?: emptyList())
         } catch (e: Exception) {
             _state.value = StopsState.Error(e.message ?: "Unknown Error")
         }
     }
 
-//    private suspend fun queryStops(query: String) {
-//        val stops = stopsApiImpl.getStops(false, addresses = false, query = query).data
-//        if (query.isEmpty()) {
-//            emptyList()
-//        } else {
-//            stops?.filter { stop ->
-//                stop.name?.contains(query, ignoreCase = true) ?: false
-//            } ?: emptyList()
-//        }
-//        _state.value = StopsState(data = stops)
-//    }
+    private suspend fun getNearestStop(location: Location) {
+        val latitude = location.latitude.toString()
+        val longitude = location.longitude.toString()
+        try {
+            _state.value = StopsState.Loading
+            val nearestStop = stopsApiImpl.getNearestStops(
+                latitude = latitude,
+                longitude = longitude,
+            ).data?.get(0) ?: Stop()
+            _state.value = StopsState.Success(nearestStop = nearestStop)
+        } catch (e: Exception) {
+            _state.value = StopsState.Error(e.message ?: "Unknown Error")
+        }
+    }
+
 }
