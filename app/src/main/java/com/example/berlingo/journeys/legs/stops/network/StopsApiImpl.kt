@@ -29,7 +29,25 @@ class StopsApiImpl @Inject constructor(
             Resource.error("${e.message}", null)
         }
     }
+    override suspend fun getNearestStops(latitude: String, longitude: String): Resource<List<Stop>> {
+        return try {
+            val response = stopsApi.getNearestStops(latitude = latitude, longitude = longitude)
+            logger.debug("getNearestStops: ${response.raw()} ")
 
+            if (response.isSuccessful) {
+                logger.debug("getNearestStops: ${response.raw().body} ")
+
+                response.body()?.let {
+                    return@let Resource.success(it)
+                } ?: Resource.error("An unknown error occurred", null)
+            } else {
+                Resource.error("An unknown error occurred", null)
+            }
+        } catch (e: Exception) {
+            Resource.error("Couldn't reach the server. Check your internet connection", null)
+            Resource.error("${e.message}", null)
+        }
+    }
     override suspend fun getStopsByDeparture(stopId: String, direction: String, duration: Int): Resource<Stop> {
         return try {
             val response = stopsApi.getStopsByDeparture(stopId = stopId, direction = direction, duration = duration)

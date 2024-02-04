@@ -7,15 +7,19 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -24,12 +28,14 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -46,8 +52,11 @@ import com.example.berlingo.journeys.JourneysEvent
 import com.example.berlingo.journeys.JourneysState
 import com.example.berlingo.journeys.legs.stops.StopsState.*
 import com.example.berlingo.journeys.legs.stops.network.responses.Stop
+import com.example.berlingo.main.MainActivity
+import com.example.berlingo.main.locationPermissionGranted
 import com.example.berlingo.ui.theme.DarkGray
 import com.example.berlingo.ui.theme.LightGray
+import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -75,7 +84,7 @@ var destinStop by mutableStateOf(Stop())
 var displayStops by mutableStateOf(false)
 
 @OptIn(ExperimentalMaterial3Api::class)
-@SuppressLint("CoroutineCreationDuringComposition")
+@SuppressLint("CoroutineCreationDuringComposition", "MissingPermission")
 @Composable
 fun StopsColumn(
     journeyState: JourneysState,
@@ -91,6 +100,9 @@ fun StopsColumn(
     ) {
         val backgroundColor = if (isSystemInDarkTheme()) DarkGray else LightGray
         val labelColor = if (isSystemInDarkTheme()) LightGray else DarkGray
+        val context = LocalContext.current
+        val fusedLocationProviderClient =
+            remember { LocationServices.getFusedLocationProviderClient(context) }
         TextField(
             label = { Text(text = "A", color = labelColor, fontWeight = FontWeight.SemiBold) },
             modifier = Modifier
@@ -105,13 +117,48 @@ fun StopsColumn(
                 originStopName = query
                 CoroutineScope(Dispatchers.IO).launch {
                     stopsEvent.invoke(
-                        StopsEvent.StopsQueryEvent(
+                        StopsEvent.GetStops(
                             query,
                         ),
                     )
                 }
             },
-            trailingIcon = { if (originStopName.isNotEmpty())Icon(Icons.Filled.Clear, contentDescription = stringResource(R.string.clear_textfield), modifier = Modifier.clickable { originStopName = "" }) },
+            trailingIcon = {
+                Row {
+                    if (originStopName.isNotEmpty()) {
+                        Icon(
+                            Icons.Filled.Clear,
+                            contentDescription = stringResource(R.string.clear_textfield),
+                            modifier = Modifier.clickable {
+                                originStopName = ""
+                                CoroutineScope(Dispatchers.IO).launch { stopsEvent.invoke(StopsEvent.EmptyStops()) }
+                            },
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(smallXX))
+                    Icon(
+                        Icons.Filled.LocationOn,
+                        contentDescription = stringResource(R.string.get_current_location),
+                        modifier = Modifier.clickable {
+                            if (locationPermissionGranted.value) {
+                                val taskLocation = fusedLocationProviderClient.lastLocation
+                                taskLocation.addOnCompleteListener(context as MainActivity) { task ->
+                                    if (task.isComplete) {
+                                        CoroutineScope(Dispatchers.IO).launch {
+                                            stopsEvent.invoke(
+                                                StopsEvent.GetNearestStops(
+                                                    task.result,
+                                                ),
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                    )
+                    Spacer(modifier = Modifier.width(smallXX))
+                }
+            },
         )
         TextField(
             label = { Text("B", color = labelColor, fontWeight = FontWeight.SemiBold) },
@@ -127,11 +174,19 @@ fun StopsColumn(
                 destinStopName = query
                 CoroutineScope(Dispatchers.IO).launch {
                     stopsEvent.invoke(
-                        StopsEvent.StopsQueryEvent(query),
+                        StopsEvent.GetStops(query),
                     )
                 }
             },
-            trailingIcon = { if (destinStopName.isNotEmpty())Icon(Icons.Filled.Clear, contentDescription = stringResource(R.string.clear_textfield), modifier = Modifier.clickable { destinStopName = "" }) },
+            trailingIcon = {
+                if (destinStopName.isNotEmpty()) {
+                    Icon(
+                        Icons.Filled.Clear,
+                        contentDescription = stringResource(R.string.clear_textfield),
+                        modifier = Modifier.clickable { destinStopName = "" },
+                    )
+                }
+            },
         )
         Box(
             modifier = Modifier
@@ -142,11 +197,6 @@ fun StopsColumn(
                 onClick = {
                     if (originStopName.isNotBlank() && destinStopName.isNotBlank()) {
                         CoroutineScope(Dispatchers.IO).launch {
-//                        if (destinLocationLat.isNotEmpty()) {
-//                        logger.debug("originLocationId: $originLocationId")
-//                        logger.debug("destinLocationId: $destinLocationId")
-//                        logger.debug("destinLocationLat: $originLocationId")
-//                        logger.debug("originLocationId: $destinLocationLong")
                             journeysEvent.invoke(
                                 JourneysEvent.JourneyQueryEvent(
                                     from = originLocationId.toString(),
@@ -155,7 +205,6 @@ fun StopsColumn(
                                     toLongitude = destinLocationLong,
                                 ),
                             )
-
                             // ------------------------------ //
                             // Hardcoded Values for Debugging //
 //                        }
@@ -185,12 +234,36 @@ fun StopsColumn(
             }
         }
     }
+    HandleStopsState(stopsState, stopsEvent)
+}
+
+@Composable
+private fun HandleStopsState(
+    stopsState: StopsState,
+    stopsEvent: suspend (StopsEvent) -> Unit,
+) {
     when (stopsState) {
         is Initial -> {}
         is Loading -> LoadingScreen()
         is Error -> ErrorScreen(message = stopsState.message)
-        is Success -> DisplayStops(stopsState.data, stopsEvent)
+        is Success -> {
+            DisplayStops(stopsState.stops, stopsEvent)
+            logger.debug("SHOW ME THIS SHIT $originStopName")
+            if (stopsState.nearestStop.name?.isNotEmpty() == true) {
+                // When user clicks on the current user location icon, it
+                // fills the origin text field "A" with user location name
+                fillOriginTextField(stopsState.nearestStop)
+            }
+        }
     }
+}
+
+private fun fillOriginTextField(nearestStop: Stop) {
+    originStopName = nearestStop.name ?: ""
+    originLocationId = nearestStop.id?.toInt() ?: 0
+    originLocationLat = nearestStop.location?.latitude ?: ""
+    originLocationLong = nearestStop.location?.longitude ?: ""
+    originStop = nearestStop
 }
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -217,14 +290,12 @@ fun DisplayStops(stopsState: List<Stop>, stopsEvent: suspend (StopsEvent) -> Uni
                         destinStop = stop
                     }
                     keyboardController?.hide()
-                    // TODO CLEAN THIS WORKAROUND
-                    // Currently used to clear
-                    // the list of Locations/Stops after
-                    // focusing on either A or B TextField
+                    // Used to clear the list of Locations/Stops
+                    // after focusing on either A or B TextField
                     CoroutineScope(Dispatchers.IO).launch {
                         stopsEvent.invoke(
-                            StopsEvent.StopsQueryEvent(
-                                "",
+                            StopsEvent.EmptyStops(
+                                emptyList(),
                             ),
                         )
                     }
@@ -235,6 +306,7 @@ fun DisplayStops(stopsState: List<Stop>, stopsEvent: suspend (StopsEvent) -> Uni
         }
     }
 }
+
 // @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 // @Composable
 // fun LegsColumnPreview() {
