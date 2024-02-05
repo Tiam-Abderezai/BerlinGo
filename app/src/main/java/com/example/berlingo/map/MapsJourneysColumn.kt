@@ -31,7 +31,6 @@ import com.example.berlingo.common.Dimensions.small
 import com.example.berlingo.common.Dimensions.smallXXX
 import com.example.berlingo.common.components.ErrorScreen
 import com.example.berlingo.common.components.LoadingScreen
-import com.example.berlingo.common.extensions.calculateDelay
 import com.example.berlingo.common.extensions.convertEpochTime
 import com.example.berlingo.common.extensions.getLineNameIcon
 import com.example.berlingo.common.extensions.getLineProductColor
@@ -76,7 +75,7 @@ private fun DisplayMapJourneys(journeys: Map<Journey, List<Leg>>, mapsEvent: sus
                 val plannedDeparture =
                     journey.legs?.get(0)?.plannedDeparture?.convertEpochTime().toString()
                 val departure = journey.legs?.get(0)?.departure?.convertEpochTime().toString()
-                val departureDelay = journey.legs?.get(0)?.departureDelay?.calculateDelay()
+                val departureDelay = journey.legs?.get(0)?.departureDelay
                 val cancelled = journey.legs?.get(0)?.cancelled
 
                 logger.debug("Journey: ${journeys.size}")

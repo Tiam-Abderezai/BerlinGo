@@ -39,7 +39,6 @@ import com.example.berlingo.common.Dimensions.smallX
 import com.example.berlingo.common.components.Divider
 import com.example.berlingo.common.components.ErrorScreen
 import com.example.berlingo.common.components.LoadingScreen
-import com.example.berlingo.common.extensions.calculateDelay
 import com.example.berlingo.common.extensions.convertEpochDate
 import com.example.berlingo.common.extensions.convertEpochTime
 import com.example.berlingo.common.extensions.getLineNameIcon
@@ -107,7 +106,7 @@ fun DisplayJourneys(
                 val plannedDeparture =
                     journey.legs?.get(0)?.plannedDeparture?.convertEpochTime().toString()
                 val departure = journey.legs?.get(0)?.departure?.convertEpochTime().toString()
-                val departureDelay = journey.legs?.get(0)?.departureDelay?.calculateDelay()
+                val departureDelay = journey.legs?.get(0)?.departureDelay
                 val cancelled = journey.legs?.get(0)?.cancelled
                 logger.debug("departureDelay: $departureDelay")
                 logger.debug("Journey: $journeys")
