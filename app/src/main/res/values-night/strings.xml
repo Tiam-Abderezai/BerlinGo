@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">BerlinGo</string>
+    <string name="duration">Duration</string>
+    <string name="clear_textfield">Clear TextField</string>
+    <string name="get_current_location">Get Current Location</string>
+</resources>

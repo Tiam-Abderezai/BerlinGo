@@ -2,6 +2,6 @@
 <resources>
 
     <style name="Theme.BerlinGo" parent="android:Theme.Material.Light.NoActionBar" >
-        <item name="android:windowBackground">@color/light_grey</item>
+        <item name="android:windowBackground">@color/dark_grey</item>
     </style>
 </resources>
