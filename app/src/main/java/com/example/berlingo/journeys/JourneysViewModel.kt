@@ -23,13 +23,11 @@ class JourneysViewModel @Inject constructor(
 
     suspend fun handleEvent(event: JourneysEvent) {
         when (event) {
-            is JourneysEvent.JourneyQueryEvent -> {
-                queryJourneys(event.from, event.to, event.toLatitude, event.toLongitude)
-            }
+            is JourneysEvent.GetJourneys -> getJourneys(event.from, event.to, event.toLatitude, event.toLongitude)
         }
     }
 
-    private suspend fun queryJourneys(
+    private suspend fun getJourneys(
         from: String,
         toId: String,
         toLatitude: String,
@@ -57,19 +55,7 @@ class JourneysViewModel @Inject constructor(
                     }
                 }
             }
-
             logger.debug("response message: ${response.message}")
-//            logger.debug("warningRemark text: ${ warningRemark.text} ")
-//            logger.debug("warningRemark summary: ${ warningRemark.summary} ")
-//            logger.debug("warningRemark priority: ${ warningRemark.priority} ")
-//            logger.debug("warningRemark category: ${ warningRemark.category} ")
-//            logger.debug("warningRemark icon: ${ warningRemark.icon} ")
-//            logger.debug("warningRemark company: ${ warningRemark.company} ")
-//            logger.debug("warningRemark validFrom: ${ warningRemark.validFrom} ")
-//            logger.debug("warningRemark validUntil: ${ warningRemark.validUntil} ")
-//            logger.debug("warningRemark products: ${ warningRemark.products} ")
-//            logger.debug("journeys: $journeys")
-//            logger.debug("legs: $legs")
             _state.value = JourneysState.Success(journeys = journeys, warningRemark = warningRemark)
         } catch (e: Exception) {
             _state.value = JourneysState.Error(message = e.message ?: "Unknown Error")
