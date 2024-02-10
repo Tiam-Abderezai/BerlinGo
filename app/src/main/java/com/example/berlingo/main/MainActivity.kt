@@ -43,6 +43,7 @@ import com.example.berlingo.journeys.legs.stops.StopsViewModel
 import com.example.berlingo.map.MapsScreen
 import com.example.berlingo.map.MapsViewModel
 import com.example.berlingo.routes.JourneysScreen
+import com.example.berlingo.settings.SettingsScreen
 import com.example.berlingo.trips.TripsViewModel
 import com.example.berlingo.ui.theme.BerlinGoTheme
 import com.example.berlingo.ui.theme.DarkGray
@@ -106,7 +107,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun BottomNavigationBar(navController: NavController) {
     Box() {
-        val screens = listOf(Screen.Journeys, Screen.Maps)
+        val screens = listOf(Screen.Journeys, Screen.Settings, Screen.Maps)
         val route = navController.currentBackStackEntryAsState().value?.destination?.route
         val selectedItemBackgroundColor = LightGray
         val unselectedItemBackgroundColor = DarkGray
@@ -124,6 +125,7 @@ fun BottomNavigationBar(navController: NavController) {
                             modifier = Modifier.size(large),
                             painter = when (screen) {
                                 Screen.Journeys -> painterResource(id = R.drawable.icon_journeys)
+                                Screen.Settings -> painterResource(id = R.drawable.icon_berlin_go)
                                 Screen.Maps -> painterResource(id = R.drawable.icon_maps)
                             },
                             contentDescription = "$route screen",
@@ -168,6 +170,9 @@ fun NavigationHost(navController: NavHostController) {
                 tripsEvent = tripsEvent,
             )
         }
+        composable(Screen.Settings.route) {
+            SettingsScreen()
+        }
         composable(Screen.Maps.route) {
             MapsScreen(
                 mapsState = mapsState,
@@ -182,6 +187,7 @@ fun NavigationHost(navController: NavHostController) {
 }
 
 sealed class Screen(val route: String) {
-    object Journeys : Screen("journeys")
+    object Journeys : Screen("Journeys")
+    object Settings : Screen("Settings")
     object Maps : Screen("Maps")
 }

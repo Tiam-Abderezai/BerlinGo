@@ -4,4 +4,8 @@
     <string name="clear_textfield">Clear TextField</string>
     <string name="get_current_location">Get Current Location</string>
     <string name="swap_stops">Swap Stops</string>
+    <string name="app_info">App Info</string>
+    <string name="language_settings">Language Settings</string>
+    <string name="dark_mode">Dark Mode</string>
+    <string name="information_privacy">Information Privacy</string>
 </resources>
