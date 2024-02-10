@@ -1,6 +1,7 @@
 package com.example.berlingo.journeys.legs.stops
 
 import android.annotation.SuppressLint
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -28,7 +29,6 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -64,26 +64,10 @@ import kotlinx.coroutines.launch
 private val logger: BaseLogger = FactoryLogger.getLoggerCompose("StopsColumn()")
 var textFieldOriginFocused by mutableStateOf(false)
 var textFieldDestinationFocused by mutableStateOf(false)
-
-var originStopName by mutableStateOf("")
-var destinStopName by mutableStateOf("")
-
-var queryText by mutableStateOf("")
-var originLocationName by mutableStateOf("")
-var destinLocationName by mutableStateOf("")
-var originLocationId by mutableStateOf(0)
-var destinLocationId by mutableStateOf(0)
-var originLocationLat by mutableStateOf("")
-var destinLocationLat by mutableStateOf("")
-var originLocationLong by mutableStateOf("")
-var destinLocationLong by mutableStateOf("")
-var originLocation by mutableStateOf(Stop().location)
-var destinationLocation by mutableStateOf(Stop().location)
 var originStop by mutableStateOf(Stop())
 var destinStop by mutableStateOf(Stop())
-var displayStops by mutableStateOf(false)
-
-@OptIn(ExperimentalMaterial3Api::class)
+var originStopName by mutableStateOf("")
+var destinStopName by mutableStateOf("")
 @SuppressLint("CoroutineCreationDuringComposition", "MissingPermission")
 @Composable
 fun StopsColumn(
@@ -101,112 +85,165 @@ fun StopsColumn(
         val backgroundColor = if (isSystemInDarkTheme()) DarkGray else LightGray
         val labelColor = if (isSystemInDarkTheme()) LightGray else DarkGray
         val context = LocalContext.current
-        val fusedLocationProviderClient =
-            remember { LocationServices.getFusedLocationProviderClient(context) }
-        TextField(
-            label = { Text(text = "A", color = labelColor, fontWeight = FontWeight.SemiBold) },
-            modifier = Modifier
-                .background(color = backgroundColor)
-                .fillMaxWidth()
-                .padding(smallXX)
-                .onFocusChanged { focusState ->
-                    textFieldOriginFocused = focusState.isFocused
+        OriginTextField(labelColor, backgroundColor, stopsEvent, context)
+        DestinationTextField(labelColor, backgroundColor, stopsEvent)
+        SearchJourneysButton(journeysEvent, labelColor)
+    }
+    HandleStopsState(stopsState, stopsEvent)
+}
+
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+private fun OriginTextField(
+    labelColor: Color,
+    backgroundColor: Color,
+    stopsEvent: suspend (StopsEvent) -> Unit,
+    context: Context,
+) {
+    TextField(
+        label = { Text(text = "A", color = labelColor, fontWeight = FontWeight.SemiBold) },
+        modifier = Modifier
+            .background(color = backgroundColor)
+            .fillMaxWidth()
+            .padding(smallXX)
+            .onFocusChanged { focusState ->
+                textFieldOriginFocused = focusState.isFocused
+            },
+        value = originStopName,
+        onValueChange = { query ->
+            originStopName = query
+            getStops(stopsEvent, query)
+        },
+        trailingIcon = { OriginTrailingIcons(stopsEvent, context) },
+    )
+}
+
+@Composable
+private fun OriginTrailingIcons(
+    stopsEvent: suspend (StopsEvent) -> Unit,
+    context: Context,
+) {
+    Row {
+        if (originStopName.isNotEmpty()) {
+            Icon(
+                Icons.Filled.Clear,
+                contentDescription = stringResource(R.string.clear_textfield),
+                modifier = Modifier.clickable {
+                    originStopName = ""
+                    CoroutineScope(Dispatchers.IO).launch { stopsEvent.invoke(StopsEvent.EmptyStops()) }
                 },
-            value = originStopName,
-            onValueChange = { query ->
-                originStopName = query
-                CoroutineScope(Dispatchers.IO).launch {
-                    stopsEvent.invoke(
-                        StopsEvent.GetStops(
-                            query,
-                        ),
-                    )
-                }
-            },
-            trailingIcon = {
-                Row {
-                    if (originStopName.isNotEmpty()) {
-                        Icon(
-                            Icons.Filled.Clear,
-                            contentDescription = stringResource(R.string.clear_textfield),
-                            modifier = Modifier.clickable {
-                                originStopName = ""
-                                CoroutineScope(Dispatchers.IO).launch { stopsEvent.invoke(StopsEvent.EmptyStops()) }
-                            },
-                        )
-                    }
-                    Spacer(modifier = Modifier.width(smallXX))
-                    Icon(
-                        Icons.Filled.LocationOn,
-                        contentDescription = stringResource(R.string.get_current_location),
-                        modifier = Modifier.clickable {
-                            if (locationPermissionGranted.value) {
-                                val taskLocation = fusedLocationProviderClient.lastLocation
-                                taskLocation.addOnCompleteListener(context as MainActivity) { task ->
-                                    if (task.isComplete) {
-                                        CoroutineScope(Dispatchers.IO).launch {
-                                            stopsEvent.invoke(
-                                                StopsEvent.GetNearestStops(
-                                                    task.result,
-                                                ),
-                                            )
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                    )
-                    Spacer(modifier = Modifier.width(smallXX))
-                }
-            },
+            )
+        }
+        Spacer(modifier = Modifier.width(smallXX))
+        Icon(
+            Icons.Filled.LocationOn,
+            contentDescription = stringResource(R.string.get_current_location),
+            modifier = Modifier.clickable { getUserLocation(context, stopsEvent) },
         )
-        TextField(
-            label = { Text("B", color = labelColor, fontWeight = FontWeight.SemiBold) },
-            modifier = Modifier
-                .background(color = backgroundColor)
-                .fillMaxWidth()
-                .padding(smallXX)
-                .onFocusChanged { focusState ->
-                    textFieldDestinationFocused = focusState.isFocused
-                },
-            value = destinStopName,
-            onValueChange = { query ->
-                destinStopName = query
-                CoroutineScope(Dispatchers.IO).launch {
-                    stopsEvent.invoke(
-                        StopsEvent.GetStops(query),
-                    )
-                }
+        Spacer(modifier = Modifier.width(smallXXX))
+    }
+}
+
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+private fun DestinationTextField(
+    labelColor: Color,
+    backgroundColor: Color,
+    stopsEvent: suspend (StopsEvent) -> Unit,
+) {
+    TextField(
+        label = { Text("B", color = labelColor, fontWeight = FontWeight.SemiBold) },
+        modifier = Modifier
+            .background(color = backgroundColor)
+            .fillMaxWidth()
+            .padding(smallXX)
+            .onFocusChanged { focusState ->
+                textFieldDestinationFocused = focusState.isFocused
             },
-            trailingIcon = {
-                if (destinStopName.isNotEmpty()) {
-                    Icon(
-                        Icons.Filled.Clear,
-                        contentDescription = stringResource(R.string.clear_textfield),
-                        modifier = Modifier.clickable { destinStopName = "" },
-                    )
-                }
-            },
+        value = destinStopName,
+        onValueChange = { query ->
+            destinStopName = query
+            getStops(stopsEvent, query)
+        },
+        trailingIcon = { DestinationTrailingIcons() },
+    )
+}
+
+@Composable
+private fun DestinationTrailingIcons() {
+    Row {
+        if (destinStopName.isNotEmpty()) {
+            Icon(
+                Icons.Filled.Clear,
+                contentDescription = stringResource(R.string.clear_textfield),
+                modifier = Modifier.clickable { destinStopName = "" },
+            )
+        }
+        Spacer(modifier = Modifier.width(smallXX))
+        Icon(
+            painter = painterResource(id = R.drawable.icon_swap),
+            contentDescription = stringResource(R.string.swap_stops),
+            modifier = Modifier.clickable { swapStops() },
         )
-        Box(
+        Spacer(modifier = Modifier.width(smallXXX))
+    }
+}
+
+@Composable
+private fun SearchJourneysButton(
+    journeysEvent: suspend (JourneysEvent) -> Unit,
+    labelColor: Color,
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(smallXX),
+    ) {
+        Button(
+            onClick = { getJourneys(journeysEvent) },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(smallXX),
+                .height(large)
+                .align(Alignment.Center),
+            shape = RoundedCornerShape(smallXXX),
         ) {
-            Button(
-                onClick = {
-                    if (originStopName.isNotBlank() && destinStopName.isNotBlank()) {
-                        CoroutineScope(Dispatchers.IO).launch {
-                            journeysEvent.invoke(
-                                JourneysEvent.JourneyQueryEvent(
-                                    from = originLocationId.toString(),
-                                    to = destinLocationId.toString(),
-                                    toLatitude = destinLocationLat,
-                                    toLongitude = destinLocationLong,
-                                ),
-                            )
-                            // ------------------------------ //
-                            // Hardcoded Values for Debugging //
+            Icon(
+                modifier = Modifier.size(large),
+                painter = painterResource(id = R.drawable.icon_search),
+                tint = labelColor,
+                contentDescription = null,
+            )
+        }
+    }
+}
+private fun getStops(
+    stopsEvent: suspend (StopsEvent) -> Unit,
+    query: String,
+) {
+    CoroutineScope(Dispatchers.IO).launch {
+        stopsEvent.invoke(
+            StopsEvent.GetStops(query),
+        )
+    }
+}
+
+private fun getJourneys(journeysEvent: suspend (JourneysEvent) -> Unit) {
+    val originLocationId = originStop.location?.id.toString()
+    val destinLocationId = destinStop.location?.id.toString()
+    val destinLocationLat = destinStop.location?.latitude ?: ""
+    val destinLocationLng = destinStop.location?.longitude ?: ""
+    if (originStopName.isNotBlank() && destinStopName.isNotBlank()) {
+        CoroutineScope(Dispatchers.IO).launch {
+            journeysEvent.invoke(
+                JourneysEvent.GetJourneys(
+                    from = originLocationId,
+                    to = destinLocationId,
+                    toLatitude = destinLocationLat,
+                    toLongitude = destinLocationLng,
+                ),
+            )
+            // ------------------------------ //
+            // Hardcoded Values for Debugging //
 //                        }
 //                        journeysEvent.invoke(
 //                            JourneysEvent.JourneyQueryEvent(
@@ -216,25 +253,40 @@ fun StopsColumn(
 //                                13.369072,
 //                            ),
 //                        )
-                        }
-                    }
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(large)
-                    .align(Alignment.Center),
-                shape = RoundedCornerShape(smallXXX),
-            ) {
-                Icon(
-                    modifier = Modifier.size(large),
-                    painter = painterResource(id = R.drawable.icon_search),
-                    tint = labelColor,
-                    contentDescription = null,
-                )
+        }
+    }
+}
+
+@SuppressLint("MissingPermission")
+private fun getUserLocation(
+    context: Context,
+    stopsEvent: suspend (StopsEvent) -> Unit,
+) {
+    val fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
+    if (locationPermissionGranted.value) {
+        val taskLocation = fusedLocationProviderClient.lastLocation
+        taskLocation.addOnCompleteListener(context as MainActivity) { task ->
+            if (task.isComplete) {
+                CoroutineScope(Dispatchers.IO).launch {
+                    stopsEvent.invoke(
+                        StopsEvent.GetNearestStops(
+                            task.result,
+                        ),
+                    )
+                }
             }
         }
     }
-    HandleStopsState(stopsState, stopsEvent)
+}
+
+private fun swapStops() {
+    val tempStop = originStop
+    originStop = destinStop
+    destinStop = tempStop
+
+    val tempStopName = originStopName
+    originStopName = destinStopName
+    destinStopName = tempStopName
 }
 
 @Composable
@@ -248,22 +300,14 @@ private fun HandleStopsState(
         is Error -> ErrorScreen(message = stopsState.message)
         is Success -> {
             DisplayStops(stopsState.stops, stopsEvent)
-            logger.debug("SHOW ME THIS SHIT $originStopName")
             if (stopsState.nearestStop.name?.isNotEmpty() == true) {
                 // When user clicks on the current user location icon, it
                 // fills the origin text field "A" with user location name
-                fillOriginTextField(stopsState.nearestStop)
+                originStop = stopsState.nearestStop
+                originStopName = stopsState.nearestStop.name
             }
         }
     }
-}
-
-private fun fillOriginTextField(nearestStop: Stop) {
-    originStopName = nearestStop.name ?: ""
-    originLocationId = nearestStop.id?.toInt() ?: 0
-    originLocationLat = nearestStop.location?.latitude ?: ""
-    originLocationLong = nearestStop.location?.longitude ?: ""
-    originStop = nearestStop
 }
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -276,34 +320,31 @@ fun DisplayStops(stopsState: List<Stop>, stopsEvent: suspend (StopsEvent) -> Uni
             Text(
                 modifier = Modifier.clickable {
                     if (textFieldOriginFocused) {
-                        originStopName = stop.name ?: ""
-                        originLocationId = stop.location?.id ?: 0
-                        originLocationLat = stop.location?.latitude ?: ""
-                        originLocationLong = stop.location?.longitude ?: ""
                         originStop = stop
+                        originStopName = stop.name ?: ""
                     }
                     if (textFieldDestinationFocused) {
-                        destinStopName = stop.name ?: ""
-                        destinLocationId = stop.location?.id ?: 0
-                        destinLocationLat = stop.location?.latitude ?: ""
-                        destinLocationLong = stop.location?.longitude ?: ""
                         destinStop = stop
+                        destinStopName = stop.name ?: ""
                     }
                     keyboardController?.hide()
                     // Used to clear the list of Locations/Stops
                     // after focusing on either A or B TextField
-                    CoroutineScope(Dispatchers.IO).launch {
-                        stopsEvent.invoke(
-                            StopsEvent.EmptyStops(
-                                emptyList(),
-                            ),
-                        )
-                    }
+                    clearStopsColumn(stopsEvent)
                 },
                 text = stop.name ?: "",
                 color = textColor,
             )
         }
+    }
+}
+private fun clearStopsColumn(stopsEvent: suspend (StopsEvent) -> Unit) {
+    CoroutineScope(Dispatchers.IO).launch {
+        stopsEvent.invoke(
+            StopsEvent.EmptyStops(
+                emptyList(),
+            ),
+        )
     }
 }
 
