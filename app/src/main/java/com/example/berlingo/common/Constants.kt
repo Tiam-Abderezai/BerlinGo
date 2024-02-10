@@ -14,4 +14,7 @@ object Dimensions {
     val large = 64.dp
     val largeX = 128.dp
     val largeXX = 256.dp
+
+    val mapBoxHeight = 235.dp
+    val mapHeight = 400.dp
 }

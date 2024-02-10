@@ -7,7 +7,7 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.size
@@ -24,8 +24,8 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.unit.dp
 import com.example.berlingo.R
+import com.example.berlingo.common.Dimensions
 import com.example.berlingo.common.Dimensions.medium
 import com.example.berlingo.common.Dimensions.small
 import com.example.berlingo.common.Dimensions.smallXXX
@@ -55,20 +55,20 @@ fun MapsJourneysColumn(
     mapsEvent: suspend (MapsEvent) -> Unit,
 ) {
     when (journeysState) {
-        is JourneysState.Initial -> {}
+        is JourneysState.Initial -> EmptyMapsJourneys()
         is JourneysState.Loading -> LoadingScreen()
         is JourneysState.Error -> ErrorScreen(message = journeysState.message)
-        is JourneysState.Success -> DisplayMapJourneys(journeysState.journeys, mapsEvent)
+        is JourneysState.Success -> MapsJourneys(journeysState.journeys, mapsEvent)
     }
 }
 
 @Composable
-private fun DisplayMapJourneys(journeys: Map<Journey, List<Leg>>, mapsEvent: suspend (MapsEvent) -> Unit) {
-    Box(modifier = Modifier.height(228.dp)) {
+private fun MapsJourneys(journeys: Map<Journey, List<Leg>>, mapsEvent: suspend (MapsEvent) -> Unit) {
+    Box(modifier = Modifier.height(Dimensions.mapBoxHeight)) {
         val textColor = if (isSystemInDarkTheme()) LightGray else DarkGray
         LazyColumn(
             modifier = Modifier
-                .fillMaxHeight(1f),
+                .fillMaxSize(),
         ) {
             itemsIndexed(journeys.keys.toList()) { indexJourney, journey ->
                 val legs = journey.legs
@@ -112,6 +112,11 @@ private fun DisplayMapJourneys(journeys: Map<Journey, List<Leg>>, mapsEvent: sus
             }
         }
     }
+}
+
+@Composable
+private fun EmptyMapsJourneys() {
+    Box(modifier = Modifier.height(Dimensions.mapBoxHeight))
 }
 
 @Composable
