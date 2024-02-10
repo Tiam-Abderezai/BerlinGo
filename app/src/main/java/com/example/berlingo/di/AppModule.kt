@@ -21,11 +21,12 @@ object AppModule {
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BASIC
     }
+    private const val timeout = 1000.toLong()
     private val okHttpClient = OkHttpClient.Builder()
         .addInterceptor(loggingInterceptor)
-        .connectTimeout(1, TimeUnit.SECONDS)
-        .readTimeout(1, TimeUnit.SECONDS)
-        .writeTimeout(1, TimeUnit.SECONDS)
+        .connectTimeout(timeout + 100, TimeUnit.MILLISECONDS)
+        .readTimeout(timeout, TimeUnit.MILLISECONDS)
+        .writeTimeout(timeout, TimeUnit.MILLISECONDS)
         .build()
 
     @Singleton

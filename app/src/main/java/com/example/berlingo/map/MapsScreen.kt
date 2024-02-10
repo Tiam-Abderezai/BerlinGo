@@ -11,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.example.berlingo.common.Dimensions
 import com.example.berlingo.common.components.ErrorScreen
 import com.example.berlingo.common.components.LoadingScreen
 import com.example.berlingo.common.extensions.decodePolyline
@@ -48,22 +49,24 @@ fun MapsScreen(
 ) {
     val backgroundColor = if (isSystemInDarkTheme()) DarkGray else LightGray
     Surface(color = backgroundColor, modifier = Modifier.fillMaxSize()) {
-        Column() {
-            StopsColumn(
-                journeysState,
-                journeysEvent,
-                stopsState,
-                stopsEvent,
-            )
-            MapsJourneysColumn(
-                journeysState,
-                mapsEvent,
-            )
-            when (mapsState) {
-                is Initial -> MapComponent(emptyList())
-                is Loading -> LoadingScreen()
-                is Error -> ErrorScreen(message = mapsState.message)
-                is Success -> MapComponent(directions = mapsState.directions)
+        Box() {
+            Column() {
+                StopsColumn(
+                    journeysState,
+                    journeysEvent,
+                    stopsState,
+                    stopsEvent,
+                )
+                MapsJourneysColumn(
+                    journeysState,
+                    mapsEvent,
+                )
+                when (mapsState) {
+                    is Initial -> MapComponent(emptyList())
+                    is Loading -> LoadingScreen()
+                    is Error -> ErrorScreen(message = mapsState.message)
+                    is Success -> MapComponent(directions = mapsState.directions)
+                }
             }
         }
     }
@@ -79,10 +82,8 @@ private fun MapComponent(directions: List<List<Route>>) {
         val berlinLng = 13.4050
         val berlinCameraPosition = CameraPosition.fromLatLngZoom(LatLng(berlinLat, berlinLng), 10f)
         GoogleMap(
-            modifier = Modifier.height(400.dp),
-            cameraPositionState = rememberCameraPositionState {
-                position = berlinCameraPosition
-            },
+            modifier = Modifier.height(Dimensions.mapHeight),
+            cameraPositionState = rememberCameraPositionState { position = berlinCameraPosition },
         ) {
             if (directions.isNotEmpty()) {
                 directions.map { routes ->
