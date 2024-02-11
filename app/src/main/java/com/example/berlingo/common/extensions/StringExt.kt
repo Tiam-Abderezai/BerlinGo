@@ -5,6 +5,8 @@ import com.example.berlingo.R
 import com.example.berlingo.common.logger.BaseLogger
 import com.example.berlingo.common.logger.FactoryLogger
 import com.google.android.gms.maps.model.LatLng
+import java.util.TimeZone
+
 val logger: BaseLogger = FactoryLogger.getLoggerCompose("StringExt")
 
 fun String.replaceWhiteSpaceWithPlus(): String {
@@ -396,4 +398,12 @@ fun String.getLineNameIcon(): Int {
         "N97" -> R.drawable.icon_bus_n97
         else -> R.drawable.icon_error
     }
+}
+
+fun getDeviceTimeZone(): String {
+    val timeZone = TimeZone.getDefault()
+    val timeZoneId = timeZone.id // Time Zone ID, e.g., "America/New_York"
+    val timeZoneDisplayName = timeZone.displayName // Display name, e.g., "Eastern Standard Time"
+
+    return "Time Zone ID: $timeZoneId, Display Name: $timeZoneDisplayName"
 }

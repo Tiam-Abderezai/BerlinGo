@@ -8,4 +8,16 @@
     <string name="language_settings">Language Settings</string>
     <string name="dark_mode">Dark Mode</string>
     <string name="information_privacy">Information Privacy</string>
+    <string name="app_version">App Version</string>
+    <string name="device_model">Device Model</string>
+    <string name="system_version">System Version</string>
+    <string name="playstore_version">Playstore Version</string>
+    <string name="language">Language</string>
+    <string name="region">Region</string>
+    <string name="back">Back</string>
+    <string name="time_zone">Time Zone</string>
+    <string name="device_brand">Device Brand</string>
+    <string name="device_manufacturer">Device Manufacturer</string>
+    <string name="device">Device</string>
+    <string name="device_product">Device Product</string>
 </resources>
