@@ -33,6 +33,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.berlingo.R
+import com.example.berlingo.Screen
 import com.example.berlingo.common.Dimensions.large
 import com.example.berlingo.common.Dimensions.smallXXX
 import com.example.berlingo.common.Permissions.Companion.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION
@@ -44,6 +45,8 @@ import com.example.berlingo.map.MapsScreen
 import com.example.berlingo.map.MapsViewModel
 import com.example.berlingo.routes.JourneysScreen
 import com.example.berlingo.settings.SettingsScreen
+import com.example.berlingo.settings.SettingsViewModel
+import com.example.berlingo.settings.app_info.AppInfoSettingsScreen
 import com.example.berlingo.trips.TripsViewModel
 import com.example.berlingo.ui.theme.BerlinGoTheme
 import com.example.berlingo.ui.theme.DarkGray
@@ -70,7 +73,7 @@ class MainActivity : ComponentActivity() {
                 Scaffold(
                     bottomBar = { BottomNavigationBar(navController) },
                 ) {
-                    NavigationHost(navController = navController)
+                    MainNavigationHost(navController = navController)
                 }
             }
         }
@@ -108,7 +111,7 @@ class MainActivity : ComponentActivity() {
 fun BottomNavigationBar(navController: NavController) {
     Box() {
         val screens = listOf(Screen.Journeys, Screen.Settings, Screen.Maps)
-        val route = navController.currentBackStackEntryAsState().value?.destination?.route
+        val route = setRoute(navController)
         val selectedItemBackgroundColor = LightGray
         val unselectedItemBackgroundColor = DarkGray
         BottomNavigation(
@@ -123,11 +126,7 @@ fun BottomNavigationBar(navController: NavController) {
                     icon = {
                         Icon(
                             modifier = Modifier.size(large),
-                            painter = when (screen) {
-                                Screen.Journeys -> painterResource(id = R.drawable.icon_journeys)
-                                Screen.Settings -> painterResource(id = R.drawable.icon_berlin_go)
-                                Screen.Maps -> painterResource(id = R.drawable.icon_maps)
-                            },
+                            painter = setPainterResource(screen),
                             contentDescription = "$route screen",
                         )
                     },
@@ -142,7 +141,7 @@ fun BottomNavigationBar(navController: NavController) {
 }
 
 @Composable
-fun NavigationHost(navController: NavHostController) {
+private fun MainNavigationHost(navController: NavHostController) {
     val journeysViewModel = hiltViewModel<JourneysViewModel>()
     val journeysState = journeysViewModel.state.collectAsState().value
     val journeysEvent = journeysViewModel::handleEvent
@@ -159,6 +158,8 @@ fun NavigationHost(navController: NavHostController) {
     val mapsState = mapsViewModel.state.collectAsState().value
     val mapsEvent = mapsViewModel::handleEvent
 
+    val settingsViewModel = hiltViewModel<SettingsViewModel>()
+
     NavHost(navController, startDestination = Screen.Journeys.route) {
         composable(Screen.Journeys.route) {
             JourneysScreen(
@@ -171,7 +172,7 @@ fun NavigationHost(navController: NavHostController) {
             )
         }
         composable(Screen.Settings.route) {
-            SettingsScreen()
+            SettingsScreen(navController, settingsViewModel)
         }
         composable(Screen.Maps.route) {
             MapsScreen(
@@ -183,11 +184,36 @@ fun NavigationHost(navController: NavHostController) {
                 stopsEvent = stopsEvent,
             )
         }
+        //
+        // Settings NavHost Screens
+        composable(Screen.AppInfo.route) {
+            AppInfoSettingsScreen(navController)
+        }
     }
 }
 
-sealed class Screen(val route: String) {
-    object Journeys : Screen("Journeys")
-    object Settings : Screen("Settings")
-    object Maps : Screen("Maps")
+@Composable
+private fun setRoute(navController: NavController): String {
+    return when (navController.currentBackStackEntryAsState().value?.destination?.route) {
+        Screen.Journeys.route -> "Journeys"
+        Screen.Settings.route -> "Settings"
+        Screen.Maps.route -> "Maps"
+        Screen.AppInfo.route -> "Settings"
+        Screen.Language.route -> "Settings"
+        Screen.DarkMode.route -> "Settings"
+        Screen.InformationPrivacy.route -> "Settings"
+        else -> { "" }
+    }
+}
+
+@Composable
+private fun setPainterResource(screen: Screen) = when (screen) {
+    Screen.Journeys -> painterResource(id = R.drawable.icon_journeys)
+    Screen.Settings -> painterResource(id = R.drawable.icon_berlin_go)
+    Screen.Maps -> painterResource(id = R.drawable.icon_maps)
+    // Settings Routes not part of BottomNav - so default 0 means no icons
+    Screen.AppInfo -> painterResource(0)
+    Screen.Language -> painterResource(0)
+    Screen.DarkMode -> painterResource(0)
+    Screen.InformationPrivacy -> painterResource(0)
 }
