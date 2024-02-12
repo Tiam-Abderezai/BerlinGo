@@ -42,6 +42,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import com.example.berlingo.R
 import com.example.berlingo.common.Dimensions.large
+import com.example.berlingo.common.Dimensions.medium
 import com.example.berlingo.common.Dimensions.smallXX
 import com.example.berlingo.common.Dimensions.smallXXX
 import com.example.berlingo.common.components.ErrorScreen
@@ -68,6 +69,7 @@ var originStop by mutableStateOf(Stop())
 var destinStop by mutableStateOf(Stop())
 var originStopName by mutableStateOf("")
 var destinStopName by mutableStateOf("")
+
 @SuppressLint("CoroutineCreationDuringComposition", "MissingPermission")
 @Composable
 fun StopsColumn(
@@ -317,8 +319,8 @@ fun DisplayStops(stopsState: List<Stop>, stopsEvent: suspend (StopsEvent) -> Uni
     LazyColumn {
         items(stopsState) { stop ->
             val keyboardController = LocalSoftwareKeyboardController.current
-            Text(
-                modifier = Modifier.clickable {
+            Row(
+                modifier = Modifier.height(medium).fillMaxWidth().clickable {
                     if (textFieldOriginFocused) {
                         originStop = stop
                         originStopName = stop.name ?: ""
@@ -332,9 +334,12 @@ fun DisplayStops(stopsState: List<Stop>, stopsEvent: suspend (StopsEvent) -> Uni
                     // after focusing on either A or B TextField
                     clearStopsColumn(stopsEvent)
                 },
-                text = stop.name ?: "",
-                color = textColor,
-            )
+            ) {
+                Text(
+                    text = stop.name ?: "",
+                    color = textColor,
+                )
+            }
         }
     }
 }
