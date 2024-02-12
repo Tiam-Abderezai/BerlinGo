@@ -2,7 +2,7 @@ package com.example.berlingo.journeys.legs.stops.network
 
 import com.example.berlingo.common.logger.BaseLogger
 import com.example.berlingo.common.logger.FactoryLogger
-import com.example.berlingo.data.network.Resource
+import com.example.berlingo.common.Resource
 import com.example.berlingo.journeys.legs.stops.network.responses.Stop
 import javax.inject.Inject
 

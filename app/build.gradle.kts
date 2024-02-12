@@ -70,6 +70,7 @@ dependencies {
     implementation("androidx.compose.material:material:1.4.2")
 
     implementation("androidx.test.ext:junit-ktx:1.1.5")
+    implementation("androidx.appcompat:appcompat:1.6.1")
     testImplementation("junit:junit:4.13.2")
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.mockito:mockito-core:4.0.0") // Use the latest version
@@ -96,4 +97,6 @@ dependencies {
     implementation("com.google.android.gms:play-services-maps:18.2.0")
     // Places
     implementation("com.google.android.libraries.places:places:3.3.0")
+    // EncryptedSharedPreferences
+    implementation("androidx.security:security-crypto:1.0.0")
 }

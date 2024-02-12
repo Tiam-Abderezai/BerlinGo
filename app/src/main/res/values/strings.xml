@@ -20,4 +20,7 @@
     <string name="device_manufacturer">Device Manufacturer</string>
     <string name="device">Device</string>
     <string name="device_product">Device Product</string>
+    <string name="locale_de" translatable="false">Deutsch</string>
+    <string name="locale_en" translatable="false">English</string>
+    <string name="locale_fr" translatable="false">Français</string>
 </resources>

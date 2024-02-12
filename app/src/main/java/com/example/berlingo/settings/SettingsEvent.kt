@@ -1,10 +1,9 @@
 package com.example.berlingo.settings
 
+import java.util.Locale
+
 sealed class SettingsEvent {
-//    data class GetJourneys(
-//        val from: String,
-//        val to: String,
-//        val toLatitude: String,
-//        val toLongitude: String,
-//    ) : SettingsEvent()
+    data class SaveLanguageSettings(
+        val locale: Locale,
+    ) : SettingsEvent()
 }

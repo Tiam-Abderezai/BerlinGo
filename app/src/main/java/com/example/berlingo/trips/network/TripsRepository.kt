@@ -1,6 +1,6 @@
 package com.example.berlingo.trips.network
 
-import com.example.berlingo.data.network.Resource
+import com.example.berlingo.common.Resource
 import com.example.berlingo.trips.network.responses.TripResponse
 import com.example.berlingo.trips.network.responses.TripsResponse
 

@@ -47,6 +47,7 @@ import com.example.berlingo.routes.JourneysScreen
 import com.example.berlingo.settings.SettingsScreen
 import com.example.berlingo.settings.SettingsViewModel
 import com.example.berlingo.settings.app_info.AppInfoSettingsScreen
+import com.example.berlingo.settings.language.LanguageSettingsScreen
 import com.example.berlingo.trips.TripsViewModel
 import com.example.berlingo.ui.theme.BerlinGoTheme
 import com.example.berlingo.ui.theme.DarkGray
@@ -159,6 +160,8 @@ private fun MainNavigationHost(navController: NavHostController) {
     val mapsEvent = mapsViewModel::handleEvent
 
     val settingsViewModel = hiltViewModel<SettingsViewModel>()
+    val settingsState = settingsViewModel.state.collectAsState().value
+    val settingsEvent = settingsViewModel::handleEvent
 
     NavHost(navController, startDestination = Screen.Journeys.route) {
         composable(Screen.Journeys.route) {
@@ -188,6 +191,9 @@ private fun MainNavigationHost(navController: NavHostController) {
         // Settings NavHost Screens
         composable(Screen.AppInfo.route) {
             AppInfoSettingsScreen(navController)
+        }
+        composable(Screen.Language.route) {
+            LanguageSettingsScreen(navController, settingsState, settingsEvent)
         }
     }
 }
