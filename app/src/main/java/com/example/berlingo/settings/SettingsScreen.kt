@@ -83,7 +83,9 @@ fun LanguageSettings(navController: NavHostController, textColor: Color) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { },
+            .clickable {
+                navController.navigate(Screen.Language.route)
+            },
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(

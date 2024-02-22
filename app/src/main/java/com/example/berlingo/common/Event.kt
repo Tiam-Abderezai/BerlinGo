@@ -1,4 +1,4 @@
-package com.example.berlingo.data.network
+package com.example.berlingo.common
 
 open class Event<out T>(private val content: T) {
 

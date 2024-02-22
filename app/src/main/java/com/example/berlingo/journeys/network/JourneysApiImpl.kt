@@ -2,7 +2,7 @@ package com.example.berlingo.journeys.network
 
 import com.example.berlingo.common.logger.BaseLogger
 import com.example.berlingo.common.logger.FactoryLogger
-import com.example.berlingo.data.network.Resource
+import com.example.berlingo.common.Resource
 import com.example.berlingo.journeys.network.responses.JourneysResponse
 import java.util.Locale
 import javax.inject.Inject

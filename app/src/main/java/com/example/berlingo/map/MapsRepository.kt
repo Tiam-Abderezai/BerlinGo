@@ -1,6 +1,6 @@
 package com.example.berlingo.map
 
-import com.example.berlingo.data.network.Resource
+import com.example.berlingo.common.Resource
 import com.example.berlingo.map.network.responses.DirectionsResponse
 
 interface MapsRepository {

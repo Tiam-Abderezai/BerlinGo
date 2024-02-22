@@ -1,4 +1,23 @@
 <resources>
     <string name="app_name">BerlinGo</string>
     <string name="duration">Dauer</string>
+    <string name="clear_textfield">TextFeld löschen</string>
+    <string name="get_current_location">Aktuellen Standort abrufen</string>
+    <string name="swap_stops">Stopps austauschen</string>
+    <string name="app_info">Infos zur Anwendung</string>
+    <string name="language_settings">Spracheinstellungen</string>
+    <string name="dark_mode">Dunkler Modus</string>
+    <string name="information_privacy">Informationen zum Datenschutz</string>
+    <string name="app_version">App-Version</string>
+    <string name="device_model">Gerät Modell</string>
+    <string name="system_version">System-Version</string>
+    <string name="playstore_version">Playstore-Version</string>
+    <string name="language">Sprache</string>
+    <string name="region">Region</string>
+    <string name="back">Zurück</string>
+    <string name="time_zone">Zeitzone</string>
+    <string name="device_brand">Gerät Marke</string>
+    <string name="device_manufacturer">Gerätehersteller</string>
+    <string name="device">Gerät</string>
+    <string name="device_product">Gerät Produkt</string>
 </resources>
