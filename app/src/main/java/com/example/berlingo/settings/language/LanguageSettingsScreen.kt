@@ -1,9 +1,6 @@
 package com.example.berlingo.settings.language
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.content.res.Configuration
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -36,7 +33,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.os.LocaleListCompat
 import androidx.navigation.NavHostController
 import com.example.berlingo.R
 import com.example.berlingo.common.components.Divider
@@ -82,7 +78,7 @@ fun LanguageSettings(
 ) {
     val textColor = if (isSystemInDarkTheme()) LightGray else DarkGray
     val backgroundColor = if (isSystemInDarkTheme()) DarkGray else LightGray
-    Scaffold(topBar = { SetTopAppBar(navController, language, backgroundColor) }) {
+    Scaffold(topBar = { SetTopAppBar(navController, backgroundColor) }) {
         Surface(color = backgroundColor, modifier = Modifier.fillMaxSize()) {
             Column(
                 modifier = Modifier.fillMaxSize(),
@@ -124,22 +120,19 @@ fun LanguageDropdownMenu(
                 .fillMaxWidth()
                 .background(backgroundColor),
         ) {
-            dropdownLanguages.forEach { language ->
+            dropdownLanguages.forEach { id ->
                 DropdownMenuItem(onClick = {
                     expanded = false
                 }) {
-                    logger.debug("locale: ${stringResource(id = language)}")
-                    val lang = stringResource(id = language)
                     Row(
                         Modifier.clickable {
-//                            val locale = LocaleUtils.updateLocale(language, context)
-//                            val locale = AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(lang))
-
-//                            saveLocale(settingsEvent, locale)
-                            selectedOption = language
+                            val lang = getLanguageCode(id)
+                            val locale = LocaleUtils.updateLocale(lang, context)
+                            saveLocale(settingsEvent, locale)
+                            selectedOption = id
                         },
                     ) {
-                        Text(text = stringResource(id = language), color = textColor)
+                        Text(text = stringResource(id = id), color = textColor)
                     }
                 }
             }
@@ -156,17 +149,24 @@ private fun getLanguageStringResource(language: String): Int {
     }
 }
 
+private fun getLanguageCode(id: Int): String {
+    return when (id) {
+        R.string.locale_en -> "en"
+        R.string.locale_de -> "de"
+        R.string.locale_fr -> "fr"
+        else -> "en"
+    }
+}
+
 private fun saveLocale(settingsEvent: suspend (event: SettingsEvent) -> Unit, locale: Locale) {
     CoroutineScope(Dispatchers.IO).launch {
         settingsEvent.invoke(SettingsEvent.SaveLanguageSettings(locale))
     }
 }
 
-
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun SetTopAppBar(navController: NavHostController, language: String, backgroundColor: Color) {
+private fun SetTopAppBar(navController: NavHostController, backgroundColor: Color) {
     logger.debug("SetTopAppBar: ${stringResource(R.string.language)}")
     TopAppBar(
         title = { Text(stringResource(R.string.language)) },

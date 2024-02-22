@@ -1,6 +1,7 @@
 package com.example.berlingo.main
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -22,6 +23,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -45,9 +47,11 @@ import com.example.berlingo.map.MapsScreen
 import com.example.berlingo.map.MapsViewModel
 import com.example.berlingo.routes.JourneysScreen
 import com.example.berlingo.settings.SettingsScreen
+import com.example.berlingo.settings.SettingsState
 import com.example.berlingo.settings.SettingsViewModel
 import com.example.berlingo.settings.app_info.AppInfoSettingsScreen
 import com.example.berlingo.settings.language.LanguageSettingsScreen
+import com.example.berlingo.settings.language.LocaleUtils
 import com.example.berlingo.trips.TripsViewModel
 import com.example.berlingo.ui.theme.BerlinGoTheme
 import com.example.berlingo.ui.theme.DarkGray
@@ -163,6 +167,10 @@ private fun MainNavigationHost(navController: NavHostController) {
     val settingsState = settingsViewModel.state.collectAsState().value
     val settingsEvent = settingsViewModel::handleEvent
 
+    // Check if App language settings already overrides user's system's language settings
+    // and if so set the app's language settings otherwise keep system's language settings
+    CheckAppLanguageSettings(settingsState)
+
     NavHost(navController, startDestination = Screen.Journeys.route) {
         composable(Screen.Journeys.route) {
             JourneysScreen(
@@ -194,6 +202,20 @@ private fun MainNavigationHost(navController: NavHostController) {
         }
         composable(Screen.Language.route) {
             LanguageSettingsScreen(navController, settingsState, settingsEvent)
+        }
+    }
+}
+
+@Composable
+fun CheckAppLanguageSettings(settingsState: SettingsState) {
+    when (settingsState) {
+        is SettingsState.Initial -> {}
+        is SettingsState.Loading -> {}
+        is SettingsState.Error -> {}
+        is SettingsState.Success -> {
+            val language = settingsState.data
+            val context: Context = LocalContext.current
+            LocaleUtils.updateLocale(language, context)
         }
     }
 }

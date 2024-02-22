@@ -16,6 +16,13 @@ private val logger: BaseLogger = FactoryLogger.getLoggerKClass(SettingsViewModel
 class SettingsViewModel @Inject constructor(private val settingsRepository: SettingsRepository) : ViewModel() {
     private val _state = MutableStateFlow<SettingsState>(SettingsState.Initial(settingsRepository.getLanguageSettings() ?: Locale.getDefault().language))
     val state: StateFlow<SettingsState> = _state.asStateFlow()
+    private val languageRegionCode = settingsRepository.getLanguageSettings()
+    init {
+        // init block used so MainActivity can check current app language settings when started
+        if (!languageRegionCode.isNullOrEmpty()) {
+            _state.value = SettingsState.Success(languageRegionCode)
+        }
+    }
     suspend fun handleEvent(event: SettingsEvent) {
         when (event) {
             is SettingsEvent.SaveLanguageSettings -> saveLanguageSettings(event.locale)
