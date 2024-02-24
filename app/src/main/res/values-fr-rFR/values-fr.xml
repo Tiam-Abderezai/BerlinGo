@@ -22,4 +22,5 @@
     <string name="device_manufacturer">Fabricant de l\'appareil</string>
     <string name="device">Appareil</string>
     <string name="device_product">Produit de l\'appareil</string>
+    <string name="permissions">Permissions</string>
 </resources>
