@@ -1,6 +1,9 @@
 package com.example.berlingo.settings
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.net.Uri
+import android.provider.Settings
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
@@ -51,6 +55,8 @@ fun SettingsScreen(navController: NavHostController, settingsViewModel: Settings
             DarkModeSettings(navController, textColor)
             Divider()
             DataPrivacySettings(navController, textColor)
+            Divider()
+            PermissionSettings(navController, textColor)
             Divider()
         }
     }
@@ -150,6 +156,34 @@ fun DataPrivacySettings(navController: NavHostController, textColor: Color) {
         Spacer(modifier = Modifier.width(medium))
         Text(
             text = stringResource(R.string.data_privacy),
+            color = textColor,
+            fontSize = 16.sp,
+        )
+    }
+}
+@Composable
+fun PermissionSettings(navController: NavHostController, textColor: Color) {
+    val context = LocalContext.current
+    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+        data = Uri.fromParts("package", context.packageName, null)
+    }
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(large)
+            .clickable {
+                context.startActivity(intent)
+            },
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Icon(
+            modifier = Modifier.size(large),
+            painter = painterResource(id = R.drawable.icon_location),
+            contentDescription = stringResource(R.string.permissions),
+        )
+        Spacer(modifier = Modifier.width(medium))
+        Text(
+            text = stringResource(R.string.permissions),
             color = textColor,
             fontSize = 16.sp,
         )
