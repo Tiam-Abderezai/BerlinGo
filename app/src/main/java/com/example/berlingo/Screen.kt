@@ -7,5 +7,5 @@ sealed class Screen(val route: String) {
     object AppInfo : Screen("AppInfo")
     object Language : Screen("Language")
     object DarkMode : Screen("DarkMode")
-    object InformationPrivacy : Screen("InformationPrivacy")
+    object DataPrivacy : Screen("DataPrivacy")
 }

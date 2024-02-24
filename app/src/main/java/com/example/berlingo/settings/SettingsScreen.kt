@@ -50,7 +50,7 @@ fun SettingsScreen(navController: NavHostController, settingsViewModel: Settings
             Divider()
             DarkModeSettings(navController, textColor)
             Divider()
-            InformationPrivacySettings(navController, textColor)
+            DataPrivacySettings(navController, textColor)
             Divider()
         }
     }
@@ -132,22 +132,24 @@ fun DarkModeSettings(navController: NavHostController, textColor: Color) {
 }
 
 @Composable
-fun InformationPrivacySettings(navController: NavHostController, textColor: Color) {
+fun DataPrivacySettings(navController: NavHostController, textColor: Color) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .height(large)
-            .clickable { },
+            .clickable {
+                navController.navigate(Screen.DataPrivacy.route)
+            },
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
             modifier = Modifier.size(large),
             painter = painterResource(id = R.drawable.icon_privacy),
-            contentDescription = stringResource(R.string.information_privacy),
+            contentDescription = stringResource(R.string.data_privacy),
         )
         Spacer(modifier = Modifier.width(medium))
         Text(
-            text = stringResource(R.string.information_privacy),
+            text = stringResource(R.string.data_privacy),
             color = textColor,
             fontSize = 16.sp,
         )

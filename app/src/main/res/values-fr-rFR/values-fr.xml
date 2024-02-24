@@ -7,7 +7,9 @@
     <string name="app_info">Infos sur l\'application</string>
     <string name="language_settings">Paramètres linguistiques</string>
     <string name="dark_mode">Mode sombre</string>
-    <string name="information_privacy">Information sur la protection de la vie privée</string>
+    <string name="dark">Sombre</string>
+    <string name="light">Lumineux</string>
+    <string name="data_privacy">Protection des données</string>
     <string name="app_version">Version de l\'application</string>
     <string name="device_model">Modèle d\'appareil</string>
     <string name="system_version">Version du système</string>
