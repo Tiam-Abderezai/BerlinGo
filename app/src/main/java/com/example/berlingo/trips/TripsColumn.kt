@@ -1,5 +1,4 @@
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
@@ -21,6 +20,7 @@ import com.example.berlingo.trips.TripsState
 import com.example.berlingo.trips.network.responses.Trip
 import com.example.berlingo.ui.theme.DarkGray
 import com.example.berlingo.ui.theme.LightGray
+import com.example.berlingo.ui.theme.isDarkMode
 
 private val logger: BaseLogger = FactoryLogger.getLoggerCompose("StopoversColumn()")
 
@@ -54,7 +54,7 @@ private fun DisplayTrips(
                 if (departureNotNull && stopNameNotNull) {
                     Text(
                         "${stopover?.departure?.convertEpochTime()} - ${stopover?.stop?.name}",
-                        color = if (isSystemInDarkTheme()) LightGray else DarkGray,
+                        color = if (isDarkMode()) LightGray else DarkGray,
                         modifier = Modifier
                             .padding(smallXX)
                             .clickable { logger.debug("trip.stopovers CLICKED}") },

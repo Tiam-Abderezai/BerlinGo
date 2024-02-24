@@ -2,6 +2,7 @@ package com.example.berlingo.ui.theme
 
 import android.app.Activity
 import android.os.Build
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
@@ -39,7 +40,7 @@ private val LightColorScheme = lightColorScheme(
 
 @Composable
 fun BerlinGoTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
+    darkTheme: Boolean = isDarkMode(),
     // Dynamic color is available on Android 12+
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit,
@@ -67,4 +68,13 @@ fun BerlinGoTheme(
         typography = Typography,
         content = content,
     )
+}
+
+@Composable
+fun isDarkMode(): Boolean {
+    return when (AppCompatDelegate.getDefaultNightMode()) {
+        AppCompatDelegate.MODE_NIGHT_YES -> true
+        AppCompatDelegate.MODE_NIGHT_NO -> false
+        else -> isSystemInDarkTheme()
+    }
 }

@@ -2,11 +2,13 @@ package com.example.berlingo.settings
 
 sealed class SettingsState {
     data class Initial(
-        val data: String,
+        val language: String = "",
+        val darkMode: Boolean = false,
     ) : SettingsState()
     object Loading : SettingsState()
     data class Success(
-        val data: String,
+        val language: String = "",
+        val darkMode: Boolean = false,
     ) : SettingsState()
     data class Error(val message: String) : SettingsState()
 

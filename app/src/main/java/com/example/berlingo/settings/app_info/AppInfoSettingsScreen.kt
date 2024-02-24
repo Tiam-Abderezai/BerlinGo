@@ -3,7 +3,6 @@ package com.example.berlingo.settings.app_info
 import android.annotation.SuppressLint
 import android.os.Build
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -35,6 +34,7 @@ import com.example.berlingo.common.logger.BaseLogger
 import com.example.berlingo.common.logger.FactoryLogger
 import com.example.berlingo.ui.theme.DarkGray
 import com.example.berlingo.ui.theme.LightGray
+import com.example.berlingo.ui.theme.isDarkMode
 import java.util.Locale
 import java.util.TimeZone
 
@@ -44,8 +44,8 @@ private val logger: BaseLogger = FactoryLogger.getLoggerCompose("AppInfoSettings
 @SuppressLint("CoroutineCreationDuringComposition", "UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun AppInfoSettingsScreen(navController: NavHostController) {
-    val textColor = if (isSystemInDarkTheme()) LightGray else DarkGray
-    val backgroundColor = if (isSystemInDarkTheme()) DarkGray else LightGray
+    val textColor = if (isDarkMode()) LightGray else DarkGray
+    val backgroundColor = if (isDarkMode()) DarkGray else LightGray
     Scaffold(topBar = { SetTopAppBar(navController, backgroundColor) }) {
         Surface(color = backgroundColor, modifier = Modifier.fillMaxSize()) {
             Column(

@@ -1,6 +1,5 @@
 package com.example.berlingo.map
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -30,6 +29,7 @@ import com.example.berlingo.map.columns.MapsJourneysColumn
 import com.example.berlingo.map.network.responses.Route
 import com.example.berlingo.ui.theme.DarkGray
 import com.example.berlingo.ui.theme.LightGray
+import com.example.berlingo.ui.theme.isDarkMode
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
@@ -47,7 +47,7 @@ fun MapsScreen(
     stopsState: StopsState,
     stopsEvent: suspend (StopsEvent) -> Unit,
 ) {
-    val backgroundColor = if (isSystemInDarkTheme()) DarkGray else LightGray
+    val backgroundColor = if (isDarkMode()) DarkGray else LightGray
     Surface(color = backgroundColor, modifier = Modifier.fillMaxSize()) {
         Box() {
             Column() {

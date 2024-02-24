@@ -1,4 +1,4 @@
-package com.example.berlingo.settings.language
+package com.example.berlingo.settings.dark_mode
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
@@ -53,31 +53,29 @@ import com.example.berlingo.ui.theme.isDarkMode
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.util.Locale
 
-private val logger: BaseLogger = FactoryLogger.getLoggerCompose("LanguageSettingsScreen()")
+private val logger: BaseLogger = FactoryLogger.getLoggerCompose("DarkModeSettingsScreen()")
 
-val dropdownLanguages = listOf(R.string.locale_en, R.string.locale_de, R.string.locale_fr)
+val dropdownDarkMode = listOf(R.string.dark, R.string.light)
 
 @SuppressLint("CoroutineCreationDuringComposition", "UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun LanguageSettingsScreen(
+fun DarkModeSettingsScreen(
     navController: NavHostController,
     settingsState: SettingsState,
     settingsEvent: suspend (event: SettingsEvent) -> Unit,
 ) {
     when (settingsState) {
-        is SettingsState.Initial -> LanguageSettings(
+        is SettingsState.Initial -> DarkModeSettings(
             navController,
-            settingsState.language,
+            settingsState.darkMode,
             settingsEvent,
         )
-
         is SettingsState.Loading -> LoadingScreen()
         is SettingsState.Error -> ErrorScreen(message = settingsState.message)
-        is SettingsState.Success -> LanguageSettings(
+        is SettingsState.Success -> DarkModeSettings(
             navController,
-            settingsState.language,
+            settingsState.darkMode,
             settingsEvent,
         )
     }
@@ -86,9 +84,9 @@ fun LanguageSettingsScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun LanguageSettings(
+fun DarkModeSettings(
     navController: NavHostController,
-    language: String,
+    darkMode: Boolean,
     settingsEvent: suspend (event: SettingsEvent) -> Unit,
 ) {
     val textColor = if (isDarkMode()) LightGray else DarkGray
@@ -100,8 +98,8 @@ fun LanguageSettings(
             ) {
                 Spacer(modifier = Modifier.height(200.dp))
                 Divider()
-                LanguageDropdownMenu(
-                    language,
+                DarkModeDropdownMenu(
+                    darkMode,
                     settingsEvent,
                     textColor,
                     backgroundColor,
@@ -113,16 +111,16 @@ fun LanguageSettings(
 }
 
 @Composable
-fun LanguageDropdownMenu(
-    language: String,
+fun DarkModeDropdownMenu(
+    darkMode: Boolean,
     settingsEvent: suspend (event: SettingsEvent) -> Unit,
     textColor: Color,
     backgroundColor: Color,
 ) {
     val context = LocalContext.current
-    var expanded by remember { mutableStateOf(false) } // State for the dropdown menu visibility
-    logger.debug("selectedOption: $language")
-    var selectedOption by remember { mutableStateOf(getLanguageStringResource(language)) } // State for the selected option
+    var expanded by remember { mutableStateOf(false) }
+    val darkModeIntValue = getDarkModeIntValue(darkMode)
+    var selectedOption by remember { mutableStateOf(darkModeIntValue) }
 
     Column() {
         Button(
@@ -144,21 +142,20 @@ fun LanguageDropdownMenu(
                 .fillMaxWidth()
                 .background(backgroundColor),
         ) {
-            dropdownLanguages.forEach { language ->
-                DropdownMenuItem(onClick = {
+            dropdownDarkMode.forEach { darkMode ->
+                DropdownMenuItem(modifier = Modifier.background(backgroundColor), onClick = {
                     expanded = false
                 }) {
                     Row(
-                        modifier = Modifier
+                        Modifier
                             .fillMaxWidth()
                             .clickable {
-                                val lang = getLanguageCode(language)
-                                val locale = SettingsManager().updateLanguage(lang, context)
-                                saveLocale(settingsEvent, locale)
-                                selectedOption = language
+                                SettingsManager().updateDarkMode(getDarkModeBooleanValue(darkMode), context)
+                                saveDarkMode(settingsEvent, darkMode)
+                                selectedOption = darkMode
                             },
                     ) {
-                        Text(text = stringResource(id = language), color = textColor, fontSize = 32.sp)
+                        Text(text = stringResource(id = darkMode), color = textColor, fontSize = 32.sp)
                     }
                 }
             }
@@ -166,40 +163,22 @@ fun LanguageDropdownMenu(
     }
 }
 
-private fun getLanguageStringResource(language: String): Int {
-    return when (language) {
-        "en" -> R.string.locale_en
-        "de" -> R.string.locale_de
-        "fr" -> R.string.locale_fr
-        else -> R.string.locale_en
-    }
-}
+fun getDarkModeIntValue(darkMode: Boolean) = if (darkMode) R.string.dark else R.string.light
 
-private fun getLanguageCode(id: Int): String {
-    return when (id) {
-        R.string.locale_en -> "en"
-        R.string.locale_de -> "de"
-        R.string.locale_fr -> "fr"
-        else -> "en"
-    }
-}
+fun getDarkModeBooleanValue(darkMode: Int) = darkMode == R.string.dark
 
-private fun saveLocale(settingsEvent: suspend (event: SettingsEvent) -> Unit, locale: Locale) {
+private fun saveDarkMode(settingsEvent: suspend (event: SettingsEvent) -> Unit, darkMode: Int) {
     CoroutineScope(Dispatchers.IO).launch {
-        settingsEvent.invoke(SettingsEvent.SaveLanguageSettings(locale))
+        val darkModeBooleanValue = getDarkModeBooleanValue(darkMode)
+        settingsEvent.invoke(SettingsEvent.SaveDarkModeSettings(darkModeBooleanValue))
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun SetTopAppBar(
-    navController: NavHostController,
-    backgroundColor: Color,
-    textColor: Color,
-) {
-    logger.debug("SetTopAppBar: ${stringResource(R.string.language)}")
+private fun SetTopAppBar(navController: NavHostController, backgroundColor: Color, textColor: Color) {
     TopAppBar(
-        title = { Text(stringResource(R.string.language), color = textColor) },
+        title = { Text(stringResource(R.string.dark_mode), color = textColor) },
         navigationIcon = {
             IconButton(onClick = { navController.popBackStack() }) {
                 Icon(Icons.Filled.ArrowBack, contentDescription = stringResource(R.string.back))
