@@ -46,12 +46,13 @@ import com.example.berlingo.journeys.legs.stops.StopsViewModel
 import com.example.berlingo.map.MapsScreen
 import com.example.berlingo.map.MapsViewModel
 import com.example.berlingo.routes.JourneysScreen
+import com.example.berlingo.settings.SettingsManager
 import com.example.berlingo.settings.SettingsScreen
 import com.example.berlingo.settings.SettingsState
 import com.example.berlingo.settings.SettingsViewModel
 import com.example.berlingo.settings.app_info.AppInfoSettingsScreen
+import com.example.berlingo.settings.dark_mode.DarkModeSettingsScreen
 import com.example.berlingo.settings.language.LanguageSettingsScreen
-import com.example.berlingo.settings.language.LocaleUtils
 import com.example.berlingo.trips.TripsViewModel
 import com.example.berlingo.ui.theme.BerlinGoTheme
 import com.example.berlingo.ui.theme.DarkGray
@@ -83,6 +84,7 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
     private fun getLocationPermission() {
         if (ContextCompat.checkSelfPermission(
                 this,
@@ -120,7 +122,8 @@ fun BottomNavigationBar(navController: NavController) {
         val selectedItemBackgroundColor = LightGray
         val unselectedItemBackgroundColor = DarkGray
         BottomNavigation(
-            modifier = Modifier.height(large)
+            modifier = Modifier
+                .height(large)
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(smallXXX)),
             backgroundColor = LightBlue,
@@ -167,9 +170,7 @@ private fun MainNavigationHost(navController: NavHostController) {
     val settingsState = settingsViewModel.state.collectAsState().value
     val settingsEvent = settingsViewModel::handleEvent
 
-    // Check if App language settings already overrides user's system's language settings
-    // and if so set the app's language settings otherwise keep system's language settings
-    CheckAppLanguageSettings(settingsState)
+    InitAppSettings(settingsState)
 
     NavHost(navController, startDestination = Screen.Journeys.route) {
         composable(Screen.Journeys.route) {
@@ -203,19 +204,26 @@ private fun MainNavigationHost(navController: NavHostController) {
         composable(Screen.Language.route) {
             LanguageSettingsScreen(navController, settingsState, settingsEvent)
         }
+        composable(Screen.DarkMode.route) {
+            DarkModeSettingsScreen(navController, settingsState, settingsEvent)
+        }
     }
 }
 
 @Composable
-fun CheckAppLanguageSettings(settingsState: SettingsState) {
+fun InitAppSettings(settingsState: SettingsState) {
     when (settingsState) {
         is SettingsState.Initial -> {}
         is SettingsState.Loading -> {}
         is SettingsState.Error -> {}
         is SettingsState.Success -> {
-            val language = settingsState.data
+            val language = settingsState.language
+            val darkMode = settingsState.darkMode
             val context: Context = LocalContext.current
-            LocaleUtils.updateLocale(language, context)
+            SettingsManager().apply {
+                updateLanguage(language, context)
+                updateDarkMode(darkMode, context)
+            }
         }
     }
 }
@@ -230,7 +238,7 @@ private fun setRoute(navController: NavController): String {
         Screen.Language.route -> "Settings"
         Screen.DarkMode.route -> "Settings"
         Screen.InformationPrivacy.route -> "Settings"
-        else -> { "" }
+        else -> ""
     }
 }
 

@@ -13,19 +13,24 @@ import javax.inject.Inject
 private val logger: BaseLogger = FactoryLogger.getLoggerKClass(SettingsViewModel::class)
 
 @HiltViewModel
-class SettingsViewModel @Inject constructor(private val settingsRepository: SettingsRepository) : ViewModel() {
-    private val _state = MutableStateFlow<SettingsState>(SettingsState.Initial(settingsRepository.getLanguageSettings() ?: Locale.getDefault().language))
+class SettingsViewModel @Inject constructor(private val settingsRepository: SettingsRepository) :
+    ViewModel() {
+    private val darkModeSettingsState = settingsRepository.darkModeState
+    private val languageSettingsState = settingsRepository.languageState
+    private val _state = MutableStateFlow<SettingsState>(SettingsState.Initial(languageSettingsState.value, darkModeSettingsState.value))
     val state: StateFlow<SettingsState> = _state.asStateFlow()
-    private val languageRegionCode = settingsRepository.getLanguageSettings()
+
     init {
         // init block used so MainActivity can check current app language settings when started
-        if (!languageRegionCode.isNullOrEmpty()) {
-            _state.value = SettingsState.Success(languageRegionCode)
+        if (languageSettingsState.value.isNotEmpty()) {
+            _state.value = SettingsState.Success(languageSettingsState.value, darkModeSettingsState.value)
         }
     }
+
     suspend fun handleEvent(event: SettingsEvent) {
         when (event) {
             is SettingsEvent.SaveLanguageSettings -> saveLanguageSettings(event.locale)
+            is SettingsEvent.SaveDarkModeSettings -> saveDarkModeSettings(event.darkMode)
         }
     }
 
@@ -34,8 +39,20 @@ class SettingsViewModel @Inject constructor(private val settingsRepository: Sett
     ) {
         try {
             _state.value = SettingsState.Loading
-            settingsRepository.saveLanguageSettings(locale)
-            _state.value = SettingsState.Success(settingsRepository.getLanguageSettings() ?: "")
+            settingsRepository.setLanguageSettings(locale.language)
+            _state.value = SettingsState.Success(language = languageSettingsState.value)
+        } catch (e: Exception) {
+            _state.value = SettingsState.Error(message = e.message ?: "Unknown Error")
+        }
+    }
+
+    private suspend fun saveDarkModeSettings(
+        darkMode: Boolean,
+    ) {
+        try {
+            _state.value = SettingsState.Loading
+            settingsRepository.setDarkModeSettings(darkMode)
+            _state.value = SettingsState.Success(darkMode = darkModeSettingsState.value)
         } catch (e: Exception) {
             _state.value = SettingsState.Error(message = e.message ?: "Unknown Error")
         }

@@ -3,7 +3,6 @@ package com.example.berlingo.map.columns
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -43,6 +42,7 @@ import com.example.berlingo.journeys.network.responses.Leg
 import com.example.berlingo.map.MapsEvent
 import com.example.berlingo.ui.theme.DarkGray
 import com.example.berlingo.ui.theme.LightGray
+import com.example.berlingo.ui.theme.isDarkMode
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -65,7 +65,7 @@ fun MapsJourneysColumn(
 @Composable
 private fun MapsJourneys(journeys: Map<Journey, List<Leg>>, mapsEvent: suspend (MapsEvent) -> Unit) {
     Box(modifier = Modifier.height(Dimensions.mapBoxHeight)) {
-        val textColor = if (isSystemInDarkTheme()) LightGray else DarkGray
+        val textColor = if (isDarkMode()) LightGray else DarkGray
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize(),

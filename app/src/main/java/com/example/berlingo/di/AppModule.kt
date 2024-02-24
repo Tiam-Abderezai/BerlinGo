@@ -1,12 +1,10 @@
 package com.example.berlingo.di
 
 import android.content.Context
-import android.content.SharedPreferences
-import androidx.security.crypto.EncryptedSharedPreferences
-import androidx.security.crypto.MasterKeys
 import com.example.berlingo.journeys.legs.stops.network.StopsApi
 import com.example.berlingo.journeys.network.JourneysApi
 import com.example.berlingo.map.network.MapsApi
+import com.example.berlingo.settings.SettingsRepository
 import com.example.berlingo.trips.network.TripsApi
 import dagger.Module
 import dagger.Provides
@@ -78,17 +76,7 @@ object AppModule {
             .create(MapsApi::class.java)
     }
 
-    @Provides
     @Singleton
-    fun provideEncryptedSharedPreferences(@ApplicationContext context: Context): SharedPreferences {
-        val masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
-
-        return EncryptedSharedPreferences.create(
-            "encrypted_shared_prefs",
-            masterKeyAlias,
-            context,
-            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM,
-        )
-    }
+    @Provides
+    fun provideSettingsRepository(@ApplicationContext context: Context): SettingsRepository = SettingsRepository(context)
 }

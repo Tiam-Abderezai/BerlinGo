@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -57,6 +56,7 @@ import com.example.berlingo.main.MainActivity
 import com.example.berlingo.main.locationPermissionGranted
 import com.example.berlingo.ui.theme.DarkGray
 import com.example.berlingo.ui.theme.LightGray
+import com.example.berlingo.ui.theme.isDarkMode
 import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -84,12 +84,12 @@ fun StopsColumn(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top,
     ) {
-        val backgroundColor = if (isSystemInDarkTheme()) DarkGray else LightGray
-        val labelColor = if (isSystemInDarkTheme()) LightGray else DarkGray
+        val backgroundColor = if (isDarkMode()) DarkGray else LightGray
+        val textColor = if (isDarkMode()) LightGray else DarkGray
         val context = LocalContext.current
-        OriginTextField(labelColor, backgroundColor, stopsEvent, context)
-        DestinationTextField(labelColor, backgroundColor, stopsEvent)
-        SearchJourneysButton(journeysEvent, labelColor)
+        OriginTextField(textColor, backgroundColor, stopsEvent, context)
+        DestinationTextField(textColor, backgroundColor, stopsEvent)
+        SearchJourneysButton(journeysEvent, textColor)
     }
     HandleStopsState(stopsState, stopsEvent)
 }
@@ -97,13 +97,13 @@ fun StopsColumn(
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 private fun OriginTextField(
-    labelColor: Color,
+    textColor: Color,
     backgroundColor: Color,
     stopsEvent: suspend (StopsEvent) -> Unit,
     context: Context,
 ) {
     TextField(
-        label = { Text(text = "A", color = labelColor, fontWeight = FontWeight.SemiBold) },
+        label = { Text(text = "A", color = textColor, fontWeight = FontWeight.SemiBold) },
         modifier = Modifier
             .background(color = backgroundColor)
             .fillMaxWidth()
@@ -149,12 +149,12 @@ private fun OriginTrailingIcons(
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 private fun DestinationTextField(
-    labelColor: Color,
+    textColor: Color,
     backgroundColor: Color,
     stopsEvent: suspend (StopsEvent) -> Unit,
 ) {
     TextField(
-        label = { Text("B", color = labelColor, fontWeight = FontWeight.SemiBold) },
+        label = { Text("B", color = textColor, fontWeight = FontWeight.SemiBold) },
         modifier = Modifier
             .background(color = backgroundColor)
             .fillMaxWidth()
@@ -194,7 +194,7 @@ private fun DestinationTrailingIcons() {
 @Composable
 private fun SearchJourneysButton(
     journeysEvent: suspend (JourneysEvent) -> Unit,
-    labelColor: Color,
+    textColor: Color,
 ) {
     Box(
         modifier = Modifier
@@ -212,7 +212,7 @@ private fun SearchJourneysButton(
             Icon(
                 modifier = Modifier.size(large),
                 painter = painterResource(id = R.drawable.icon_search),
-                tint = labelColor,
+                tint = textColor,
                 contentDescription = null,
             )
         }
@@ -315,7 +315,7 @@ private fun HandleStopsState(
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun DisplayStops(stopsState: List<Stop>, stopsEvent: suspend (StopsEvent) -> Unit) {
-    val textColor = if (isSystemInDarkTheme()) Color.White else Color.Black
+    val textColor = if (isDarkMode()) Color.White else Color.Black
     LazyColumn {
         items(stopsState) { stop ->
             val keyboardController = LocalSoftwareKeyboardController.current

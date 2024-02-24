@@ -97,6 +97,8 @@ dependencies {
     implementation("com.google.android.gms:play-services-maps:18.2.0")
     // Places
     implementation("com.google.android.libraries.places:places:3.3.0")
-    // EncryptedSharedPreferences
-    implementation("androidx.security:security-crypto:1.0.0")
+    // DataStore Preferences
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
+
+
 }

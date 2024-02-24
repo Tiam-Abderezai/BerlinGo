@@ -2,7 +2,6 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -59,6 +58,7 @@ import com.example.berlingo.trips.TripsEvent
 import com.example.berlingo.trips.TripsState
 import com.example.berlingo.ui.theme.DarkGray
 import com.example.berlingo.ui.theme.LightGray
+import com.example.berlingo.ui.theme.isDarkMode
 
 private val logger: BaseLogger = FactoryLogger.getLoggerCompose("JourneysColumn()")
 
@@ -96,7 +96,7 @@ fun DisplayJourneys(
 ) {
     Divider()
     Box() {
-        val textColor = if (isSystemInDarkTheme()) LightGray else DarkGray
+        val textColor = if (isDarkMode()) LightGray else DarkGray
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize(),
@@ -217,7 +217,7 @@ fun DisplayWarningRemark(warningRemark: Remark) {
     val validUntil = warningRemark.validUntil?.convertEpochDate() ?: ""
     Box() {
         val scrollState = rememberScrollState()
-        val textColor = if (isSystemInDarkTheme()) LightGray else DarkGray
+        val textColor = if (isDarkMode()) LightGray else DarkGray
         Column(
             modifier = Modifier.verticalScroll(scrollState),
         ) {

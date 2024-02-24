@@ -2,9 +2,6 @@ package com.example.berlingo.routes
 
 import JourneysColumn
 import android.annotation.SuppressLint
-import android.os.Build
-import androidx.annotation.RequiresApi
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
@@ -21,6 +18,7 @@ import com.example.berlingo.trips.TripsEvent
 import com.example.berlingo.trips.TripsState
 import com.example.berlingo.ui.theme.DarkGray
 import com.example.berlingo.ui.theme.LightGray
+import com.example.berlingo.ui.theme.isDarkMode
 
 private val logger: BaseLogger = FactoryLogger.getLoggerCompose("JourneysScreen()")
 
@@ -34,7 +32,7 @@ fun JourneysScreen(
     tripsState: TripsState,
     tripsEvent: suspend (TripsEvent) -> Unit,
 ) {
-    val backgroundColor = if (isSystemInDarkTheme()) DarkGray else LightGray
+    val backgroundColor = if (isDarkMode()) DarkGray else LightGray
     Surface(color = backgroundColor, modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier.fillMaxSize(),
