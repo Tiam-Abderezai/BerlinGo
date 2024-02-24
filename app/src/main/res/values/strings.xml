@@ -9,7 +9,7 @@
     <string name="dark_mode">Dark Mode</string>
     <string name="dark">Dark</string>
     <string name="light">Light</string>
-    <string name="information_privacy">Information Privacy</string>
+    <string name="data_privacy">Data Privacy</string>
     <string name="app_version">App Version</string>
     <string name="device_model">Device Model</string>
     <string name="system_version">System Version</string>

@@ -51,6 +51,7 @@ import com.example.berlingo.settings.SettingsScreen
 import com.example.berlingo.settings.SettingsState
 import com.example.berlingo.settings.SettingsViewModel
 import com.example.berlingo.settings.app_info.AppInfoSettingsScreen
+import com.example.berlingo.settings.data_privacy.DataPrivacySettingsScreen
 import com.example.berlingo.settings.dark_mode.DarkModeSettingsScreen
 import com.example.berlingo.settings.language.LanguageSettingsScreen
 import com.example.berlingo.trips.TripsViewModel
@@ -207,6 +208,9 @@ private fun MainNavigationHost(navController: NavHostController) {
         composable(Screen.DarkMode.route) {
             DarkModeSettingsScreen(navController, settingsState, settingsEvent)
         }
+        composable(Screen.DataPrivacy.route) {
+            DataPrivacySettingsScreen(navController)
+        }
     }
 }
 
@@ -237,7 +241,7 @@ private fun setRoute(navController: NavController): String {
         Screen.AppInfo.route -> "Settings"
         Screen.Language.route -> "Settings"
         Screen.DarkMode.route -> "Settings"
-        Screen.InformationPrivacy.route -> "Settings"
+        Screen.DataPrivacy.route -> "Settings"
         else -> ""
     }
 }
@@ -251,5 +255,5 @@ private fun setPainterResource(screen: Screen) = when (screen) {
     Screen.AppInfo -> painterResource(0)
     Screen.Language -> painterResource(0)
     Screen.DarkMode -> painterResource(0)
-    Screen.InformationPrivacy -> painterResource(0)
+    Screen.DataPrivacy -> painterResource(0)
 }
