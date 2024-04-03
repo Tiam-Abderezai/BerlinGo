@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextDecoration
@@ -48,6 +49,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 private val logger: BaseLogger = FactoryLogger.getLoggerCompose("MapsJourneysColumn()")
+private const val testTag = "MapsJourneysColumn()"
 
 @Composable
 fun MapsJourneysColumn(
@@ -63,11 +65,19 @@ fun MapsJourneysColumn(
 }
 
 @Composable
-private fun MapsJourneys(journeys: Map<Journey, List<Leg>>, mapsEvent: suspend (MapsEvent) -> Unit) {
-    Box(modifier = Modifier.height(Dimensions.mapBoxHeight)) {
+private fun MapsJourneys(
+    journeys: Map<Journey, List<Leg>>,
+    mapsEvent: suspend (MapsEvent) -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .testTag("${testTag}: MapsJourneys(): Box()")
+            .height(Dimensions.mapBoxHeight)
+    ) {
         val textColor = if (isDarkMode()) LightGray else DarkGray
         LazyColumn(
             modifier = Modifier
+                .testTag("${testTag}: MapsJourneys(): Box(): LazyColumn()")
                 .fillMaxSize(),
         ) {
             itemsIndexed(journeys.keys.toList()) { indexJourney, journey ->
@@ -81,19 +91,22 @@ private fun MapsJourneys(journeys: Map<Journey, List<Leg>>, mapsEvent: suspend (
                 logger.debug("Journey: ${journeys.size}")
                 logger.debug("Legs: ${journey.legs}")
                 logger.debug("TripIds: ${journey.legs?.get(0)?.tripId}")
-                Row() {
+                Row(modifier = Modifier.testTag("${testTag}: MapsJourneys(): Box(): LazyColumn(): Row()")) {
                     if (cancelled == false) {
-                        Column() {
+                        Column(modifier = Modifier.testTag("${testTag}: MapsJourneys(): Box(): LazyColumn(): Row(): Column()")) {
                             Text(
+                                modifier = Modifier.testTag("${testTag}: MapsJourneys(): Box(): LazyColumn(): Row(): Column() - plannedDeparture"),
                                 text = plannedDeparture,
                                 color = textColor,
                             )
                             if (departureDelay != 0 && departureDelay != null) {
                                 Text(
+                                    modifier = Modifier.testTag("${testTag}: MapsJourneys(): Box(): LazyColumn(): Row(): Column() - departure"),
                                     text = departure,
                                     color = Color.Red,
                                 )
                                 Text(
+                                    modifier = Modifier.testTag("${testTag}: MapsJourneys(): Box(): LazyColumn(): Row(): Column() - departureDelay"),
                                     text = "($departureDelay)",
                                     color = Color.Red,
                                 )
@@ -101,6 +114,7 @@ private fun MapsJourneys(journeys: Map<Journey, List<Leg>>, mapsEvent: suspend (
                         }
                     } else {
                         Text(
+                            modifier = Modifier.testTag("${testTag}: MapsJourneys(): Box(): LazyColumn(): Row(): Text() - plannedDeparture"),
                             text = plannedDeparture,
                             color = Color.Red,
                             style = TextStyle(textDecoration = TextDecoration.LineThrough),
@@ -116,7 +130,11 @@ private fun MapsJourneys(journeys: Map<Journey, List<Leg>>, mapsEvent: suspend (
 
 @Composable
 private fun EmptyMapsJourneys() {
-    Box(modifier = Modifier.height(Dimensions.mapBoxHeight))
+    Box(
+        modifier = Modifier
+            .testTag("${testTag}: EmptyMapsJourneys(): Box()")
+            .height(Dimensions.mapBoxHeight)
+    )
 }
 
 @Composable
@@ -127,6 +145,7 @@ fun DrawLegsLineWithIcons(
 ) {
     Row(
         modifier = Modifier
+            .testTag("${testTag}: DrawLegsLineWithIcons(): Row()")
             .heightIn(small)
             .clickable {
                 CoroutineScope(Dispatchers.IO).launch {
@@ -144,15 +163,20 @@ fun DrawLegsLineWithIcons(
             val product = line?.product
             val walking = leg.walking
             val lineProductIcon =
-                if (walking == true) R.drawable.icon_change_station else product?.getLineProductIcon() ?: 0
-            val lineProductColor = if (walking == true) Color.Black else product?.getLineProductColor() ?: Color.Transparent
-            val lineNameIcon = if (walking == true) R.drawable.icon_walking else line?.name?.getLineNameIcon() ?: 0
+                if (walking == true) R.drawable.icon_change_station else product?.getLineProductIcon()
+                    ?: 0
+            val lineProductColor =
+                if (walking == true) Color.Black else product?.getLineProductColor()
+                    ?: Color.Transparent
+            val lineNameIcon =
+                if (walking == true) R.drawable.icon_walking else line?.name?.getLineNameIcon() ?: 0
             DrawLineProductImage(lineProductIcon, lineNameIcon)
             logger.debug("line?.name: ${leg.line?.name}")
             logger.debug("lineProductIcon: $lineProductIcon")
             logger.debug("lineNameIcon: $lineNameIcon")
             Canvas(
                 modifier = Modifier
+                    .testTag("${testTag}: DrawLegsLineWithIcons(): Row(): Canvas()")
                     .weight(1f)
                     .height(smallXXX),
             ) {
@@ -172,12 +196,16 @@ private fun DrawLineProductImage(lineProductIcon: Int, lineNameIcon: Int) {
     // 0 means ignore don't display Icon if no product is found
     if (lineProductIcon != 0 && lineNameIcon != 0) {
         Image(
-            modifier = Modifier.size(medium),
+            modifier = Modifier
+                .testTag("${testTag}: DrawLineProductImage() - lineProductIcon")
+                .size(medium),
             painter = painterResource(id = lineProductIcon),
             contentDescription = null,
         )
         Image(
-            modifier = Modifier.size(medium),
+            modifier = Modifier
+                .testTag("${testTag}: DrawLineProductImage() - lineNameIcon")
+                .size(medium),
             painter = painterResource(id = lineNameIcon),
             contentDescription = null,
         )

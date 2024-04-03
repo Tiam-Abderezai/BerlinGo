@@ -4,7 +4,7 @@ import android.location.Location
 import androidx.lifecycle.ViewModel
 import com.example.berlingo.common.logger.BaseLogger
 import com.example.berlingo.common.logger.FactoryLogger
-import com.example.berlingo.journeys.legs.stops.network.StopsApiImpl
+import com.example.berlingo.journeys.legs.stops.network.StopsRepository
 import com.example.berlingo.journeys.legs.stops.network.responses.Stop
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,7 +16,7 @@ private val logger: BaseLogger = FactoryLogger.getLoggerKClass(StopsViewModel::c
 
 @HiltViewModel
 class StopsViewModel @Inject constructor(
-    private val stopsApiImpl: StopsApiImpl,
+    private val stopsRepository: StopsRepository,
 ) : ViewModel() {
     private val _state = MutableStateFlow<StopsState>(StopsState.Initial)
     val state: StateFlow<StopsState> = _state.asStateFlow()
@@ -43,7 +43,7 @@ class StopsViewModel @Inject constructor(
     private suspend fun getStops(query: String) {
         try {
             _state.value = StopsState.Loading
-            val stops = stopsApiImpl.getStops(false, addresses = false, query = query).data
+            val stops = stopsRepository.getStops(false, addresses = false, query = query).data
             if (query.isNotEmpty()) {
                 stops?.filter { stop ->
                     stop.name?.contains(query, ignoreCase = true) ?: false
@@ -60,7 +60,7 @@ class StopsViewModel @Inject constructor(
         val longitude = location.longitude.toString()
         try {
             _state.value = StopsState.Loading
-            val nearestStop = stopsApiImpl.getNearestStops(
+            val nearestStop = stopsRepository.getNearestStops(
                 latitude = latitude,
                 longitude = longitude,
             ).data?.get(0) ?: Stop()

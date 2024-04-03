@@ -7,9 +7,9 @@ import com.example.berlingo.trips.network.responses.TripResponse
 import com.example.berlingo.trips.network.responses.TripsResponse
 import javax.inject.Inject
 
-private val logger: BaseLogger = FactoryLogger.getLoggerKClass(TripsApiImpl::class)
+private val logger: BaseLogger = FactoryLogger.getLoggerKClass(TripsRepositoryImpl::class)
 
-class TripsApiImpl @Inject constructor(
+class TripsRepositoryImpl @Inject constructor(
     private val tripsApi: TripsApi,
 ) : TripsRepository {
 

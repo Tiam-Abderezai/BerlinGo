@@ -6,9 +6,9 @@ import com.example.berlingo.common.Resource
 import com.example.berlingo.journeys.legs.stops.network.responses.Stop
 import javax.inject.Inject
 
-private val logger: BaseLogger = FactoryLogger.getLoggerKClass(StopsApiImpl::class)
+private val logger: BaseLogger = FactoryLogger.getLoggerKClass(StopsRepositoryImpl::class)
 
-class StopsApiImpl @Inject constructor(
+class StopsRepositoryImpl @Inject constructor(
     private val stopsApi: StopsApi,
 ) : StopsRepository {
 

@@ -7,9 +7,9 @@ import com.example.berlingo.journeys.network.responses.JourneysResponse
 import java.util.Locale
 import javax.inject.Inject
 
-private val logger: BaseLogger = FactoryLogger.getLoggerKClass(JourneysApiImpl::class)
+private val logger: BaseLogger = FactoryLogger.getLoggerKClass(JourneysRepositoryImpl::class)
 
-class JourneysApiImpl @Inject constructor(
+class JourneysRepositoryImpl @Inject constructor(
     private val journeysApi: JourneysApi,
 ) : JourneysRepository {
 

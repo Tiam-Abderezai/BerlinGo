@@ -7,9 +7,9 @@ import com.example.berlingo.map.network.responses.DirectionsResponse
 import com.example.berlingo.map.MapsRepository
 import javax.inject.Inject
 
-private val logger: BaseLogger = FactoryLogger.getLoggerKClass(MapsApiImpl::class)
+private val logger: BaseLogger = FactoryLogger.getLoggerKClass(MapsRepositoryImpl::class)
 
-class MapsApiImpl @Inject constructor(
+class MapsRepositoryImpl @Inject constructor(
     private val mapsApi: MapsApi,
 ) : MapsRepository {
 

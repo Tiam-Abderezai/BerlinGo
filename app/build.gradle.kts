@@ -18,7 +18,7 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.example.berlingo.HiltTestRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -55,6 +55,13 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    testOptions {
+        packagingOptions {
+            jniLibs {
+                useLegacyPackaging = true
+            }
+        }
+    }
 }
 
 dependencies {
@@ -71,16 +78,28 @@ dependencies {
 
     implementation("androidx.test.ext:junit-ktx:1.1.5")
     implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("androidx.test:runner:1.5.2")
+    implementation("androidx.navigation:navigation-testing:2.7.7")
     testImplementation("junit:junit:4.13.2")
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.mockito:mockito-core:4.0.0") // Use the latest version
     testImplementation("org.mockito:mockito-android:4.0.0") // Use the latest version
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.1")
+    testImplementation("com.squareup.okhttp3:mockwebserver:4.12.0")
+    testImplementation("com.google.dagger:hilt-android-testing:2.44")
+    testImplementation("io.mockk:mockk-agent-jvm:1.12.5")
+    testImplementation("io.mockk:mockk:1.12.5")
+    testImplementation("org.robolectric:robolectric:4.12.1")
+    androidTestImplementation("io.mockk:mockk-android:1.12.5")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     androidTestImplementation(platform("androidx.compose:compose-bom:2023.03.00"))
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
+    androidTestImplementation("com.google.dagger:hilt-android-testing:2.44")
+    androidTestImplementation("com.squareup.okhttp3:mockwebserver:4.9.0")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+    kaptAndroidTest("com.google.dagger:hilt-android-compiler:2.48.1")
     // DaggerHilt
     implementation("com.google.dagger:hilt-android-gradle-plugin:$hiltVersion")
     implementation("com.google.dagger:hilt-android:$hiltVersion")

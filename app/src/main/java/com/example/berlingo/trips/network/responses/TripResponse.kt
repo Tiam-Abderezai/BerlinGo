@@ -36,12 +36,12 @@ data class Trip(
     )
 
     data class Destination(
-        val id: String,
-        val location: Location,
-        val name: String,
-        val products: Products,
-        val stationDHID: String,
-        val type: String,
+        val id: String? = "",
+        val location: Location? = null,
+        val name: String? = "",
+        val products: Products? = null,
+        val stationDHID: String? = "",
+        val type: String? = "",
     ) {
         data class Location(
             val id: String,
@@ -81,18 +81,18 @@ data class Trip(
     }
 
     data class Origin(
-        val id: String,
-        val location: Location,
-        val name: String,
-        val products: Products,
-        val stationDHID: String,
-        val type: String,
+        val id: String? = "",
+        val location: Location? = null,
+        val name: String? = "",
+        val products: Products? = null,
+        val stationDHID: String? = "",
+        val type: String? = "",
     ) {
         data class Location(
-            val id: String,
-            val latitude: Double,
-            val longitude: Double,
-            val type: String,
+            val id: String? = "",
+            val latitude: Double? = 0.0,
+            val longitude: Double? = 0.0,
+            val type: String? = "",
         )
 
         data class Products(
