@@ -1,4 +1,4 @@
-package com.example.berlingo.main
+package com.example.berlingo
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -34,8 +34,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.berlingo.R
-import com.example.berlingo.Screen
 import com.example.berlingo.common.Dimensions.large
 import com.example.berlingo.common.Dimensions.smallXXX
 import com.example.berlingo.common.Permissions.Companion.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION

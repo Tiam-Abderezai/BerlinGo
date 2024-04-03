@@ -1,3 +1,4 @@
+import android.content.res.Configuration
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -26,10 +27,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import com.example.berlingo.R
 import com.example.berlingo.common.Dimensions.medium
@@ -47,12 +50,12 @@ import com.example.berlingo.common.logger.BaseLogger
 import com.example.berlingo.common.logger.FactoryLogger
 import com.example.berlingo.journeys.JourneysEvent
 import com.example.berlingo.journeys.JourneysState
-import com.example.berlingo.journeys.JourneysState.Error
-import com.example.berlingo.journeys.JourneysState.Initial
-import com.example.berlingo.journeys.JourneysState.Loading
-import com.example.berlingo.journeys.JourneysState.Success
+import com.example.berlingo.journeys.legs.stops.network.responses.Location
+import com.example.berlingo.journeys.network.responses.Destination
 import com.example.berlingo.journeys.network.responses.Journey
 import com.example.berlingo.journeys.network.responses.Leg
+import com.example.berlingo.journeys.network.responses.Line
+import com.example.berlingo.journeys.network.responses.Origin
 import com.example.berlingo.journeys.network.responses.Remark
 import com.example.berlingo.trips.TripsEvent
 import com.example.berlingo.trips.TripsState
@@ -61,21 +64,22 @@ import com.example.berlingo.ui.theme.LightGray
 import com.example.berlingo.ui.theme.isDarkMode
 
 private val logger: BaseLogger = FactoryLogger.getLoggerCompose("JourneysColumn()")
+private const val testTag = "JourneysColumn()"
 
 @Composable
 fun JourneysColumn(
-    journeysState: JourneysState,
-    journeyEvent: suspend (JourneysEvent) -> Unit,
-    tripsState: TripsState,
-    tripsEvent: suspend (TripsEvent) -> Unit,
+    journeysState: JourneysState = JourneysState.Initial,
+    journeyEvent: suspend (JourneysEvent) -> Unit = {},
+    tripsState: TripsState = TripsState.Initial,
+    tripsEvent: suspend (TripsEvent) -> Unit = {},
 ) {
     when (journeysState) {
-        is Initial -> {}
-        is Loading -> LoadingScreen()
-        is Error -> ErrorScreen(message = journeysState.message)
-        is Success -> {
-            Box() {
-                Column() {
+        is JourneysState.Initial -> {}
+        is JourneysState.Loading -> LoadingScreen()
+        is JourneysState.Error -> ErrorScreen(message = journeysState.message)
+        is JourneysState.Success -> {
+            Box(modifier = Modifier.testTag("$testTag: Box()")) {
+                Column(modifier = Modifier.testTag("$testTag: Box(): Column()")) {
                     if (journeysState.warningRemark?.type == "warning") {
                         DisplayWarningRemark(journeysState.warningRemark)
                     }
@@ -95,10 +99,11 @@ fun DisplayJourneys(
     tripsEvent: suspend (TripsEvent) -> Unit,
 ) {
     Divider()
-    Box() {
+    Box(modifier = Modifier.testTag("$testTag: DisplayJourneys(): Box()")) {
         val textColor = if (isDarkMode()) LightGray else DarkGray
         LazyColumn(
             modifier = Modifier
+                .testTag("$testTag: DisplayJourneys(): Box(): LazyColumn()")
                 .fillMaxSize(),
         ) {
             itemsIndexed(journeys.keys.toList()) { indexJourney, journey ->
@@ -112,19 +117,22 @@ fun DisplayJourneys(
                 logger.debug("Journey: $journeys")
                 logger.debug("Legs: ${journey.legs}")
                 logger.debug("TripIds: ${journey.legs?.get(0)?.tripId}")
-                Row() {
+                Row(modifier = Modifier.testTag("$testTag: DisplayJourneys(): Box(): LazyColumn(): Row()")) {
                     if (cancelled == false) {
-                        Column() {
+                        Column(modifier = Modifier.testTag("$testTag: DisplayJourneys(): Box(): LazyColumn(): Row(): LazyColumn()")) {
                             Text(
+                                modifier = Modifier.testTag("$testTag: DisplayJourneys(): Box(): LazyColumn(): Row(): LazyColumn(): Text() - plannedDeparture"),
                                 text = plannedDeparture,
                                 color = textColor,
                             )
                             if (departureDelay != 0 && departureDelay != null) {
                                 Text(
+                                    modifier = Modifier.testTag("$testTag: DisplayJourneys(): Box(): LazyColumn(): Row(): LazyColumn(): Text() - departure"),
                                     text = departure,
                                     color = Color.Red,
                                 )
                                 Text(
+                                    modifier = Modifier.testTag("$testTag: DisplayJourneys(): Box(): LazyColumn(): Row(): LazyColumn(): Text() - departureDelay"),
                                     text = "($departureDelay)",
                                     color = Color.Red,
                                 )
@@ -132,6 +140,7 @@ fun DisplayJourneys(
                         }
                     } else {
                         Text(
+                            modifier = Modifier.testTag("$testTag: DisplayJourneys(): Box(): LazyColumn(): Row(): Text() - plannedDeparture"),
                             text = plannedDeparture,
                             color = Color.Red,
                             style = TextStyle(textDecoration = TextDecoration.LineThrough),
@@ -153,23 +162,33 @@ private fun DrawLegsLineWithIcons(
     indexJourney: Int,
 ) {
     var expandedItemIndex by remember { mutableStateOf(-1) }
-    Column() {
+    Column(modifier = Modifier.testTag("$testTag: DrawLegsLineWithIcons(): Column()")) {
         Row(
             modifier = Modifier
+                .testTag("$testTag: DrawLegsLineWithIcons(): Column(): Row()")
                 .fillMaxWidth()
-                .clickable { expandedItemIndex = if (indexJourney == expandedItemIndex) -1 else indexJourney },
+                .clickable {
+                    expandedItemIndex = if (indexJourney == expandedItemIndex) -1 else indexJourney
+                },
             verticalAlignment = Alignment.CenterVertically,
         ) {
             legs?.forEach { leg ->
                 val line = leg.line
                 val product = line?.product
                 val walking = leg.walking
-                val lineProductIcon = if (walking == true) R.drawable.icon_change_station else product?.getLineProductIcon() ?: 0
-                val lineProductColor = if (walking == true) Color.Black else product?.getLineProductColor() ?: Color.Transparent
-                val lineNameIcon = if (walking == true) R.drawable.icon_walking else line?.name?.getLineNameIcon() ?: 0
+                val lineProductIcon =
+                    if (walking == true) R.drawable.icon_change_station else product?.getLineProductIcon()
+                        ?: 0
+                val lineProductColor =
+                    if (walking == true) Color.Black else product?.getLineProductColor()
+                        ?: Color.Transparent
+                val lineNameIcon =
+                    if (walking == true) R.drawable.icon_walking else line?.name?.getLineNameIcon()
+                        ?: 0
                 DrawLineProductImageJourneys(lineProductIcon, lineNameIcon)
                 Canvas(
                     modifier = Modifier
+                        .testTag("$testTag: DrawLegsLineWithIcons(): Column(): Row(): Canvas()")
                         .weight(1f)
                         .height(small),
                 ) {
@@ -197,12 +216,16 @@ private fun DrawLineProductImageJourneys(lineProductIcon: Int, lineNameIcon: Int
     // 0 means ignore don't display Icon if no product is found
     if (lineProductIcon != 0 && lineNameIcon != 0) {
         Image(
-            modifier = Modifier.size(medium),
+            modifier = Modifier
+                .testTag("$testTag: DrawLineProductImageJourneys(): Image() - lineProduction")
+                .size(medium),
             painter = painterResource(id = lineProductIcon),
             contentDescription = null,
         )
         Image(
-            modifier = Modifier.size(medium),
+            modifier = Modifier
+                .testTag("$testTag: DrawLineProductImageJourneys(): Image() - lineNameIcon")
+                .size(medium),
             painter = painterResource(id = lineNameIcon),
             contentDescription = null,
         )
@@ -215,64 +238,91 @@ fun DisplayWarningRemark(warningRemark: Remark) {
     val text = warningRemark.text ?: ""
     val validFrom = warningRemark.validFrom?.convertEpochDate() ?: ""
     val validUntil = warningRemark.validUntil?.convertEpochDate() ?: ""
-    Box() {
+    Box(modifier = Modifier.testTag("$testTag: DisplayWarningRemark(): Box()")) {
         val scrollState = rememberScrollState()
         val textColor = if (isDarkMode()) LightGray else DarkGray
         Column(
-            modifier = Modifier.verticalScroll(scrollState),
+            modifier = Modifier
+                .testTag("$testTag: DisplayWarningRemark(): Box(): Column()")
+                .verticalScroll(scrollState),
         ) {
             Icon(
-                painterResource(id = R.drawable.icon_warning_amber),
+                modifier = Modifier
+                    .testTag("$testTag: DisplayWarningRemark(): Box(): Column(): Icon()")
+                    .background(color = Color.Yellow)
+                    .align(Alignment.CenterHorizontally)
+                    .size(medium),
+                painter = painterResource(id = R.drawable.icon_warning_amber),
                 contentDescription = null,
-                modifier = Modifier.background(color = Color.Yellow)
-                    .align(Alignment.CenterHorizontally).size(medium),
             )
             Text(
+                modifier = Modifier.testTag("$testTag: DisplayWarningRemark(): Box(): Column(): Text() - summary"),
                 text = summary,
                 color = textColor,
                 fontSize = 32.sp,
             )
             Text(
+                modifier = Modifier.testTag("$testTag: DisplayWarningRemark(): Box(): Column(): Text() - text"),
                 text = text,
                 color = textColor,
             )
             Text(
+                modifier = Modifier.testTag("$testTag: DisplayWarningRemark(): Box(): Column(): Text() - Duration"),
                 text = "${stringResource(id = R.string.duration)}: $validFrom  $validUntil",
                 color = textColor,
             )
         }
     }
 }
-//
-// @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
-// @Composable
-// fun JourneysColumnPreview() {
-//    val viewState = remember { mutableStateOf(JourneysState()) }
-//    val leg1 = Leg(destination = Destination(name = "Hauptbahnhof"), departure = "11:11")
-//    val leg2 =
-//        Leg(Origin(name = "Lichterfelde"), Destination(name = "Hauptbahnhof"), departure = "11:11")
-//    val leg3 =
-//        Leg(Origin(name = "Lichterfelde"), Destination(name = "Hauptbahnhof"), departure = "11:11")
-//    val legs = listOf(leg1, leg2, leg3)
-//
-//    val journey1 = Journey(legs = legs)
-//    val journey2 = Journey(legs = legs)
-//    val journey3 = Journey(legs = legs)
-//
-//    val trip1 = Trip()
-//
-//    val journeysPair = Pair(journey1, legs)
-//    val journeyMap = mapOf(journeysPair)
-//
-//    val legsPair = Pair(leg1, "")
-//    val legsMap = mapOf(legsPair)
-//
-//    JourneysColumn(
-//        viewState = viewState,
-//    ) {}
-//    LegsColumn(
-//        viewState = viewState,
-//        onEvent = {},
-//        legs = legs,
-//    )
-// }
+
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
+@Composable
+fun JourneysColumnPreview() {
+    val leg1 = Leg(
+        origin = Origin("S+U Rathaus Steglitz (Berlin) [Schloßstr.]"),
+        destination = Destination(
+            name = "S Potsdamer Platz Bhf/Voßstr. (Berlin)",
+            location = Location()
+        ),
+        plannedDeparture = "2024-04-03T01:26:00+02:00",
+        departure = "11:11",
+        line = Line(name = "M85", product = "bus")
+    )
+    val leg2 = Leg(
+        origin = Origin("S+U Rathaus Steglitz (Berlin) [Schloßstr.]"),
+        destination = Destination(
+            name = "S Potsdamer Platz Bhf/Voßstr. (Berlin)",
+            location = Location()
+        ),
+        plannedDeparture = "2024-04-03T01:26:00+02:00",
+        departure = "11:11",
+        line = Line(name = "M48", product = "bus")
+    )
+    val leg3 = Leg(
+        origin = Origin("S+U Rathaus Steglitz (Berlin) [Schloßstr.]"),
+        destination = Destination(
+            name = "S Potsdamer Platz Bhf/Voßstr. (Berlin)",
+            location = Location()
+        ),
+        plannedDeparture = "2024-04-03T01:26:00+02:00",
+        departure = "11:11",
+        line = Line(name = "RE8", product = "regional")
+    )
+    val leg4 = Leg(
+        origin = Origin("S+U Rathaus Steglitz (Berlin) [Schloßstr.]"),
+        destination = Destination(
+            name = "S Potsdamer Platz Bhf/Voßstr. (Berlin)",
+            location = Location()
+        ),
+        plannedDeparture = "2024-04-03T01:26:00+02:00",
+        departure = "11:11",
+        line = Line(name = "S8", product = "suburban")
+    )
+    val legs = listOf(leg1, leg2, leg3, leg4)
+
+    val journey1 = Journey(type = "journey", legs = legs)
+    val journey2 = Journey(type = "journey", legs = legs)
+
+    val journeys = mapOf(journey1 to legs, journey2 to legs)
+    JourneysColumn(journeysState = JourneysState.Success(journeys))
+}

@@ -2,10 +2,18 @@ package com.example.berlingo.di
 
 import android.content.Context
 import com.example.berlingo.journeys.legs.stops.network.StopsApi
+import com.example.berlingo.journeys.legs.stops.network.StopsRepository
+import com.example.berlingo.journeys.legs.stops.network.StopsRepositoryImpl
 import com.example.berlingo.journeys.network.JourneysApi
+import com.example.berlingo.journeys.network.JourneysRepository
+import com.example.berlingo.journeys.network.JourneysRepositoryImpl
+import com.example.berlingo.map.MapsRepository
 import com.example.berlingo.map.network.MapsApi
+import com.example.berlingo.map.network.MapsRepositoryImpl
 import com.example.berlingo.settings.SettingsRepository
 import com.example.berlingo.trips.network.TripsApi
+import com.example.berlingo.trips.network.TripsRepository
+import com.example.berlingo.trips.network.TripsRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -34,6 +42,12 @@ object AppModule {
 
     @Singleton
     @Provides
+    fun provideJourneysRepository(
+        journeysApi: JourneysApi
+    ) = JourneysRepositoryImpl(journeysApi) as JourneysRepository
+
+    @Singleton
+    @Provides
     fun provideJourneysNetwork(): JourneysApi {
         return Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
@@ -42,6 +56,12 @@ object AppModule {
             .build()
             .create(JourneysApi::class.java)
     }
+
+    @Singleton
+    @Provides
+    fun provideStopsRepository(
+        stopsApi: StopsApi
+    ) = StopsRepositoryImpl(stopsApi) as StopsRepository
 
     @Singleton
     @Provides
@@ -56,6 +76,12 @@ object AppModule {
 
     @Singleton
     @Provides
+    fun provideTripsRepository(
+        tripsApi: TripsApi
+    ) = TripsRepositoryImpl(tripsApi) as TripsRepository
+
+    @Singleton
+    @Provides
     fun provideTripsApiNetwork(): TripsApi {
         return Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
@@ -64,7 +90,11 @@ object AppModule {
             .build()
             .create(TripsApi::class.java)
     }
-
+    @Singleton
+    @Provides
+    fun provideMapsRepository(
+        mapsApi: MapsApi
+    ) = MapsRepositoryImpl(mapsApi) as MapsRepository
     @Singleton
     @Provides
     fun provideMapsNetwork(): MapsApi {

@@ -1,3 +1,4 @@
+import android.content.res.Configuration
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -20,7 +21,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.berlingo.R
 import com.example.berlingo.common.Dimensions.medium
@@ -30,7 +33,11 @@ import com.example.berlingo.common.extensions.getLineProductColor
 import com.example.berlingo.common.extensions.getLineProductIcon
 import com.example.berlingo.common.logger.BaseLogger
 import com.example.berlingo.common.logger.FactoryLogger
+import com.example.berlingo.journeys.legs.stops.network.responses.Location
+import com.example.berlingo.journeys.network.responses.Destination
 import com.example.berlingo.journeys.network.responses.Leg
+import com.example.berlingo.journeys.network.responses.Line
+import com.example.berlingo.journeys.network.responses.Origin
 import com.example.berlingo.trips.TripsEvent
 import com.example.berlingo.trips.TripsState
 import kotlinx.coroutines.CoroutineScope
@@ -38,16 +45,22 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 private val logger: BaseLogger = FactoryLogger.getLoggerCompose("LegsColumn()")
+private const val testTag = "LegsColumn()"
 
 @Composable
 fun LegsColumn(
-    legs: List<Leg>?,
-    tripsState: TripsState,
-    tripsEvent: suspend (TripsEvent) -> Unit,
+    legs: List<Leg>? = emptyList(),
+    tripsState: TripsState = TripsState.Initial,
+    tripsEvent: suspend (TripsEvent) -> Unit = {},
 ) {
-    Box(modifier = Modifier.heightIn(max = 200.dp)) {
+    Box(
+        modifier = Modifier
+            .testTag("$testTag: Box()")
+            .heightIn(max = 200.dp)
+    ) {
         LazyColumn(
             modifier = Modifier
+                .testTag("$testTag: Box(): LazyColumn()")
                 .fillMaxWidth()
                 .padding(start = medium),
         ) {
@@ -78,7 +91,9 @@ private fun DrawLineProductImageLegs(
     val lineNameIcon =
         if (walking == true) R.drawable.icon_walking else line?.name?.getLineNameIcon() ?: 0
     Row(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .testTag("$testTag: DrawLineProductImageLegs(): Row()")
+            .fillMaxWidth()
             // Don't show trips if walking is true, because there is nothing to show
             .clickable(walking == false) {
                 expandedItemIndex = if (indexLeg == expandedItemIndex) -1 else indexLeg
@@ -96,6 +111,7 @@ private fun DrawLineProductImageLegs(
         DrawLineProductIcons(lineProductIcon, lineNameIcon)
         Canvas(
             modifier = Modifier
+                .testTag("$testTag: DrawLineProductImageLegs(): Row() - Canvas()")
                 .weight(1f)
                 .height(small),
         ) {
@@ -120,45 +136,42 @@ fun DrawLineProductIcons(lineProductIcon: Int, lineNameIcon: Int) {
     // 0 means ignore don't display Icon if no product is found
     if (lineProductIcon != 0 && lineNameIcon != 0) {
         Image(
-            modifier = Modifier.size(medium),
+            modifier = Modifier
+                .testTag("$testTag: DrawLineProductIcons(): Image() - lineProductIcon")
+                .size(medium),
             painter = painterResource(id = lineProductIcon),
             contentDescription = null,
         )
         Image(
-            modifier = Modifier.size(medium),
+            modifier = Modifier
+                .testTag("$testTag: DrawLineProductIcons(): Image() - lineNameIcon")
+                .size(medium),
             painter = painterResource(id = lineNameIcon),
             contentDescription = null,
         )
     }
 }
 
-// @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
-// @Composable
-// fun LegsColumnPreview() {
-//    val viewState = remember { mutableStateOf(JourneysState()) }
-//
-//    val leg1 = Leg(destination = Destination(name = "Hauptbahnhof"), departure = "11:11")
-//    val leg2 =
-//        Leg(Origin(name = "Lichterfelde"), Destination(name = "Hauptbahnhof"), departure = "11:11")
-//    val leg3 =
-//        Leg(Origin(name = "Lichterfelde"), Destination(name = "Hauptbahnhof"), departure = "11:11")
-//    val legs = listOf(leg1, leg2, leg3)
-//
-//    val journey1 = Journey(legs = legs)
-//    val journey2 = Journey(legs = legs)
-//    val journey3 = Journey(legs = legs)
-//
-//    val trip1 = Trip()
-//
-//    val journeysPair = Pair(journey1, legs)
-//    val journeyMap = mapOf(journeysPair)
-//
-//    val legsPair = Pair(leg1, "")
-//    val legsMap = mapOf(legsPair)
-//
-//    LegsColumn(
-//        viewState = viewState,
-//        onEvent = {},
-//        legs = legs,
-//    )
-// }
+ @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
+ @Composable
+ fun LegsColumnPreview() {
+     val leg1 = Leg(origin = Origin("S+U Rathaus Steglitz (Berlin) [Schloßstr.]"),
+         destination = Destination(name = "S Potsdamer Platz Bhf/Voßstr. (Berlin)", location = Location()),
+         plannedDeparture = "2024-04-03T01:26:00+02:00", departure = "11:11", line = Line(name = "M85", product = "bus")
+     )
+     val leg2 = Leg(origin = Origin("S+U Rathaus Steglitz (Berlin) [Schloßstr.]"),
+         destination = Destination(name = "S Potsdamer Platz Bhf/Voßstr. (Berlin)", location = Location()),
+         plannedDeparture = "2024-04-03T01:26:00+02:00", departure = "11:11", line = Line(name = "M48", product = "bus")
+     )
+     val leg3 = Leg(origin = Origin("S+U Rathaus Steglitz (Berlin) [Schloßstr.]"),
+         destination = Destination(name = "S Potsdamer Platz Bhf/Voßstr. (Berlin)", location = Location()),
+         plannedDeparture = "2024-04-03T01:26:00+02:00", departure = "11:11", line = Line(name = "RE8", product = "regional")
+     )
+     val leg4 = Leg(origin = Origin("S+U Rathaus Steglitz (Berlin) [Schloßstr.]"),
+         destination = Destination(name = "S Potsdamer Platz Bhf/Voßstr. (Berlin)", location = Location()),
+         plannedDeparture = "2024-04-03T01:26:00+02:00", departure = "11:11", line = Line(name = "S8", product = "suburban")
+     )
+     val legs = listOf(leg1, leg2, leg3, leg4)
+
+    LegsColumn(legs = legs)
+ }

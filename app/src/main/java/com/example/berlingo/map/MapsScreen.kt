@@ -9,6 +9,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.berlingo.common.Dimensions
 import com.example.berlingo.common.components.ErrorScreen
@@ -37,22 +39,27 @@ import com.google.maps.android.compose.Polyline
 import com.google.maps.android.compose.rememberCameraPositionState
 
 private val logger: BaseLogger = FactoryLogger.getLoggerCompose("MapsScreen()")
+private const val testTag = "MapsScreen()"
 
 @Composable
 fun MapsScreen(
-    mapsState: MapsState,
-    mapsEvent: suspend (MapsEvent) -> Unit,
-    journeysState: JourneysState,
-    journeysEvent: suspend (JourneysEvent) -> Unit,
-    stopsState: StopsState,
-    stopsEvent: suspend (StopsEvent) -> Unit,
+    mapsState: MapsState = Initial,
+    mapsEvent: suspend (MapsEvent) -> Unit = {},
+    journeysState: JourneysState = JourneysState.Initial,
+    journeysEvent: suspend (JourneysEvent) -> Unit = {},
+    stopsState: StopsState = StopsState.Initial,
+    stopsEvent: suspend (StopsEvent) -> Unit = {},
 ) {
     val backgroundColor = if (isDarkMode()) DarkGray else LightGray
-    Surface(color = backgroundColor, modifier = Modifier.fillMaxSize()) {
-        Box() {
-            Column() {
+    Surface(
+        modifier = Modifier
+            .testTag("$testTag: Surface()")
+            .fillMaxSize(),
+        color = backgroundColor
+    ) {
+        Box(modifier = Modifier.testTag("$testTag: Surface(): Box()")) {
+            Column(modifier = Modifier.testTag("$testTag: Surface(): Box(): Column()")) {
                 StopsColumn(
-                    journeysState,
                     journeysEvent,
                     stopsState,
                     stopsEvent,
@@ -75,14 +82,18 @@ fun MapsScreen(
 @Composable
 private fun MapComponent(directions: List<List<Route>>) {
     Box(
+        modifier = Modifier
+            .testTag("$testTag: MapComponent(): Box()")
+            .height(300.dp),
         contentAlignment = Alignment.Center,
-        modifier = Modifier.height(300.dp),
     ) {
         val berlinLat = 52.5200
         val berlinLng = 13.4050
         val berlinCameraPosition = CameraPosition.fromLatLngZoom(LatLng(berlinLat, berlinLng), 10f)
         GoogleMap(
-            modifier = Modifier.height(Dimensions.mapHeight),
+            modifier = Modifier
+                .testTag("$testTag: MapComponent(): Box(): GoogleMap()")
+                .height(Dimensions.mapHeight),
             cameraPositionState = rememberCameraPositionState { position = berlinCameraPosition },
         ) {
             if (directions.isNotEmpty()) {
@@ -101,15 +112,9 @@ private fun MapComponent(directions: List<List<Route>>) {
         }
     }
 }
-// @Preview
-// @Composable
-// fun MapsPreview() {
-//    val mockMapsState = remember { MapsState() }
-//    val mockJourneysState = remember { mutableStateOf(JourneysState()) }
-//    val mapsState = remember { mutableStateOf(mockMapsState) }
-//    val berlinLat = 52.5200
-//    val berlinLng = 13.4050
-//    val berlinCameraPosition = CameraPosition.fromLatLngZoom(LatLng(berlinLat, berlinLng), 10f)
-//
-//    MapsScreen(mapsState = mapsState, journeysState = mockJourneysState, onMapsEvent = {}, onJourneysEvent = {})
-// }
+
+@Preview
+@Composable
+fun MapsPreview() {
+    MapsScreen()
+}

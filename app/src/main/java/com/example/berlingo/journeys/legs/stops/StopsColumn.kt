@@ -2,6 +2,7 @@ package com.example.berlingo.journeys.legs.stops
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -36,9 +37,12 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
+import com.example.berlingo.MainActivity
 import com.example.berlingo.R
 import com.example.berlingo.common.Dimensions.large
 import com.example.berlingo.common.Dimensions.medium
@@ -49,11 +53,8 @@ import com.example.berlingo.common.components.LoadingScreen
 import com.example.berlingo.common.logger.BaseLogger
 import com.example.berlingo.common.logger.FactoryLogger
 import com.example.berlingo.journeys.JourneysEvent
-import com.example.berlingo.journeys.JourneysState
-import com.example.berlingo.journeys.legs.stops.StopsState.*
 import com.example.berlingo.journeys.legs.stops.network.responses.Stop
-import com.example.berlingo.main.MainActivity
-import com.example.berlingo.main.locationPermissionGranted
+import com.example.berlingo.locationPermissionGranted
 import com.example.berlingo.ui.theme.DarkGray
 import com.example.berlingo.ui.theme.LightGray
 import com.example.berlingo.ui.theme.isDarkMode
@@ -63,6 +64,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 private val logger: BaseLogger = FactoryLogger.getLoggerCompose("StopsColumn()")
+private const val testTag = "StopsColumn()"
+
 var textFieldOriginFocused by mutableStateOf(false)
 var textFieldDestinationFocused by mutableStateOf(false)
 var originStop by mutableStateOf(Stop())
@@ -73,13 +76,13 @@ var destinStopName by mutableStateOf("")
 @SuppressLint("CoroutineCreationDuringComposition", "MissingPermission")
 @Composable
 fun StopsColumn(
-    journeyState: JourneysState,
-    journeysEvent: suspend (JourneysEvent) -> Unit,
-    stopsState: StopsState,
-    stopsEvent: suspend (StopsEvent) -> Unit,
+    journeysEvent: suspend (JourneysEvent) -> Unit = {},
+    stopsState: StopsState = StopsState.Initial,
+    stopsEvent: suspend (StopsEvent) -> Unit = {},
 ) {
     Column(
         modifier = Modifier
+            .testTag("$testTag: Column()")
             .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top,
@@ -103,14 +106,15 @@ private fun OriginTextField(
     context: Context,
 ) {
     TextField(
-        label = { Text(text = "A", color = textColor, fontWeight = FontWeight.SemiBold) },
         modifier = Modifier
+            .testTag("$testTag: OriginTextField(): TextField()")
             .background(color = backgroundColor)
             .fillMaxWidth()
             .padding(smallXX)
             .onFocusChanged { focusState ->
                 textFieldOriginFocused = focusState.isFocused
             },
+        label = { Text(text = "A", color = textColor, fontWeight = FontWeight.SemiBold) },
         value = originStopName,
         onValueChange = { query ->
             originStopName = query
@@ -125,22 +129,26 @@ private fun OriginTrailingIcons(
     stopsEvent: suspend (StopsEvent) -> Unit,
     context: Context,
 ) {
-    Row {
+    Row(modifier = Modifier.testTag("$testTag: OriginTrailingIcons(): Row()")) {
         if (originStopName.isNotEmpty()) {
             Icon(
-                Icons.Filled.Clear,
+                modifier = Modifier
+                    .testTag("$testTag: OriginTrailingIcons(): Row(): Icon() - Clear TextField")
+                    .clickable {
+                        originStopName = ""
+                        CoroutineScope(Dispatchers.IO).launch { stopsEvent.invoke(StopsEvent.EmptyStops()) }
+                    },
+                imageVector = Icons.Filled.Clear,
                 contentDescription = stringResource(R.string.clear_textfield),
-                modifier = Modifier.clickable {
-                    originStopName = ""
-                    CoroutineScope(Dispatchers.IO).launch { stopsEvent.invoke(StopsEvent.EmptyStops()) }
-                },
             )
         }
         Spacer(modifier = Modifier.width(smallXX))
         Icon(
-            Icons.Filled.LocationOn,
+            modifier = Modifier
+                .testTag("$testTag: OriginTrailingIcons(): Row(): Icon() - Get Current Location")
+                .clickable { getUserLocation(context, stopsEvent) },
+            imageVector = Icons.Filled.LocationOn,
             contentDescription = stringResource(R.string.get_current_location),
-            modifier = Modifier.clickable { getUserLocation(context, stopsEvent) },
         )
         Spacer(modifier = Modifier.width(smallXXX))
     }
@@ -154,14 +162,15 @@ private fun DestinationTextField(
     stopsEvent: suspend (StopsEvent) -> Unit,
 ) {
     TextField(
-        label = { Text("B", color = textColor, fontWeight = FontWeight.SemiBold) },
         modifier = Modifier
+            .testTag("$testTag: DestinationTextField(): TextField()")
             .background(color = backgroundColor)
             .fillMaxWidth()
             .padding(smallXX)
             .onFocusChanged { focusState ->
                 textFieldDestinationFocused = focusState.isFocused
             },
+        label = { Text("B", color = textColor, fontWeight = FontWeight.SemiBold) },
         value = destinStopName,
         onValueChange = { query ->
             destinStopName = query
@@ -173,7 +182,7 @@ private fun DestinationTextField(
 
 @Composable
 private fun DestinationTrailingIcons() {
-    Row {
+    Row(modifier = Modifier.testTag("$testTag: DestinationTrailingIcons(): Row()")) {
         if (destinStopName.isNotEmpty()) {
             Icon(
                 Icons.Filled.Clear,
@@ -183,9 +192,11 @@ private fun DestinationTrailingIcons() {
         }
         Spacer(modifier = Modifier.width(smallXX))
         Icon(
+            modifier = Modifier
+                .testTag("$testTag: DestinationTrailingIcons(): Row(): Icon()")
+                .clickable { swapStops() },
             painter = painterResource(id = R.drawable.icon_swap),
             contentDescription = stringResource(R.string.swap_stops),
-            modifier = Modifier.clickable { swapStops() },
         )
         Spacer(modifier = Modifier.width(smallXXX))
     }
@@ -198,19 +209,23 @@ private fun SearchJourneysButton(
 ) {
     Box(
         modifier = Modifier
+            .testTag("$testTag: SearchJourneysButton(): Box()")
             .fillMaxWidth()
             .padding(smallXX),
     ) {
         Button(
-            onClick = { getJourneys(journeysEvent) },
             modifier = Modifier
+                .testTag("$testTag: SearchJourneysButton(): Box(): Button()")
                 .fillMaxWidth()
                 .height(large)
                 .align(Alignment.Center),
+            onClick = { getJourneys(journeysEvent) },
             shape = RoundedCornerShape(smallXXX),
         ) {
             Icon(
-                modifier = Modifier.size(large),
+                modifier = Modifier
+                    .testTag("$testTag: SearchJourneysButton(): Box(): Button(): Icon()")
+                    .size(large),
                 painter = painterResource(id = R.drawable.icon_search),
                 tint = textColor,
                 contentDescription = null,
@@ -218,6 +233,7 @@ private fun SearchJourneysButton(
         }
     }
 }
+
 private fun getStops(
     stopsEvent: suspend (StopsEvent) -> Unit,
     query: String,
@@ -297,10 +313,10 @@ private fun HandleStopsState(
     stopsEvent: suspend (StopsEvent) -> Unit,
 ) {
     when (stopsState) {
-        is Initial -> {}
-        is Loading -> LoadingScreen()
-        is Error -> ErrorScreen(message = stopsState.message)
-        is Success -> {
+        is StopsState.Initial -> {}
+        is StopsState.Loading -> LoadingScreen()
+        is StopsState.Error -> ErrorScreen(message = stopsState.message)
+        is StopsState.Success -> {
             DisplayStops(stopsState.stops, stopsEvent)
             if (stopsState.nearestStop.name?.isNotEmpty() == true) {
                 // When user clicks on the current user location icon, it
@@ -316,26 +332,31 @@ private fun HandleStopsState(
 @Composable
 fun DisplayStops(stopsState: List<Stop>, stopsEvent: suspend (StopsEvent) -> Unit) {
     val textColor = if (isDarkMode()) Color.White else Color.Black
-    LazyColumn {
+    LazyColumn(modifier = Modifier.testTag("$testTag: DisplayStops(): LazyColumn()")) {
         items(stopsState) { stop ->
             val keyboardController = LocalSoftwareKeyboardController.current
             Row(
-                modifier = Modifier.height(medium).fillMaxWidth().clickable {
-                    if (textFieldOriginFocused) {
-                        originStop = stop
-                        originStopName = stop.name ?: ""
-                    }
-                    if (textFieldDestinationFocused) {
-                        destinStop = stop
-                        destinStopName = stop.name ?: ""
-                    }
-                    keyboardController?.hide()
-                    // Used to clear the list of Locations/Stops
-                    // after focusing on either A or B TextField
-                    clearStopsColumn(stopsEvent)
-                },
+                modifier = Modifier
+                    .testTag("$testTag: DisplayStops(): LazyColumn(): Row()")
+                    .height(medium)
+                    .fillMaxWidth()
+                    .clickable {
+                        if (textFieldOriginFocused) {
+                            originStop = stop
+                            originStopName = stop.name ?: ""
+                        }
+                        if (textFieldDestinationFocused) {
+                            destinStop = stop
+                            destinStopName = stop.name ?: ""
+                        }
+                        keyboardController?.hide()
+                        // Used to clear the list of Locations/Stops
+                        // after focusing on either A or B TextField
+                        clearStopsColumn(stopsEvent)
+                    },
             ) {
                 Text(
+                    modifier = Modifier.testTag("$testTag: DisplayStops(): LazyColumn(): Row(): Text()"),
                     text = stop.name ?: "",
                     color = textColor,
                 )
@@ -343,6 +364,7 @@ fun DisplayStops(stopsState: List<Stop>, stopsEvent: suspend (StopsEvent) -> Uni
         }
     }
 }
+
 private fun clearStopsColumn(stopsEvent: suspend (StopsEvent) -> Unit) {
     CoroutineScope(Dispatchers.IO).launch {
         stopsEvent.invoke(
@@ -353,32 +375,8 @@ private fun clearStopsColumn(stopsEvent: suspend (StopsEvent) -> Unit) {
     }
 }
 
-// @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
-// @Composable
-// fun LegsColumnPreview() {
-//    val viewState = remember { mutableStateOf(JourneysState()) }
-//
-//    val leg1 = Leg(destination = Destination(name = "Hauptbahnhof"), departure = "11:11")
-//    val leg2 =
-//        Leg(Origin(name = "Lichterfelde"), Destination(name = "Hauptbahnhof"), departure = "11:11")
-//    val leg3 =
-//        Leg(Origin(name = "Lichterfelde"), Destination(name = "Hauptbahnhof"), departure = "11:11")
-//    val legs = listOf(leg1, leg2, leg3)
-//
-//    val journey1 = Journey(legs = legs)
-//    val journey2 = Journey(legs = legs)
-//    val journey3 = Journey(legs = legs)
-//
-//    val trip1 = Trip()
-//
-//    val journeysPair = Pair(journey1, legs)
-//    val journeyMap = mapOf(journeysPair)
-//
-//    val legsPair = Pair(leg1, "")
-//    val legsMap = mapOf(legsPair)
-//
-//    StopsQuerySection(
-//        viewState = viewState,
-//        onEvent = {},
-//    )
-// }
+ @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
+ @Composable
+ fun StopsColumnPreview() {
+     StopsColumn()
+ }

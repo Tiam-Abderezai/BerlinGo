@@ -6,7 +6,6 @@ import com.example.berlingo.common.API_KEY_GOOGLE_MAPS
 import com.example.berlingo.common.logger.BaseLogger
 import com.example.berlingo.common.logger.FactoryLogger
 import com.example.berlingo.journeys.network.responses.Journey
-import com.example.berlingo.map.network.MapsApiImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -18,7 +17,7 @@ private val logger: BaseLogger = FactoryLogger.getLoggerKClass(MapsViewModel::cl
 
 @HiltViewModel
 class MapsViewModel @Inject constructor(
-    private val mapsApiImpl: MapsApiImpl,
+    private val mapsRepository: MapsRepository,
 ) : ViewModel() {
     private val _state = MutableStateFlow<MapsState>(MapsState.Initial)
     val state: StateFlow<MapsState> = _state.asStateFlow()
@@ -39,7 +38,7 @@ class MapsViewModel @Inject constructor(
         try {
             _state.value = MapsState.Loading
             val directions = journey?.legs?.map { leg ->
-                mapsApiImpl.getDirection(
+                mapsRepository.getDirection(
                     key = API_KEY_GOOGLE_MAPS,
                     origin = "${leg.origin?.location?.latitude},${leg.origin?.location?.longitude}",
                     destination = "${leg.destination?.location?.latitude},${leg.destination?.location?.longitude}",

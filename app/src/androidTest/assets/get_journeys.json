@@ -1,0 +1,2193 @@
+{
+  "earlierRef": "3|OB|MT#14#18262#18262#18289#18289#0#0#165#18262#1#0#10#0#0#-2147483648#1#2|PDH#f371d1b12df0134d56140af66d295187|RD#2042024|RT#162206|US#1|RS#INIT",
+  "laterRef": "3|OF|MT#14#18279#18279#18308#18326#0#0#165#18276#7#0#2#0#0#-2147483648#1#2|PDH#f371d1b12df0134d56140af66d295187|RD#2042024|RT#162206|US#1|RS#INIT",
+  "journeys": [
+    {
+      "type": "journey",
+      "legs": [
+        {
+          "origin": {
+            "type": "stop",
+            "id": "900066354",
+            "name": "Bremer Str. (Berlin)",
+            "location": {
+              "type": "location",
+              "id": "900066354",
+              "latitude": 52.42891,
+              "longitude": 13.306858
+            },
+            "products": {
+              "suburban": false,
+              "subway": false,
+              "tram": false,
+              "bus": true,
+              "ferry": false,
+              "express": false,
+              "regional": false
+            },
+            "stationDHID": "de:11000:900066354"
+          },
+          "destination": {
+            "type": "stop",
+            "id": "900066401",
+            "name": "Goerzallee/Drakestr. (Berlin)",
+            "location": {
+              "type": "location",
+              "id": "900066401",
+              "latitude": 52.431373,
+              "longitude": 13.30968
+            },
+            "products": {
+              "suburban": false,
+              "subway": false,
+              "tram": false,
+              "bus": true,
+              "ferry": false,
+              "express": false,
+              "regional": false
+            },
+            "stationDHID": "de:11000:900066401"
+          },
+          "departure": "2024-04-02T16:22:00+02:00",
+          "plannedDeparture": "2024-04-02T16:22:00+02:00",
+          "departureDelay": null,
+          "arrival": "2024-04-02T16:26:00+02:00",
+          "plannedArrival": "2024-04-02T16:26:00+02:00",
+          "arrivalDelay": null,
+          "public": true,
+          "walking": true,
+          "distance": 335
+        },
+        {
+          "origin": {
+            "type": "stop",
+            "id": "900066401",
+            "name": "Goerzallee/Drakestr. (Berlin)",
+            "location": {
+              "type": "location",
+              "id": "900066401",
+              "latitude": 52.431373,
+              "longitude": 13.30968
+            },
+            "products": {
+              "suburban": false,
+              "subway": false,
+              "tram": false,
+              "bus": true,
+              "ferry": false,
+              "express": false,
+              "regional": false
+            },
+            "stationDHID": "de:11000:900066401"
+          },
+          "destination": {
+            "type": "stop",
+            "id": "900064301",
+            "name": "S Lichterfelde Ost Bhf (Berlin)",
+            "location": {
+              "type": "location",
+              "id": "900064301",
+              "latitude": 52.429297,
+              "longitude": 13.327749
+            },
+            "products": {
+              "suburban": true,
+              "subway": false,
+              "tram": false,
+              "bus": true,
+              "ferry": false,
+              "express": false,
+              "regional": true
+            },
+            "stationDHID": "de:11000:900064301"
+          },
+          "departure": "2024-04-02T16:26:00+02:00",
+          "plannedDeparture": "2024-04-02T16:26:00+02:00",
+          "departureDelay": null,
+          "arrival": "2024-04-02T16:32:00+02:00",
+          "plannedArrival": "2024-04-02T16:32:00+02:00",
+          "arrivalDelay": null,
+          "reachable": true,
+          "tripId": "1|32775|0|86|2042024",
+          "line": {
+            "type": "line",
+            "id": "m11",
+            "fahrtNr": "51882",
+            "name": "M11",
+            "public": true,
+            "adminCode": "BVB---",
+            "productName": "Bus",
+            "mode": "bus",
+            "product": "bus",
+            "operator": {
+              "type": "operator",
+              "id": "berliner-verkehrsbetriebe",
+              "name": "Berliner Verkehrsbetriebe"
+            }
+          },
+          "direction": "S Schöneweide",
+          "currentLocation": {
+            "type": "location",
+            "latitude": 52.44163,
+            "longitude": 13.298102
+          },
+          "arrivalPlatform": null,
+          "plannedArrivalPlatform": null,
+          "arrivalPrognosisType": "prognosed",
+          "departurePlatform": null,
+          "plannedDeparturePlatform": null,
+          "departurePrognosisType": "prognosed",
+          "remarks": [],
+          "cycle": {
+            "min": 180,
+            "max": 600,
+            "nr": 21
+          },
+          "alternatives": [
+            {
+              "tripId": "1|40210|6|86|2042024",
+              "line": {
+                "type": "line",
+                "id": "x11",
+                "fahrtNr": "66310",
+                "name": "X11",
+                "public": true,
+                "adminCode": "BVB---",
+                "productName": "Bus",
+                "mode": "bus",
+                "product": "bus",
+                "operator": {
+                  "type": "operator",
+                  "id": "berliner-verkehrsbetriebe",
+                  "name": "Berliner Verkehrsbetriebe"
+                }
+              },
+              "direction": "S Lichterfelde Ost",
+              "when": "2024-04-02T16:32:00+02:00",
+              "plannedWhen": "2024-04-02T16:32:00+02:00",
+              "delay": null
+            },
+            {
+              "tripId": "1|32775|1|86|2042024",
+              "line": {
+                "type": "line",
+                "id": "m11",
+                "fahrtNr": "51882",
+                "name": "M11",
+                "public": true,
+                "adminCode": "BVB---",
+                "productName": "Bus",
+                "mode": "bus",
+                "product": "bus",
+                "operator": {
+                  "type": "operator",
+                  "id": "berliner-verkehrsbetriebe",
+                  "name": "Berliner Verkehrsbetriebe"
+                }
+              },
+              "direction": "S Schöneweide",
+              "when": "2024-04-02T16:36:00+02:00",
+              "plannedWhen": "2024-04-02T16:36:00+02:00",
+              "delay": null
+            },
+            {
+              "tripId": "1|40230|7|86|2042024",
+              "line": {
+                "type": "line",
+                "id": "x11",
+                "fahrtNr": "66333",
+                "name": "X11",
+                "public": true,
+                "adminCode": "BVB---",
+                "productName": "Bus",
+                "mode": "bus",
+                "product": "bus",
+                "operator": {
+                  "type": "operator",
+                  "id": "berliner-verkehrsbetriebe",
+                  "name": "Berliner Verkehrsbetriebe"
+                }
+              },
+              "direction": "S Schöneweide",
+              "when": "2024-04-02T16:42:00+02:00",
+              "plannedWhen": "2024-04-02T16:42:00+02:00",
+              "delay": null
+            },
+            {
+              "tripId": "1|32804|0|86|2042024",
+              "line": {
+                "type": "line",
+                "id": "m11",
+                "fahrtNr": "51916",
+                "name": "M11",
+                "public": true,
+                "adminCode": "BVB---",
+                "productName": "Bus",
+                "mode": "bus",
+                "product": "bus",
+                "operator": {
+                  "type": "operator",
+                  "id": "berliner-verkehrsbetriebe",
+                  "name": "Berliner Verkehrsbetriebe"
+                }
+              },
+              "direction": "S Schöneweide",
+              "when": "2024-04-02T16:48:00+02:00",
+              "plannedWhen": "2024-04-02T16:48:00+02:00",
+              "delay": null
+            },
+            {
+              "tripId": "1|40210|7|86|2042024",
+              "line": {
+                "type": "line",
+                "id": "x11",
+                "fahrtNr": "66310",
+                "name": "X11",
+                "public": true,
+                "adminCode": "BVB---",
+                "productName": "Bus",
+                "mode": "bus",
+                "product": "bus",
+                "operator": {
+                  "type": "operator",
+                  "id": "berliner-verkehrsbetriebe",
+                  "name": "Berliner Verkehrsbetriebe"
+                }
+              },
+              "direction": "S Lichterfelde Ost",
+              "when": "2024-04-02T16:52:00+02:00",
+              "plannedWhen": "2024-04-02T16:52:00+02:00",
+              "delay": null
+            }
+          ],
+          "occupancy": "medium"
+        },
+        {
+          "origin": {
+            "type": "stop",
+            "id": "900064301",
+            "name": "S Lichterfelde Ost Bhf (Berlin)",
+            "location": {
+              "type": "location",
+              "id": "900064301",
+              "latitude": 52.429297,
+              "longitude": 13.327749
+            },
+            "products": {
+              "suburban": true,
+              "subway": false,
+              "tram": false,
+              "bus": true,
+              "ferry": false,
+              "express": false,
+              "regional": true
+            },
+            "stationDHID": "de:11000:900064301"
+          },
+          "destination": {
+            "type": "stop",
+            "id": "900100020",
+            "name": "S+U Potsdamer Platz Bhf (Berlin)",
+            "location": {
+              "type": "location",
+              "id": "900100020",
+              "latitude": 52.509355,
+              "longitude": 13.376551
+            },
+            "products": {
+              "suburban": true,
+              "subway": false,
+              "tram": false,
+              "bus": false,
+              "ferry": false,
+              "express": false,
+              "regional": true
+            },
+            "stationDHID": "de:11000:900100020"
+          },
+          "departure": "2024-04-02T16:38:00+02:00",
+          "plannedDeparture": "2024-04-02T16:38:00+02:00",
+          "departureDelay": null,
+          "arrival": "2024-04-02T16:49:00+02:00",
+          "plannedArrival": "2024-04-02T16:49:00+02:00",
+          "arrivalDelay": null,
+          "reachable": true,
+          "tripId": "1|53989|3|86|2042024",
+          "line": {
+            "type": "line",
+            "id": "re4",
+            "fahrtNr": "84",
+            "name": "RE4",
+            "public": true,
+            "adminCode": "800158",
+            "productName": "RE",
+            "mode": "train",
+            "product": "regional",
+            "operator": {
+              "type": "operator",
+              "id": "db-regio-ag",
+              "name": "DB Regio AG"
+            }
+          },
+          "direction": "Rathenow, Bahnhof",
+          "currentLocation": {
+            "type": "location",
+            "latitude": 52.239813,
+            "longitude": 13.251682
+          },
+          "arrivalPlatform": "4",
+          "plannedArrivalPlatform": "4",
+          "arrivalPrognosisType": "prognosed",
+          "departurePlatform": "4",
+          "plannedDeparturePlatform": "4",
+          "departurePrognosisType": "prognosed",
+          "remarks": [
+            {
+              "type": "hint",
+              "code": "FK",
+              "text": "Fahrradmitnahme möglich (S Lichterfelde Ost Bhf (Berlin))"
+            },
+            {
+              "type": "hint",
+              "code": "FK",
+              "text": "Fahrradmitnahme möglich (S+U Potsdamer Platz Bhf (Berlin))"
+            },
+            {
+              "type": "hint",
+              "code": "SN",
+              "text": "SnackPoint/Imbiss im Zug"
+            },
+            {
+              "type": "hint",
+              "code": "ia",
+              "text": "Fahrzeuggebundene Einstiegshilfe vorhanden"
+            }
+          ],
+          "cycle": {
+            "min": 1020,
+            "max": 1380,
+            "nr": 7
+          }
+        }
+      ],
+      "refreshToken": "¶HKI¶G@F$A=1@O=Bremer Str. (Berlin)@L=900066354@a=128@$A=1@O=Goerzallee/Drakestr. (Berlin)@L=900066401@a=128@$202404021622$202404021626$$$1$$$$$$§T$A=1@O=Goerzallee/Drakestr. (Berlin)@L=900066401@a=128@$A=1@O=S Lichterfelde Ost Bhf (Berlin)@L=900064301@a=128@$202404021626$202404021632$     M11$$1$$$$$$§T$A=1@O=S Lichterfelde Ost Bhf (Berlin)@L=900064301@a=128@$A=1@O=S+U Potsdamer Platz Bhf (Berlin)@L=900100020@a=128@$202404021638$202404021649$     RE4$$1$$$$$$¶GP¶ft@0@2000@120@-1@100@1@0@0@@@@@false@0@-1@0@-1@-1@$f@$f@$f@$f@$f@$§bt@0@2000@120@-1@100@1@0@0@@@@@false@0@-1@0@-1@-1@$f@$f@$f@$f@$f@$§tf@$f@$f@$f@$f@$f@$§¶KC¶#VE#2#CF#100#CA#0#CM#0#SICT#0#AM#97#AM2#0#RT#7#¶KRCC¶#VE#1#¶PC¶eyJncnBJZCI6Ik9FViJ9",
+      "cycle": {
+        "min": 1020
+      }
+    },
+    {
+      "type": "journey",
+      "legs": [
+        {
+          "origin": {
+            "type": "stop",
+            "id": "900066354",
+            "name": "Bremer Str. (Berlin)",
+            "location": {
+              "type": "location",
+              "id": "900066354",
+              "latitude": 52.42891,
+              "longitude": 13.306858
+            },
+            "products": {
+              "suburban": false,
+              "subway": false,
+              "tram": false,
+              "bus": true,
+              "ferry": false,
+              "express": false,
+              "regional": false
+            },
+            "stationDHID": "de:11000:900066354"
+          },
+          "destination": {
+            "type": "stop",
+            "id": "900062782",
+            "name": "S+U Rathaus Steglitz (Berlin) [Schloßstr.]",
+            "location": {
+              "type": "location",
+              "id": "900062782",
+              "latitude": 52.456759,
+              "longitude": 13.320584
+            },
+            "products": {
+              "suburban": false,
+              "subway": false,
+              "tram": false,
+              "bus": true,
+              "ferry": false,
+              "express": false,
+              "regional": false
+            },
+            "stationDHID": "de:11000:900062782"
+          },
+          "departure": "2024-04-02T16:25:00+02:00",
+          "plannedDeparture": "2024-04-02T16:25:00+02:00",
+          "departureDelay": null,
+          "arrival": "2024-04-02T16:36:00+02:00",
+          "plannedArrival": "2024-04-02T16:36:00+02:00",
+          "arrivalDelay": null,
+          "reachable": true,
+          "tripId": "1|31334|9|86|2042024",
+          "line": {
+            "type": "line",
+            "id": "285",
+            "fahrtNr": "49408",
+            "name": "285",
+            "public": true,
+            "adminCode": "BVB---",
+            "productName": "Bus",
+            "mode": "bus",
+            "product": "bus",
+            "operator": {
+              "type": "operator",
+              "id": "berliner-verkehrsbetriebe",
+              "name": "Berliner Verkehrsbetriebe"
+            }
+          },
+          "direction": "S+U Rathaus Steglitz",
+          "currentLocation": {
+            "type": "location",
+            "latitude": 52.421278,
+            "longitude": 13.29741
+          },
+          "arrivalPlatform": null,
+          "plannedArrivalPlatform": null,
+          "arrivalPrognosisType": "prognosed",
+          "departurePlatform": null,
+          "plannedDeparturePlatform": null,
+          "departurePrognosisType": "prognosed",
+          "remarks": [
+            {
+              "id": "87022",
+              "type": "warning",
+              "summary": "geänderte Haltestellenbedienung",
+              "text": "Bus 285: Verlegung der Haltestelle Bäkestraße Richtung S+U Rathaus Steglitz um ca. 110 Meter hinter den regulären Standort.\n",
+              "icon": {
+                "type": "HIM1",
+                "title": null
+              },
+              "priority": 100,
+              "products": {
+                "suburban": false,
+                "subway": false,
+                "tram": false,
+                "bus": true,
+                "ferry": false,
+                "express": false,
+                "regional": false
+              },
+              "categories": [
+                1
+              ],
+              "validFrom": "2022-12-01T14:00:00+01:00",
+              "validUntil": "2049-12-31T23:59:59+01:00",
+              "modified": "2022-11-29T10:48:08+01:00"
+            },
+            {
+              "id": "87021",
+              "type": "warning",
+              "summary": "geänderte Haltestellenbedienung",
+              "text": "Bus M85: Verlegung der Haltestelle Bäkestraße Richtung S+U Hauptbahnhof um ca. 110 Meter hinter den regulären Standort.\n",
+              "icon": {
+                "type": "HIM1",
+                "title": null
+              },
+              "priority": 100,
+              "products": {
+                "suburban": false,
+                "subway": false,
+                "tram": false,
+                "bus": true,
+                "ferry": false,
+                "express": false,
+                "regional": false
+              },
+              "categories": [
+                1
+              ],
+              "validFrom": "2022-12-01T14:00:00+01:00",
+              "validUntil": "2049-12-31T23:59:59+01:00",
+              "modified": "2022-11-29T10:48:07+01:00"
+            }
+          ],
+          "cycle": {
+            "min": 240,
+            "max": 360,
+            "nr": 25
+          },
+          "occupancy": "medium"
+        },
+        {
+          "origin": {
+            "type": "stop",
+            "id": "900062782",
+            "name": "S+U Rathaus Steglitz (Berlin) [Schloßstr.]",
+            "location": {
+              "type": "location",
+              "id": "900062782",
+              "latitude": 52.456759,
+              "longitude": 13.320584
+            },
+            "products": {
+              "suburban": false,
+              "subway": false,
+              "tram": false,
+              "bus": true,
+              "ferry": false,
+              "express": false,
+              "regional": false
+            },
+            "stationDHID": "de:11000:900062782"
+          },
+          "destination": {
+            "type": "stop",
+            "id": "900062202",
+            "name": "S+U Rathaus Steglitz (Berlin)",
+            "location": {
+              "type": "location",
+              "id": "900062202",
+              "latitude": 52.455069,
+              "longitude": 13.322148
+            },
+            "products": {
+              "suburban": true,
+              "subway": true,
+              "tram": false,
+              "bus": true,
+              "ferry": false,
+              "express": false,
+              "regional": false
+            },
+            "stationDHID": "de:11000:900062202"
+          },
+          "departure": "2024-04-02T16:36:00+02:00",
+          "plannedDeparture": "2024-04-02T16:36:00+02:00",
+          "departureDelay": null,
+          "arrival": "2024-04-02T16:41:00+02:00",
+          "plannedArrival": "2024-04-02T16:41:00+02:00",
+          "arrivalDelay": null,
+          "public": true,
+          "walking": true,
+          "distance": 216
+        },
+        {
+          "origin": {
+            "type": "stop",
+            "id": "900062202",
+            "name": "S+U Rathaus Steglitz (Berlin)",
+            "location": {
+              "type": "location",
+              "id": "900062202",
+              "latitude": 52.455069,
+              "longitude": 13.322148
+            },
+            "products": {
+              "suburban": true,
+              "subway": true,
+              "tram": false,
+              "bus": true,
+              "ferry": false,
+              "express": false,
+              "regional": false
+            },
+            "stationDHID": "de:11000:900062202"
+          },
+          "destination": {
+            "type": "stop",
+            "id": "900100020",
+            "name": "S+U Potsdamer Platz Bhf (Berlin)",
+            "location": {
+              "type": "location",
+              "id": "900100020",
+              "latitude": 52.509355,
+              "longitude": 13.376551
+            },
+            "products": {
+              "suburban": true,
+              "subway": false,
+              "tram": false,
+              "bus": false,
+              "ferry": false,
+              "express": false,
+              "regional": true
+            },
+            "stationDHID": "de:11000:900100020"
+          },
+          "departure": "2024-04-02T16:41:00+02:00",
+          "plannedDeparture": "2024-04-02T16:41:00+02:00",
+          "departureDelay": null,
+          "arrival": "2024-04-02T16:56:00+02:00",
+          "plannedArrival": "2024-04-02T16:56:00+02:00",
+          "arrivalDelay": null,
+          "reachable": true,
+          "tripId": "1|197|20|86|2042024",
+          "line": {
+            "type": "line",
+            "id": "s1",
+            "fahrtNr": "12879",
+            "name": "S1",
+            "public": true,
+            "adminCode": "DBS---",
+            "productName": "S",
+            "mode": "train",
+            "product": "suburban",
+            "operator": {
+              "type": "operator",
+              "id": "s-bahn-berlin-gmbh",
+              "name": "S-Bahn Berlin GmbH"
+            }
+          },
+          "direction": "S Frohnau (Berlin)",
+          "arrivalPlatform": "14",
+          "plannedArrivalPlatform": "14",
+          "arrivalPrognosisType": "prognosed",
+          "departurePlatform": "2",
+          "plannedDeparturePlatform": "2",
+          "departurePrognosisType": "prognosed",
+          "remarks": [
+            {
+              "type": "hint",
+              "code": "FK",
+              "text": "Fahrradmitnahme möglich (S+U Rathaus Steglitz (Berlin))"
+            },
+            {
+              "type": "hint",
+              "code": "FK",
+              "text": "Fahrradmitnahme möglich (S+U Potsdamer Platz Bhf (Berlin))"
+            }
+          ],
+          "cycle": {
+            "min": 300,
+            "max": 300,
+            "nr": 25
+          }
+        }
+      ],
+      "refreshToken": "¶HKI¶T$A=1@O=Bremer Str. (Berlin)@L=900066354@a=128@$A=1@O=S+U Rathaus Steglitz (Berlin) [Schloßstr.]@L=900062782@a=128@$202404021625$202404021636$     285$$1$$$$$$§W$A=1@O=S+U Rathaus Steglitz (Berlin) [Schloßstr.]@L=900062782@a=128@$A=1@O=S+U Rathaus Steglitz (Berlin)@L=900062202@a=128@$202404021636$202404021641$$$1$$$$$$§T$A=1@O=S+U Rathaus Steglitz (Berlin)@L=900062202@a=128@$A=1@O=S+U Potsdamer Platz Bhf (Berlin)@L=900100020@a=128@$202404021641$202404021656$      S1$$1$$$$$$¶KC¶#VE#2#CF#100#CA#0#CM#0#SICT#0#AM#97#AM2#0#RT#7#¶KRCC¶#VE#1#¶PC¶eyJncnBJZCI6Ik9FViJ9",
+      "cycle": {
+        "min": 300
+      }
+    },
+    {
+      "type": "journey",
+      "legs": [
+        {
+          "origin": {
+            "type": "stop",
+            "id": "900066354",
+            "name": "Bremer Str. (Berlin)",
+            "location": {
+              "type": "location",
+              "id": "900066354",
+              "latitude": 52.42891,
+              "longitude": 13.306858
+            },
+            "products": {
+              "suburban": false,
+              "subway": false,
+              "tram": false,
+              "bus": true,
+              "ferry": false,
+              "express": false,
+              "regional": false
+            },
+            "stationDHID": "de:11000:900066354"
+          },
+          "destination": {
+            "type": "stop",
+            "id": "900066401",
+            "name": "Goerzallee/Drakestr. (Berlin)",
+            "location": {
+              "type": "location",
+              "id": "900066401",
+              "latitude": 52.431373,
+              "longitude": 13.30968
+            },
+            "products": {
+              "suburban": false,
+              "subway": false,
+              "tram": false,
+              "bus": true,
+              "ferry": false,
+              "express": false,
+              "regional": false
+            },
+            "stationDHID": "de:11000:900066401"
+          },
+          "departure": "2024-04-02T16:29:00+02:00",
+          "plannedDeparture": "2024-04-02T16:29:00+02:00",
+          "departureDelay": null,
+          "arrival": "2024-04-02T16:30:00+02:00",
+          "plannedArrival": "2024-04-02T16:30:00+02:00",
+          "arrivalDelay": null,
+          "reachable": true,
+          "tripId": "1|38009|10|86|2042024",
+          "line": {
+            "type": "line",
+            "id": "m85",
+            "fahrtNr": "60462",
+            "name": "M85",
+            "public": true,
+            "adminCode": "BVB---",
+            "productName": "Bus",
+            "mode": "bus",
+            "product": "bus",
+            "operator": {
+              "type": "operator",
+              "id": "berliner-verkehrsbetriebe",
+              "name": "Berliner Verkehrsbetriebe"
+            }
+          },
+          "direction": "S+U Hauptbahnhof",
+          "currentLocation": {
+            "type": "location",
+            "latitude": 52.416083,
+            "longitude": 13.303909
+          },
+          "arrivalPlatform": null,
+          "plannedArrivalPlatform": null,
+          "arrivalPrognosisType": "prognosed",
+          "departurePlatform": null,
+          "plannedDeparturePlatform": null,
+          "departurePrognosisType": "prognosed",
+          "remarks": [],
+          "cycle": {
+            "min": 240,
+            "max": 360,
+            "nr": 24
+          },
+          "occupancy": "low"
+        },
+        {
+          "origin": {
+            "type": "stop",
+            "id": "900066401",
+            "name": "Goerzallee/Drakestr. (Berlin)",
+            "location": {
+              "type": "location",
+              "id": "900066401",
+              "latitude": 52.431373,
+              "longitude": 13.30968
+            },
+            "products": {
+              "suburban": false,
+              "subway": false,
+              "tram": false,
+              "bus": true,
+              "ferry": false,
+              "express": false,
+              "regional": false
+            },
+            "stationDHID": "de:11000:900066401"
+          },
+          "destination": {
+            "type": "stop",
+            "id": "900064301",
+            "name": "S Lichterfelde Ost Bhf (Berlin)",
+            "location": {
+              "type": "location",
+              "id": "900064301",
+              "latitude": 52.429297,
+              "longitude": 13.327749
+            },
+            "products": {
+              "suburban": true,
+              "subway": false,
+              "tram": false,
+              "bus": true,
+              "ferry": false,
+              "express": false,
+              "regional": true
+            },
+            "stationDHID": "de:11000:900064301"
+          },
+          "departure": "2024-04-02T16:32:00+02:00",
+          "plannedDeparture": "2024-04-02T16:32:00+02:00",
+          "departureDelay": null,
+          "arrival": "2024-04-02T16:37:00+02:00",
+          "plannedArrival": "2024-04-02T16:37:00+02:00",
+          "arrivalDelay": null,
+          "reachable": true,
+          "tripId": "1|40210|6|86|2042024",
+          "line": {
+            "type": "line",
+            "id": "x11",
+            "fahrtNr": "66310",
+            "name": "X11",
+            "public": true,
+            "adminCode": "BVB---",
+            "productName": "Bus",
+            "mode": "bus",
+            "product": "bus",
+            "operator": {
+              "type": "operator",
+              "id": "berliner-verkehrsbetriebe",
+              "name": "Berliner Verkehrsbetriebe"
+            }
+          },
+          "direction": "S Lichterfelde Ost",
+          "currentLocation": {
+            "type": "location",
+            "latitude": 52.433513,
+            "longitude": 13.276052
+          },
+          "arrivalPlatform": null,
+          "plannedArrivalPlatform": null,
+          "arrivalPrognosisType": "prognosed",
+          "departurePlatform": null,
+          "plannedDeparturePlatform": null,
+          "departurePrognosisType": "prognosed",
+          "remarks": [],
+          "cycle": {
+            "min": 180,
+            "max": 600,
+            "nr": 21
+          },
+          "alternatives": [
+            {
+              "tripId": "1|32775|1|86|2042024",
+              "line": {
+                "type": "line",
+                "id": "m11",
+                "fahrtNr": "51882",
+                "name": "M11",
+                "public": true,
+                "adminCode": "BVB---",
+                "productName": "Bus",
+                "mode": "bus",
+                "product": "bus",
+                "operator": {
+                  "type": "operator",
+                  "id": "berliner-verkehrsbetriebe",
+                  "name": "Berliner Verkehrsbetriebe"
+                }
+              },
+              "direction": "S Schöneweide",
+              "when": "2024-04-02T16:36:00+02:00",
+              "plannedWhen": "2024-04-02T16:36:00+02:00",
+              "delay": null
+            },
+            {
+              "tripId": "1|40230|7|86|2042024",
+              "line": {
+                "type": "line",
+                "id": "x11",
+                "fahrtNr": "66333",
+                "name": "X11",
+                "public": true,
+                "adminCode": "BVB---",
+                "productName": "Bus",
+                "mode": "bus",
+                "product": "bus",
+                "operator": {
+                  "type": "operator",
+                  "id": "berliner-verkehrsbetriebe",
+                  "name": "Berliner Verkehrsbetriebe"
+                }
+              },
+              "direction": "S Schöneweide",
+              "when": "2024-04-02T16:42:00+02:00",
+              "plannedWhen": "2024-04-02T16:42:00+02:00",
+              "delay": null
+            },
+            {
+              "tripId": "1|32804|0|86|2042024",
+              "line": {
+                "type": "line",
+                "id": "m11",
+                "fahrtNr": "51916",
+                "name": "M11",
+                "public": true,
+                "adminCode": "BVB---",
+                "productName": "Bus",
+                "mode": "bus",
+                "product": "bus",
+                "operator": {
+                  "type": "operator",
+                  "id": "berliner-verkehrsbetriebe",
+                  "name": "Berliner Verkehrsbetriebe"
+                }
+              },
+              "direction": "S Schöneweide",
+              "when": "2024-04-02T16:48:00+02:00",
+              "plannedWhen": "2024-04-02T16:48:00+02:00",
+              "delay": null
+            },
+            {
+              "tripId": "1|40210|7|86|2042024",
+              "line": {
+                "type": "line",
+                "id": "x11",
+                "fahrtNr": "66310",
+                "name": "X11",
+                "public": true,
+                "adminCode": "BVB---",
+                "productName": "Bus",
+                "mode": "bus",
+                "product": "bus",
+                "operator": {
+                  "type": "operator",
+                  "id": "berliner-verkehrsbetriebe",
+                  "name": "Berliner Verkehrsbetriebe"
+                }
+              },
+              "direction": "S Lichterfelde Ost",
+              "when": "2024-04-02T16:52:00+02:00",
+              "plannedWhen": "2024-04-02T16:52:00+02:00",
+              "delay": null
+            },
+            {
+              "tripId": "1|32777|0|86|2042024",
+              "line": {
+                "type": "line",
+                "id": "m11",
+                "fahrtNr": "51884",
+                "name": "M11",
+                "public": true,
+                "adminCode": "BVB---",
+                "productName": "Bus",
+                "mode": "bus",
+                "product": "bus",
+                "operator": {
+                  "type": "operator",
+                  "id": "berliner-verkehrsbetriebe",
+                  "name": "Berliner Verkehrsbetriebe"
+                }
+              },
+              "direction": "S Schöneweide",
+              "when": "2024-04-02T16:59:00+02:00",
+              "plannedWhen": "2024-04-02T16:59:00+02:00",
+              "delay": null
+            }
+          ],
+          "occupancy": "medium"
+        },
+        {
+          "origin": {
+            "type": "stop",
+            "id": "900064301",
+            "name": "S Lichterfelde Ost Bhf (Berlin)",
+            "location": {
+              "type": "location",
+              "id": "900064301",
+              "latitude": 52.429297,
+              "longitude": 13.327749
+            },
+            "products": {
+              "suburban": true,
+              "subway": false,
+              "tram": false,
+              "bus": true,
+              "ferry": false,
+              "express": false,
+              "regional": true
+            },
+            "stationDHID": "de:11000:900064301"
+          },
+          "destination": {
+            "type": "stop",
+            "id": "900100020",
+            "name": "S+U Potsdamer Platz Bhf (Berlin)",
+            "location": {
+              "type": "location",
+              "id": "900100020",
+              "latitude": 52.509355,
+              "longitude": 13.376551
+            },
+            "products": {
+              "suburban": true,
+              "subway": false,
+              "tram": false,
+              "bus": false,
+              "ferry": false,
+              "express": false,
+              "regional": true
+            },
+            "stationDHID": "de:11000:900100020"
+          },
+          "departure": "2024-04-02T16:42:00+02:00",
+          "plannedDeparture": "2024-04-02T16:42:00+02:00",
+          "departureDelay": null,
+          "arrival": "2024-04-02T16:58:00+02:00",
+          "plannedArrival": "2024-04-02T16:58:00+02:00",
+          "arrivalDelay": null,
+          "reachable": true,
+          "tripId": "1|3342|33|86|2042024",
+          "line": {
+            "type": "line",
+            "id": "s26",
+            "fahrtNr": "14827",
+            "name": "S26",
+            "public": true,
+            "adminCode": "DBS---",
+            "productName": "S",
+            "mode": "train",
+            "product": "suburban",
+            "operator": {
+              "type": "operator",
+              "id": "s-bahn-berlin-gmbh",
+              "name": "S-Bahn Berlin GmbH"
+            }
+          },
+          "direction": "S Blankenburg (Berlin)",
+          "arrivalPlatform": "14",
+          "plannedArrivalPlatform": "14",
+          "arrivalPrognosisType": "prognosed",
+          "departurePlatform": "2",
+          "plannedDeparturePlatform": "2",
+          "departurePrognosisType": "prognosed",
+          "remarks": [
+            {
+              "type": "hint",
+              "code": "FK",
+              "text": "Fahrradmitnahme möglich (S Lichterfelde Ost Bhf (Berlin))"
+            },
+            {
+              "type": "hint",
+              "code": "FK",
+              "text": "Fahrradmitnahme möglich (S+U Potsdamer Platz Bhf (Berlin))"
+            }
+          ],
+          "cycle": {
+            "min": 600,
+            "max": 600,
+            "nr": 13
+          }
+        }
+      ],
+      "refreshToken": "¶HKI¶T$A=1@O=Bremer Str. (Berlin)@L=900066354@a=128@$A=1@O=Goerzallee/Drakestr. (Berlin)@L=900066401@a=128@$202404021629$202404021630$     M85$$1$$$$$$§T$A=1@O=Goerzallee/Drakestr. (Berlin)@L=900066401@a=128@$A=1@O=S Lichterfelde Ost Bhf (Berlin)@L=900064301@a=128@$202404021632$202404021637$     X11$$1$$$$$$§T$A=1@O=S Lichterfelde Ost Bhf (Berlin)@L=900064301@a=128@$A=1@O=S+U Potsdamer Platz Bhf (Berlin)@L=900100020@a=128@$202404021642$202404021658$     S26$$1$$$$$$¶KC¶#VE#2#CF#100#CA#0#CM#0#SICT#0#AM#97#AM2#0#RT#7#¶KRCC¶#VE#1#¶PC¶eyJncnBJZCI6Ik9FViJ9",
+      "cycle": {
+        "min": 600
+      }
+    },
+    {
+      "type": "journey",
+      "legs": [
+        {
+          "origin": {
+            "type": "stop",
+            "id": "900066354",
+            "name": "Bremer Str. (Berlin)",
+            "location": {
+              "type": "location",
+              "id": "900066354",
+              "latitude": 52.42891,
+              "longitude": 13.306858
+            },
+            "products": {
+              "suburban": false,
+              "subway": false,
+              "tram": false,
+              "bus": true,
+              "ferry": false,
+              "express": false,
+              "regional": false
+            },
+            "stationDHID": "de:11000:900066354"
+          },
+          "destination": {
+            "type": "stop",
+            "id": "900100022",
+            "name": "S Potsdamer Platz Bhf/Voßstr. (Berlin)",
+            "location": {
+              "type": "location",
+              "id": "900100022",
+              "latitude": 52.510146,
+              "longitude": 13.376659
+            },
+            "products": {
+              "suburban": false,
+              "subway": false,
+              "tram": false,
+              "bus": true,
+              "ferry": false,
+              "express": false,
+              "regional": false
+            },
+            "stationDHID": "de:11000:900100022"
+          },
+          "departure": "2024-04-02T16:29:00+02:00",
+          "plannedDeparture": "2024-04-02T16:29:00+02:00",
+          "departureDelay": null,
+          "arrival": "2024-04-02T17:16:00+02:00",
+          "plannedArrival": "2024-04-02T17:16:00+02:00",
+          "arrivalDelay": null,
+          "reachable": true,
+          "tripId": "1|38009|10|86|2042024",
+          "line": {
+            "type": "line",
+            "id": "m85",
+            "fahrtNr": "60462",
+            "name": "M85",
+            "public": true,
+            "adminCode": "BVB---",
+            "productName": "Bus",
+            "mode": "bus",
+            "product": "bus",
+            "operator": {
+              "type": "operator",
+              "id": "berliner-verkehrsbetriebe",
+              "name": "Berliner Verkehrsbetriebe"
+            }
+          },
+          "direction": "S+U Hauptbahnhof",
+          "currentLocation": {
+            "type": "location",
+            "latitude": 52.416083,
+            "longitude": 13.303909
+          },
+          "arrivalPlatform": null,
+          "plannedArrivalPlatform": null,
+          "arrivalPrognosisType": "prognosed",
+          "departurePlatform": null,
+          "plannedDeparturePlatform": null,
+          "departurePrognosisType": "prognosed",
+          "remarks": [
+            {
+              "id": "87022",
+              "type": "warning",
+              "summary": "geänderte Haltestellenbedienung",
+              "text": "Bus 285: Verlegung der Haltestelle Bäkestraße Richtung S+U Rathaus Steglitz um ca. 110 Meter hinter den regulären Standort.\n",
+              "icon": {
+                "type": "HIM1",
+                "title": null
+              },
+              "priority": 100,
+              "products": {
+                "suburban": false,
+                "subway": false,
+                "tram": false,
+                "bus": true,
+                "ferry": false,
+                "express": false,
+                "regional": false
+              },
+              "categories": [
+                1
+              ],
+              "validFrom": "2022-12-01T14:00:00+01:00",
+              "validUntil": "2049-12-31T23:59:59+01:00",
+              "modified": "2022-11-29T10:48:08+01:00"
+            },
+            {
+              "id": "87021",
+              "type": "warning",
+              "summary": "geänderte Haltestellenbedienung",
+              "text": "Bus M85: Verlegung der Haltestelle Bäkestraße Richtung S+U Hauptbahnhof um ca. 110 Meter hinter den regulären Standort.\n",
+              "icon": {
+                "type": "HIM1",
+                "title": null
+              },
+              "priority": 100,
+              "products": {
+                "suburban": false,
+                "subway": false,
+                "tram": false,
+                "bus": true,
+                "ferry": false,
+                "express": false,
+                "regional": false
+              },
+              "categories": [
+                1
+              ],
+              "validFrom": "2022-12-01T14:00:00+01:00",
+              "validUntil": "2049-12-31T23:59:59+01:00",
+              "modified": "2022-11-29T10:48:07+01:00"
+            },
+            {
+              "id": "139343",
+              "type": "warning",
+              "summary": "geänderte Haltestellenbedienung",
+              "text": "Haltestellenverlegung M48: Die Haltestelle Richard-von-Weizsäcker-Platz ist in Richtung U Mohrenstr. um 150 Meter hinter den planmäßigen Standort verlegt worden.\n",
+              "icon": {
+                "type": "HIM1",
+                "title": null
+              },
+              "priority": 100,
+              "products": {
+                "suburban": false,
+                "subway": false,
+                "tram": false,
+                "bus": true,
+                "ferry": false,
+                "express": false,
+                "regional": false
+              },
+              "categories": [
+                1
+              ],
+              "validFrom": "2024-03-21T07:00:00+01:00",
+              "validUntil": "2049-12-31T23:59:59+01:00",
+              "modified": "2024-03-21T06:39:20+01:00"
+            },
+            {
+              "id": "139344",
+              "type": "warning",
+              "summary": "geänderte Haltestellenbedienung",
+              "text": "Haltestellenverlegung: Richard-von-Weizsäcker-Platz ist in Richtung S+U Hauptbahnhof um 150 Meter hinter den planmäßigen Standort verlegt worden.\n",
+              "icon": {
+                "type": "HIM1",
+                "title": null
+              },
+              "priority": 100,
+              "products": {
+                "suburban": false,
+                "subway": false,
+                "tram": false,
+                "bus": true,
+                "ferry": false,
+                "express": false,
+                "regional": false
+              },
+              "categories": [
+                1
+              ],
+              "validFrom": "2024-03-21T07:00:00+01:00",
+              "validUntil": "2049-12-31T23:59:59+01:00",
+              "modified": "2024-03-21T06:39:21+01:00"
+            },
+            {
+              "id": "139346",
+              "type": "warning",
+              "summary": "geänderte Haltestellenbedienung",
+              "text": "Haltestellenverlegung: Richard-von-Weizsäcker-Platz ist in Richtung U Turmstr. um 150 Meter hinter den planmäßigen Standort verlegt worden.\n",
+              "icon": {
+                "type": "HIM1",
+                "title": null
+              },
+              "priority": 100,
+              "products": {
+                "suburban": false,
+                "subway": false,
+                "tram": false,
+                "bus": true,
+                "ferry": false,
+                "express": false,
+                "regional": false
+              },
+              "categories": [
+                1
+              ],
+              "validFrom": "2024-03-21T07:00:00+01:00",
+              "validUntil": "2049-12-31T23:59:59+01:00",
+              "modified": "2024-03-21T06:39:21+01:00"
+            }
+          ],
+          "cycle": {
+            "min": 600,
+            "max": 660,
+            "nr": 12
+          },
+          "occupancy": "high"
+        }
+      ],
+      "refreshToken": "¶HKI¶T$A=1@O=Bremer Str. (Berlin)@L=900066354@a=128@$A=1@O=S Potsdamer Platz Bhf/Voßstr. (Berlin)@L=900100022@a=128@$202404021629$202404021716$     M85$$1$$$$$$¶KC¶#VE#2#CF#100#CA#0#CM#0#SICT#0#AM#97#AM2#0#RT#7#¶KRCC¶#VE#1#¶PC¶eyJncnBJZCI6Ik9FViJ9",
+      "cycle": {
+        "min": 600
+      },
+      "remarks": []
+    },
+    {
+      "type": "journey",
+      "legs": [
+        {
+          "origin": {
+            "type": "stop",
+            "id": "900066354",
+            "name": "Bremer Str. (Berlin)",
+            "location": {
+              "type": "location",
+              "id": "900066354",
+              "latitude": 52.42891,
+              "longitude": 13.306858
+            },
+            "products": {
+              "suburban": false,
+              "subway": false,
+              "tram": false,
+              "bus": true,
+              "ferry": false,
+              "express": false,
+              "regional": false
+            },
+            "stationDHID": "de:11000:900066354"
+          },
+          "destination": {
+            "type": "stop",
+            "id": "900062782",
+            "name": "S+U Rathaus Steglitz (Berlin) [Schloßstr.]",
+            "location": {
+              "type": "location",
+              "id": "900062782",
+              "latitude": 52.456759,
+              "longitude": 13.320584
+            },
+            "products": {
+              "suburban": false,
+              "subway": false,
+              "tram": false,
+              "bus": true,
+              "ferry": false,
+              "express": false,
+              "regional": false
+            },
+            "stationDHID": "de:11000:900062782"
+          },
+          "departure": "2024-04-02T16:35:00+02:00",
+          "plannedDeparture": "2024-04-02T16:35:00+02:00",
+          "departureDelay": null,
+          "arrival": "2024-04-02T16:46:00+02:00",
+          "plannedArrival": "2024-04-02T16:46:00+02:00",
+          "arrivalDelay": null,
+          "reachable": true,
+          "tripId": "1|31326|2|86|2042024",
+          "line": {
+            "type": "line",
+            "id": "285",
+            "fahrtNr": "49399",
+            "name": "285",
+            "public": true,
+            "adminCode": "BVB---",
+            "productName": "Bus",
+            "mode": "bus",
+            "product": "bus",
+            "operator": {
+              "type": "operator",
+              "id": "berliner-verkehrsbetriebe",
+              "name": "Berliner Verkehrsbetriebe"
+            }
+          },
+          "direction": "S+U Rathaus Steglitz",
+          "arrivalPlatform": null,
+          "plannedArrivalPlatform": null,
+          "arrivalPrognosisType": "prognosed",
+          "departurePlatform": null,
+          "plannedDeparturePlatform": null,
+          "departurePrognosisType": "prognosed",
+          "remarks": [
+            {
+              "id": "87022",
+              "type": "warning",
+              "summary": "geänderte Haltestellenbedienung",
+              "text": "Bus 285: Verlegung der Haltestelle Bäkestraße Richtung S+U Rathaus Steglitz um ca. 110 Meter hinter den regulären Standort.\n",
+              "icon": {
+                "type": "HIM1",
+                "title": null
+              },
+              "priority": 100,
+              "products": {
+                "suburban": false,
+                "subway": false,
+                "tram": false,
+                "bus": true,
+                "ferry": false,
+                "express": false,
+                "regional": false
+              },
+              "categories": [
+                1
+              ],
+              "validFrom": "2022-12-01T14:00:00+01:00",
+              "validUntil": "2049-12-31T23:59:59+01:00",
+              "modified": "2022-11-29T10:48:08+01:00"
+            },
+            {
+              "id": "87021",
+              "type": "warning",
+              "summary": "geänderte Haltestellenbedienung",
+              "text": "Bus M85: Verlegung der Haltestelle Bäkestraße Richtung S+U Hauptbahnhof um ca. 110 Meter hinter den regulären Standort.\n",
+              "icon": {
+                "type": "HIM1",
+                "title": null
+              },
+              "priority": 100,
+              "products": {
+                "suburban": false,
+                "subway": false,
+                "tram": false,
+                "bus": true,
+                "ferry": false,
+                "express": false,
+                "regional": false
+              },
+              "categories": [
+                1
+              ],
+              "validFrom": "2022-12-01T14:00:00+01:00",
+              "validUntil": "2049-12-31T23:59:59+01:00",
+              "modified": "2022-11-29T10:48:07+01:00"
+            }
+          ],
+          "cycle": {
+            "min": 240,
+            "max": 360,
+            "nr": 25
+          },
+          "occupancy": "medium"
+        },
+        {
+          "origin": {
+            "type": "stop",
+            "id": "900062782",
+            "name": "S+U Rathaus Steglitz (Berlin) [Schloßstr.]",
+            "location": {
+              "type": "location",
+              "id": "900062782",
+              "latitude": 52.456759,
+              "longitude": 13.320584
+            },
+            "products": {
+              "suburban": false,
+              "subway": false,
+              "tram": false,
+              "bus": true,
+              "ferry": false,
+              "express": false,
+              "regional": false
+            },
+            "stationDHID": "de:11000:900062782"
+          },
+          "destination": {
+            "type": "stop",
+            "id": "900062202",
+            "name": "S+U Rathaus Steglitz (Berlin)",
+            "location": {
+              "type": "location",
+              "id": "900062202",
+              "latitude": 52.455069,
+              "longitude": 13.322148
+            },
+            "products": {
+              "suburban": true,
+              "subway": true,
+              "tram": false,
+              "bus": true,
+              "ferry": false,
+              "express": false,
+              "regional": false
+            },
+            "stationDHID": "de:11000:900062202"
+          },
+          "departure": "2024-04-02T16:46:00+02:00",
+          "plannedDeparture": "2024-04-02T16:46:00+02:00",
+          "departureDelay": null,
+          "arrival": "2024-04-02T16:51:00+02:00",
+          "plannedArrival": "2024-04-02T16:51:00+02:00",
+          "arrivalDelay": null,
+          "public": true,
+          "walking": true,
+          "distance": 216
+        },
+        {
+          "origin": {
+            "type": "stop",
+            "id": "900062202",
+            "name": "S+U Rathaus Steglitz (Berlin)",
+            "location": {
+              "type": "location",
+              "id": "900062202",
+              "latitude": 52.455069,
+              "longitude": 13.322148
+            },
+            "products": {
+              "suburban": true,
+              "subway": true,
+              "tram": false,
+              "bus": true,
+              "ferry": false,
+              "express": false,
+              "regional": false
+            },
+            "stationDHID": "de:11000:900062202"
+          },
+          "destination": {
+            "type": "stop",
+            "id": "900100020",
+            "name": "S+U Potsdamer Platz Bhf (Berlin)",
+            "location": {
+              "type": "location",
+              "id": "900100020",
+              "latitude": 52.509355,
+              "longitude": 13.376551
+            },
+            "products": {
+              "suburban": true,
+              "subway": false,
+              "tram": false,
+              "bus": false,
+              "ferry": false,
+              "express": false,
+              "regional": true
+            },
+            "stationDHID": "de:11000:900100020"
+          },
+          "departure": "2024-04-02T16:51:00+02:00",
+          "plannedDeparture": "2024-04-02T16:51:00+02:00",
+          "departureDelay": null,
+          "arrival": "2024-04-02T17:06:00+02:00",
+          "plannedArrival": "2024-04-02T17:06:00+02:00",
+          "arrivalDelay": null,
+          "reachable": true,
+          "tripId": "1|18|29|86|2042024",
+          "line": {
+            "type": "line",
+            "id": "s1",
+            "fahrtNr": "12608",
+            "name": "S1",
+            "public": true,
+            "adminCode": "DBS---",
+            "productName": "S",
+            "mode": "train",
+            "product": "suburban",
+            "operator": {
+              "type": "operator",
+              "id": "s-bahn-berlin-gmbh",
+              "name": "S-Bahn Berlin GmbH"
+            }
+          },
+          "direction": "S Frohnau (Berlin)",
+          "arrivalPlatform": "14",
+          "plannedArrivalPlatform": "14",
+          "arrivalPrognosisType": "prognosed",
+          "departurePlatform": "2",
+          "plannedDeparturePlatform": "2",
+          "departurePrognosisType": "prognosed",
+          "remarks": [
+            {
+              "type": "hint",
+              "code": "FK",
+              "text": "Fahrradmitnahme möglich (S+U Rathaus Steglitz (Berlin))"
+            },
+            {
+              "type": "hint",
+              "code": "FK",
+              "text": "Fahrradmitnahme möglich (S+U Potsdamer Platz Bhf (Berlin))"
+            }
+          ],
+          "cycle": {
+            "min": 300,
+            "max": 300,
+            "nr": 25
+          }
+        }
+      ],
+      "refreshToken": "¶HKI¶T$A=1@O=Bremer Str. (Berlin)@L=900066354@a=128@$A=1@O=S+U Rathaus Steglitz (Berlin) [Schloßstr.]@L=900062782@a=128@$202404021635$202404021646$     285$$1$$$$$$§W$A=1@O=S+U Rathaus Steglitz (Berlin) [Schloßstr.]@L=900062782@a=128@$A=1@O=S+U Rathaus Steglitz (Berlin)@L=900062202@a=128@$202404021646$202404021651$$$1$$$$$$§T$A=1@O=S+U Rathaus Steglitz (Berlin)@L=900062202@a=128@$A=1@O=S+U Potsdamer Platz Bhf (Berlin)@L=900100020@a=128@$202404021651$202404021706$      S1$$1$$$$$$¶KC¶#VE#2#CF#100#CA#0#CM#0#SICT#0#AM#97#AM2#0#RT#7#¶KRCC¶#VE#1#¶PC¶eyJncnBJZCI6Ik9FViJ9",
+      "cycle": {
+        "min": 300
+      }
+    },
+    {
+      "type": "journey",
+      "legs": [
+        {
+          "origin": {
+            "type": "stop",
+            "id": "900066354",
+            "name": "Bremer Str. (Berlin)",
+            "location": {
+              "type": "location",
+              "id": "900066354",
+              "latitude": 52.42891,
+              "longitude": 13.306858
+            },
+            "products": {
+              "suburban": false,
+              "subway": false,
+              "tram": false,
+              "bus": true,
+              "ferry": false,
+              "express": false,
+              "regional": false
+            },
+            "stationDHID": "de:11000:900066354"
+          },
+          "destination": {
+            "type": "stop",
+            "id": "900066401",
+            "name": "Goerzallee/Drakestr. (Berlin)",
+            "location": {
+              "type": "location",
+              "id": "900066401",
+              "latitude": 52.431373,
+              "longitude": 13.30968
+            },
+            "products": {
+              "suburban": false,
+              "subway": false,
+              "tram": false,
+              "bus": true,
+              "ferry": false,
+              "express": false,
+              "regional": false
+            },
+            "stationDHID": "de:11000:900066401"
+          },
+          "departure": "2024-04-02T16:39:00+02:00",
+          "plannedDeparture": "2024-04-02T16:39:00+02:00",
+          "departureDelay": null,
+          "arrival": "2024-04-02T16:40:00+02:00",
+          "plannedArrival": "2024-04-02T16:40:00+02:00",
+          "arrivalDelay": null,
+          "reachable": true,
+          "tripId": "1|38009|11|86|2042024",
+          "line": {
+            "type": "line",
+            "id": "m85",
+            "fahrtNr": "60462",
+            "name": "M85",
+            "public": true,
+            "adminCode": "BVB---",
+            "productName": "Bus",
+            "mode": "bus",
+            "product": "bus",
+            "operator": {
+              "type": "operator",
+              "id": "berliner-verkehrsbetriebe",
+              "name": "Berliner Verkehrsbetriebe"
+            }
+          },
+          "direction": "S+U Hauptbahnhof",
+          "arrivalPlatform": null,
+          "plannedArrivalPlatform": null,
+          "arrivalPrognosisType": "prognosed",
+          "departurePlatform": null,
+          "plannedDeparturePlatform": null,
+          "departurePrognosisType": "prognosed",
+          "remarks": [],
+          "cycle": {
+            "min": 240,
+            "max": 360,
+            "nr": 24
+          },
+          "occupancy": "low"
+        },
+        {
+          "origin": {
+            "type": "stop",
+            "id": "900066401",
+            "name": "Goerzallee/Drakestr. (Berlin)",
+            "location": {
+              "type": "location",
+              "id": "900066401",
+              "latitude": 52.431373,
+              "longitude": 13.30968
+            },
+            "products": {
+              "suburban": false,
+              "subway": false,
+              "tram": false,
+              "bus": true,
+              "ferry": false,
+              "express": false,
+              "regional": false
+            },
+            "stationDHID": "de:11000:900066401"
+          },
+          "destination": {
+            "type": "stop",
+            "id": "900064301",
+            "name": "S Lichterfelde Ost Bhf (Berlin)",
+            "location": {
+              "type": "location",
+              "id": "900064301",
+              "latitude": 52.429297,
+              "longitude": 13.327749
+            },
+            "products": {
+              "suburban": true,
+              "subway": false,
+              "tram": false,
+              "bus": true,
+              "ferry": false,
+              "express": false,
+              "regional": true
+            },
+            "stationDHID": "de:11000:900064301"
+          },
+          "departure": "2024-04-02T16:42:00+02:00",
+          "plannedDeparture": "2024-04-02T16:42:00+02:00",
+          "departureDelay": null,
+          "arrival": "2024-04-02T16:47:00+02:00",
+          "plannedArrival": "2024-04-02T16:47:00+02:00",
+          "arrivalDelay": null,
+          "reachable": true,
+          "tripId": "1|40230|7|86|2042024",
+          "line": {
+            "type": "line",
+            "id": "x11",
+            "fahrtNr": "66333",
+            "name": "X11",
+            "public": true,
+            "adminCode": "BVB---",
+            "productName": "Bus",
+            "mode": "bus",
+            "product": "bus",
+            "operator": {
+              "type": "operator",
+              "id": "berliner-verkehrsbetriebe",
+              "name": "Berliner Verkehrsbetriebe"
+            }
+          },
+          "direction": "S Schöneweide",
+          "currentLocation": {
+            "type": "location",
+            "latitude": 52.44056,
+            "longitude": 13.244509
+          },
+          "arrivalPlatform": null,
+          "plannedArrivalPlatform": null,
+          "arrivalPrognosisType": "prognosed",
+          "departurePlatform": null,
+          "plannedDeparturePlatform": null,
+          "departurePrognosisType": "prognosed",
+          "remarks": [],
+          "cycle": {
+            "min": 180,
+            "max": 600,
+            "nr": 20
+          },
+          "alternatives": [
+            {
+              "tripId": "1|32804|0|86|2042024",
+              "line": {
+                "type": "line",
+                "id": "m11",
+                "fahrtNr": "51916",
+                "name": "M11",
+                "public": true,
+                "adminCode": "BVB---",
+                "productName": "Bus",
+                "mode": "bus",
+                "product": "bus",
+                "operator": {
+                  "type": "operator",
+                  "id": "berliner-verkehrsbetriebe",
+                  "name": "Berliner Verkehrsbetriebe"
+                }
+              },
+              "direction": "S Schöneweide",
+              "when": "2024-04-02T16:48:00+02:00",
+              "plannedWhen": "2024-04-02T16:48:00+02:00",
+              "delay": null
+            },
+            {
+              "tripId": "1|40210|7|86|2042024",
+              "line": {
+                "type": "line",
+                "id": "x11",
+                "fahrtNr": "66310",
+                "name": "X11",
+                "public": true,
+                "adminCode": "BVB---",
+                "productName": "Bus",
+                "mode": "bus",
+                "product": "bus",
+                "operator": {
+                  "type": "operator",
+                  "id": "berliner-verkehrsbetriebe",
+                  "name": "Berliner Verkehrsbetriebe"
+                }
+              },
+              "direction": "S Lichterfelde Ost",
+              "when": "2024-04-02T16:52:00+02:00",
+              "plannedWhen": "2024-04-02T16:52:00+02:00",
+              "delay": null
+            },
+            {
+              "tripId": "1|32777|0|86|2042024",
+              "line": {
+                "type": "line",
+                "id": "m11",
+                "fahrtNr": "51884",
+                "name": "M11",
+                "public": true,
+                "adminCode": "BVB---",
+                "productName": "Bus",
+                "mode": "bus",
+                "product": "bus",
+                "operator": {
+                  "type": "operator",
+                  "id": "berliner-verkehrsbetriebe",
+                  "name": "Berliner Verkehrsbetriebe"
+                }
+              },
+              "direction": "S Schöneweide",
+              "when": "2024-04-02T16:59:00+02:00",
+              "plannedWhen": "2024-04-02T16:59:00+02:00",
+              "delay": null
+            },
+            {
+              "tripId": "1|40230|8|86|2042024",
+              "line": {
+                "type": "line",
+                "id": "x11",
+                "fahrtNr": "66333",
+                "name": "X11",
+                "public": true,
+                "adminCode": "BVB---",
+                "productName": "Bus",
+                "mode": "bus",
+                "product": "bus",
+                "operator": {
+                  "type": "operator",
+                  "id": "berliner-verkehrsbetriebe",
+                  "name": "Berliner Verkehrsbetriebe"
+                }
+              },
+              "direction": "S Schöneweide",
+              "when": "2024-04-02T17:02:00+02:00",
+              "plannedWhen": "2024-04-02T17:02:00+02:00",
+              "delay": null
+            },
+            {
+              "tripId": "1|32795|0|86|2042024",
+              "line": {
+                "type": "line",
+                "id": "m11",
+                "fahrtNr": "51906",
+                "name": "M11",
+                "public": true,
+                "adminCode": "BVB---",
+                "productName": "Bus",
+                "mode": "bus",
+                "product": "bus",
+                "operator": {
+                  "type": "operator",
+                  "id": "berliner-verkehrsbetriebe",
+                  "name": "Berliner Verkehrsbetriebe"
+                }
+              },
+              "direction": "S Schöneweide",
+              "when": "2024-04-02T17:09:00+02:00",
+              "plannedWhen": "2024-04-02T17:09:00+02:00",
+              "delay": null
+            }
+          ],
+          "occupancy": "medium"
+        },
+        {
+          "origin": {
+            "type": "stop",
+            "id": "900064301",
+            "name": "S Lichterfelde Ost Bhf (Berlin)",
+            "location": {
+              "type": "location",
+              "id": "900064301",
+              "latitude": 52.429297,
+              "longitude": 13.327749
+            },
+            "products": {
+              "suburban": true,
+              "subway": false,
+              "tram": false,
+              "bus": true,
+              "ferry": false,
+              "express": false,
+              "regional": true
+            },
+            "stationDHID": "de:11000:900064301"
+          },
+          "destination": {
+            "type": "stop",
+            "id": "900100020",
+            "name": "S+U Potsdamer Platz Bhf (Berlin)",
+            "location": {
+              "type": "location",
+              "id": "900100020",
+              "latitude": 52.509355,
+              "longitude": 13.376551
+            },
+            "products": {
+              "suburban": true,
+              "subway": false,
+              "tram": false,
+              "bus": false,
+              "ferry": false,
+              "express": false,
+              "regional": true
+            },
+            "stationDHID": "de:11000:900100020"
+          },
+          "departure": "2024-04-02T16:52:00+02:00",
+          "plannedDeparture": "2024-04-02T16:52:00+02:00",
+          "departureDelay": null,
+          "arrival": "2024-04-02T17:08:00+02:00",
+          "plannedArrival": "2024-04-02T17:08:00+02:00",
+          "arrivalDelay": null,
+          "reachable": true,
+          "tripId": "1|605|31|86|2042024",
+          "line": {
+            "type": "line",
+            "id": "s25",
+            "fahrtNr": "14591",
+            "name": "S25",
+            "public": true,
+            "adminCode": "DBS---",
+            "productName": "S",
+            "mode": "train",
+            "product": "suburban",
+            "operator": {
+              "type": "operator",
+              "id": "s-bahn-berlin-gmbh",
+              "name": "S-Bahn Berlin GmbH"
+            }
+          },
+          "direction": "S Hennigsdorf Bhf",
+          "arrivalPlatform": "14",
+          "plannedArrivalPlatform": "14",
+          "arrivalPrognosisType": "prognosed",
+          "departurePlatform": "2",
+          "plannedDeparturePlatform": "2",
+          "departurePrognosisType": "prognosed",
+          "remarks": [
+            {
+              "type": "hint",
+              "code": "FK",
+              "text": "Fahrradmitnahme möglich (S Lichterfelde Ost Bhf (Berlin))"
+            },
+            {
+              "type": "hint",
+              "code": "FK",
+              "text": "Fahrradmitnahme möglich (S+U Potsdamer Platz Bhf (Berlin))"
+            }
+          ],
+          "cycle": {
+            "min": 600,
+            "max": 600,
+            "nr": 13
+          }
+        }
+      ],
+      "refreshToken": "¶HKI¶T$A=1@O=Bremer Str. (Berlin)@L=900066354@a=128@$A=1@O=Goerzallee/Drakestr. (Berlin)@L=900066401@a=128@$202404021639$202404021640$     M85$$1$$$$$$§T$A=1@O=Goerzallee/Drakestr. (Berlin)@L=900066401@a=128@$A=1@O=S Lichterfelde Ost Bhf (Berlin)@L=900064301@a=128@$202404021642$202404021647$     X11$$1$$$$$$§T$A=1@O=S Lichterfelde Ost Bhf (Berlin)@L=900064301@a=128@$A=1@O=S+U Potsdamer Platz Bhf (Berlin)@L=900100020@a=128@$202404021652$202404021708$     S25$$1$$$$$$¶KC¶#VE#2#CF#100#CA#0#CM#0#SICT#0#AM#97#AM2#0#RT#7#¶KRCC¶#VE#1#¶PC¶eyJncnBJZCI6Ik9FViJ9",
+      "cycle": {
+        "min": 600
+      }
+    },
+    {
+      "type": "journey",
+      "legs": [
+        {
+          "origin": {
+            "type": "stop",
+            "id": "900066354",
+            "name": "Bremer Str. (Berlin)",
+            "location": {
+              "type": "location",
+              "id": "900066354",
+              "latitude": 52.42891,
+              "longitude": 13.306858
+            },
+            "products": {
+              "suburban": false,
+              "subway": false,
+              "tram": false,
+              "bus": true,
+              "ferry": false,
+              "express": false,
+              "regional": false
+            },
+            "stationDHID": "de:11000:900066354"
+          },
+          "destination": {
+            "type": "stop",
+            "id": "900100022",
+            "name": "S Potsdamer Platz Bhf/Voßstr. (Berlin)",
+            "location": {
+              "type": "location",
+              "id": "900100022",
+              "latitude": 52.510146,
+              "longitude": 13.376659
+            },
+            "products": {
+              "suburban": false,
+              "subway": false,
+              "tram": false,
+              "bus": true,
+              "ferry": false,
+              "express": false,
+              "regional": false
+            },
+            "stationDHID": "de:11000:900100022"
+          },
+          "departure": "2024-04-02T16:39:00+02:00",
+          "plannedDeparture": "2024-04-02T16:39:00+02:00",
+          "departureDelay": null,
+          "arrival": "2024-04-02T17:26:00+02:00",
+          "plannedArrival": "2024-04-02T17:26:00+02:00",
+          "arrivalDelay": null,
+          "reachable": true,
+          "tripId": "1|38009|11|86|2042024",
+          "line": {
+            "type": "line",
+            "id": "m85",
+            "fahrtNr": "60462",
+            "name": "M85",
+            "public": true,
+            "adminCode": "BVB---",
+            "productName": "Bus",
+            "mode": "bus",
+            "product": "bus",
+            "operator": {
+              "type": "operator",
+              "id": "berliner-verkehrsbetriebe",
+              "name": "Berliner Verkehrsbetriebe"
+            }
+          },
+          "direction": "S+U Hauptbahnhof",
+          "arrivalPlatform": null,
+          "plannedArrivalPlatform": null,
+          "arrivalPrognosisType": "prognosed",
+          "departurePlatform": null,
+          "plannedDeparturePlatform": null,
+          "departurePrognosisType": "prognosed",
+          "remarks": [
+            {
+              "id": "87022",
+              "type": "warning",
+              "summary": "geänderte Haltestellenbedienung",
+              "text": "Bus 285: Verlegung der Haltestelle Bäkestraße Richtung S+U Rathaus Steglitz um ca. 110 Meter hinter den regulären Standort.\n",
+              "icon": {
+                "type": "HIM1",
+                "title": null
+              },
+              "priority": 100,
+              "products": {
+                "suburban": false,
+                "subway": false,
+                "tram": false,
+                "bus": true,
+                "ferry": false,
+                "express": false,
+                "regional": false
+              },
+              "categories": [
+                1
+              ],
+              "validFrom": "2022-12-01T14:00:00+01:00",
+              "validUntil": "2049-12-31T23:59:59+01:00",
+              "modified": "2022-11-29T10:48:08+01:00"
+            },
+            {
+              "id": "87021",
+              "type": "warning",
+              "summary": "geänderte Haltestellenbedienung",
+              "text": "Bus M85: Verlegung der Haltestelle Bäkestraße Richtung S+U Hauptbahnhof um ca. 110 Meter hinter den regulären Standort.\n",
+              "icon": {
+                "type": "HIM1",
+                "title": null
+              },
+              "priority": 100,
+              "products": {
+                "suburban": false,
+                "subway": false,
+                "tram": false,
+                "bus": true,
+                "ferry": false,
+                "express": false,
+                "regional": false
+              },
+              "categories": [
+                1
+              ],
+              "validFrom": "2022-12-01T14:00:00+01:00",
+              "validUntil": "2049-12-31T23:59:59+01:00",
+              "modified": "2022-11-29T10:48:07+01:00"
+            },
+            {
+              "id": "139343",
+              "type": "warning",
+              "summary": "geänderte Haltestellenbedienung",
+              "text": "Haltestellenverlegung M48: Die Haltestelle Richard-von-Weizsäcker-Platz ist in Richtung U Mohrenstr. um 150 Meter hinter den planmäßigen Standort verlegt worden.\n",
+              "icon": {
+                "type": "HIM1",
+                "title": null
+              },
+              "priority": 100,
+              "products": {
+                "suburban": false,
+                "subway": false,
+                "tram": false,
+                "bus": true,
+                "ferry": false,
+                "express": false,
+                "regional": false
+              },
+              "categories": [
+                1
+              ],
+              "validFrom": "2024-03-21T07:00:00+01:00",
+              "validUntil": "2049-12-31T23:59:59+01:00",
+              "modified": "2024-03-21T06:39:20+01:00"
+            },
+            {
+              "id": "139344",
+              "type": "warning",
+              "summary": "geänderte Haltestellenbedienung",
+              "text": "Haltestellenverlegung: Richard-von-Weizsäcker-Platz ist in Richtung S+U Hauptbahnhof um 150 Meter hinter den planmäßigen Standort verlegt worden.\n",
+              "icon": {
+                "type": "HIM1",
+                "title": null
+              },
+              "priority": 100,
+              "products": {
+                "suburban": false,
+                "subway": false,
+                "tram": false,
+                "bus": true,
+                "ferry": false,
+                "express": false,
+                "regional": false
+              },
+              "categories": [
+                1
+              ],
+              "validFrom": "2024-03-21T07:00:00+01:00",
+              "validUntil": "2049-12-31T23:59:59+01:00",
+              "modified": "2024-03-21T06:39:21+01:00"
+            },
+            {
+              "id": "139346",
+              "type": "warning",
+              "summary": "geänderte Haltestellenbedienung",
+              "text": "Haltestellenverlegung: Richard-von-Weizsäcker-Platz ist in Richtung U Turmstr. um 150 Meter hinter den planmäßigen Standort verlegt worden.\n",
+              "icon": {
+                "type": "HIM1",
+                "title": null
+              },
+              "priority": 100,
+              "products": {
+                "suburban": false,
+                "subway": false,
+                "tram": false,
+                "bus": true,
+                "ferry": false,
+                "express": false,
+                "regional": false
+              },
+              "categories": [
+                1
+              ],
+              "validFrom": "2024-03-21T07:00:00+01:00",
+              "validUntil": "2049-12-31T23:59:59+01:00",
+              "modified": "2024-03-21T06:39:21+01:00"
+            }
+          ],
+          "cycle": {
+            "min": 600,
+            "max": 660,
+            "nr": 12
+          },
+          "occupancy": "high"
+        }
+      ],
+      "refreshToken": "¶HKI¶T$A=1@O=Bremer Str. (Berlin)@L=900066354@a=128@$A=1@O=S Potsdamer Platz Bhf/Voßstr. (Berlin)@L=900100022@a=128@$202404021639$202404021726$     M85$$1$$$$$$¶KC¶#VE#2#CF#100#CA#0#CM#0#SICT#0#AM#97#AM2#0#RT#7#¶KRCC¶#VE#1#¶PC¶eyJncnBJZCI6Ik9FViJ9",
+      "cycle": {
+        "min": 600
+      },
+      "remarks": []
+    }
+  ],
+  "realtimeDataUpdatedAt": 1711854127
+}

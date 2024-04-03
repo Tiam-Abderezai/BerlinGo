@@ -21,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
@@ -37,15 +38,16 @@ import com.example.berlingo.ui.theme.LightGray
 import com.example.berlingo.ui.theme.isDarkMode
 
 private val logger: BaseLogger = FactoryLogger.getLoggerCompose("SettingsScreen()")
+private const val testTag = "SettingsScreen()"
 
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun SettingsScreen(navController: NavHostController, settingsViewModel: SettingsViewModel) {
     val textColor = if (isDarkMode()) LightGray else DarkGray
     val backgroundColor = if (isDarkMode()) DarkGray else LightGray
-    Surface(color = backgroundColor, modifier = Modifier.fillMaxSize()) {
+    Surface(color = backgroundColor, modifier = Modifier.testTag("${testTag}: Surface()").fillMaxSize()) {
         Column(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.testTag("${testTag}: Surface(): Column").fillMaxSize(),
         ) {
             Divider()
             AppInfoSettings(navController, textColor)

@@ -3,7 +3,8 @@ package com.example.berlingo.journeys
 import androidx.lifecycle.ViewModel
 import com.example.berlingo.common.logger.BaseLogger
 import com.example.berlingo.common.logger.FactoryLogger
-import com.example.berlingo.journeys.network.JourneysApiImpl
+import com.example.berlingo.journeys.network.JourneysRepository
+import com.example.berlingo.journeys.network.JourneysRepositoryImpl
 import com.example.berlingo.journeys.network.responses.Leg
 import com.example.berlingo.journeys.network.responses.Remark
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,7 +17,7 @@ private val logger: BaseLogger = FactoryLogger.getLoggerKClass(JourneysViewModel
 
 @HiltViewModel
 class JourneysViewModel @Inject constructor(
-    private val journeysApiImpl: JourneysApiImpl,
+    private val journeysRepository: JourneysRepository,
 ) : ViewModel() {
     private val _state = MutableStateFlow<JourneysState>(JourneysState.Initial)
     val state: StateFlow<JourneysState> = _state.asStateFlow()
@@ -35,7 +36,7 @@ class JourneysViewModel @Inject constructor(
     ) {
         try {
             _state.value = JourneysState.Loading
-            val response = journeysApiImpl.getJourneys(
+            val response = journeysRepository.getJourneys(
                 from = from,
                 toId = toId,
                 toLatitude = toLatitude,

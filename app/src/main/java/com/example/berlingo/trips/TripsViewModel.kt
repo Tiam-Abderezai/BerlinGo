@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import com.example.berlingo.common.logger.BaseLogger
 import com.example.berlingo.common.logger.FactoryLogger
 import com.example.berlingo.journeys.network.responses.Leg
-import com.example.berlingo.trips.network.TripsApiImpl
+import com.example.berlingo.trips.network.TripsRepository
 import com.example.berlingo.trips.network.responses.Trip
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,7 +16,7 @@ private val logger: BaseLogger = FactoryLogger.getLoggerKClass(TripsViewModel::c
 
 @HiltViewModel
 class TripsViewModel @Inject constructor(
-    private val tripsApiImpl: TripsApiImpl,
+    private val tripsRepository: TripsRepository,
 ) : ViewModel() {
     private val _state = MutableStateFlow<TripsState>(TripsState.Initial)
     val state: StateFlow<TripsState> = _state.asStateFlow()
@@ -35,7 +35,7 @@ class TripsViewModel @Inject constructor(
     private suspend fun queryTripById(tripId: String, leg: Leg?) {
         try {
             _state.value = TripsState.Loading
-            val stopOvers = tripsApiImpl.getTripById(tripId = tripId).data?.trip?.stopovers
+            val stopOvers = tripsRepository.getTripById(tripId = tripId).data?.trip?.stopovers
             val stopovers = mutableListOf(Trip.Stopover())
             var addStopovers = false
             stopOvers?.map { stopover ->

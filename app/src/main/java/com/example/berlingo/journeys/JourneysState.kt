@@ -12,6 +12,4 @@ sealed class JourneysState {
         val warningRemark: Remark? = null,
     ) : JourneysState()
     data class Error(val message: String) : JourneysState()
-
-//    data class Warning(val remarks: List<Remark>)
 }
