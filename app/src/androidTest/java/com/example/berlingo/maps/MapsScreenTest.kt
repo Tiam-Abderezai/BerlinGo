@@ -1,6 +1,7 @@
 package com.example.berlingo.maps
 
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.platform.ViewRootForTest
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
@@ -34,30 +35,8 @@ class MapsScreenTest {
         journeysViewModel = JourneysViewModel(mockJourneysRepository)
         stopsViewModel = StopsViewModel(mockStopsRepository)
         mapsViewModel = MapsViewModel(mockMapsRepository)
-    }
-
-//    @Test
-//    fun testMapComponent() {
-//        rule.setContent {
-//            MapComponent(
-//                mapsState = mapsViewModel.state.collectAsState().value,
-//                mapsEvent = mapsViewModel::handleEvent,
-//                journeysState = journeysViewModel.state.collectAsState().value,
-//                journeysEvent = journeysViewModel::handleEvent,
-//                stopsState = stopsViewModel.state.collectAsState().value,
-//                stopsEvent = stopsViewModel::handleEvent,
-//            )
-//        }
-//        rule.apply{
-////            onNodeWithTag("JourneysColumn(): Box()").assertExists()
-//            onNodeWithTag("JourneysColumn(): Box(): Column()").assertExists()
-//            onNodeWithTag("JourneysColumn(): DisplayJourneys(): Box()").assertExists()
-//        }
-//    }
-
-    @Test
-    fun testStopsColumn() {
         rule.setContent {
+            ViewRootForTest
             MapsScreen(
                 mapsState = mapsViewModel.state.collectAsState().value,
                 mapsEvent = mapsViewModel::handleEvent,
@@ -66,24 +45,6 @@ class MapsScreenTest {
                 stopsState = stopsViewModel.state.collectAsState().value,
                 stopsEvent = stopsViewModel::handleEvent,
             )
-        }
-        rule.apply{
-            onNodeWithTag("StopsColumn(): Column()").assertExists()
-            onNodeWithTag("StopsColumn(): OriginTextField(): TextField()").assertExists().performTextInput("Lichterfelde")
-//            onNodeWithTag("StopsColumn(): OriginTrailingIcons(): Row()").assertExists()
-            onNodeWithTag("StopsColumn(): OriginTrailingIcons(): Row(): Icon() - Clear TextField").assertExists()
-            onNodeWithTag("StopsColumn(): OriginTrailingIcons(): Row(): Icon() - Get Current Location").assertExists()
-            onNodeWithTag("StopsColumn(): DestinationTextField(): TextField()").assertExists().performTextInput("Hauptbahnhof")
-//            onNodeWithTag("StopsColumn(): DestinationTrailingIcons(): Row()").assertExists()
-            onNodeWithTag("StopsColumn(): DestinationTrailingIcons(): Row(): Icon()").assertExists()
-            onNodeWithTag("StopsColumn(): SearchJourneysButton(): Box()").assertExists()
-            onNodeWithTag("StopsColumn(): SearchJourneysButton(): Box(): Button()").assertExists().performClick()
-//            onNodeWithTag("StopsColumn(): SearchJourneysButton(): Box(): Button(): Icon()").assertExists()
-//            runBlocking { delay(2000) }
-//            onNodeWithTag("StopsColumn(): DisplayStops(): LazyColumn()").assertExists()
-//            onNodeWithTag("StopsColumn(): DisplayStops(): LazyColumn(): Row()").assertExists()
-//            onNodeWithTag("StopsColumn(): DisplayStops(): LazyColumn(): Row(): Text()").assertExists()
-//                .performClick()
         }
     }
 
@@ -98,11 +59,50 @@ class MapsScreenTest {
 //                stopsState = stopsViewModel.state.collectAsState().value,
 //                stopsEvent = stopsViewModel::handleEvent,
 //            )
+//            StopsColumn(
+//                journeysEvent = journeysViewModel::handleEvent,
+//                stopsState = stopsViewModel.state.collectAsState().value,
+//                stopsEvent = stopsViewModel::handleEvent,
+//            )
+//            MapsJourneysColumn(
+//                journeysState = journeysViewModel.state.collectAsState().value,
+//                mapsEvent = mapsViewModel::handleEvent,
+//            )
 //        }
-//        rule.apply{
-////            onNodeWithTag("JourneysColumn(): Box()").assertExists()
-//            onNodeWithTag("JourneysColumn(): Box(): Column()").assertExists()
-//            onNodeWithTag("JourneysColumn(): DisplayJourneys(): Box()").assertExists()
+//        rule.apply {
+//            onNodeWithTag("MapsJourneysColumn(): MapsJourneys(): Box()").assertExists()
+//            onNodeWithTag("MapsJourneysColumn(): MapsJourneys(): Box(): LazyColumn()").assertExists()
+//            onNodeWithTag("MapsJourneysColumn(): MapsJourneys(): Box(): LazyColumn(): Row()").assertExists()
+//            onNodeWithTag("MapsJourneysColumn(): MapsJourneys(): Box(): LazyColumn(): Row(): Column()").assertExists()
+//
+//            onNodeWithTag("MapsJourneysColumn(): MapsJourneys(): Box(): LazyColumn(): Row(): Column()").assertExists()
+//            onNodeWithTag("MapsJourneysColumn(): MapsJourneys(): Box(): LazyColumn(): Row(): Column() - plannedDeparture").assertExists()
+//            onNodeWithTag("MapsJourneysColumn(): MapsJourneys(): Box(): LazyColumn(): Row(): Column() - departure").assertExists()
+//            onNodeWithTag("MapsJourneysColumn(): MapsJourneys(): Box(): LazyColumn(): Row(): Column() - departureDelay").assertExists()
+//            onNodeWithTag("MapsJourneysColumn(): MapsJourneys(): Box(): LazyColumn(): Row(): Text() - plannedDeparture").assertExists()
+//
 //        }
 //    }
+
+    @Test
+    fun assert_StopsColumn_AND_MapComponent_exist() {
+        rule.apply {
+            onNodeWithTag("StopsColumn(): Column()").assertExists()
+            onNodeWithTag("StopsColumn(): OriginTextField(): TextField()").assertExists()
+                .performTextInput("Lichterfelde")
+            onNodeWithTag("StopsColumn(): OriginTrailingIcons(): Row(): Icon() - Clear TextField").assertExists()
+            onNodeWithTag("StopsColumn(): OriginTrailingIcons(): Row(): Icon() - Get Current Location").assertExists()
+            onNodeWithTag("StopsColumn(): DestinationTextField(): TextField()").assertExists()
+                .performTextInput("Hauptbahnhof")
+            onNodeWithTag("StopsColumn(): DestinationTrailingIcons(): Row(): Icon()").assertExists()
+            onNodeWithTag("StopsColumn(): SearchJourneysButton(): Box()").assertExists()
+            onNodeWithTag("StopsColumn(): SearchJourneysButton(): Box(): Button()").assertExists()
+                .performClick()
+            onNodeWithTag("MapsScreen(): MapComponent(): Box()").assertExists()
+            onNodeWithTag("MapsScreen(): MapComponent(): Box(): GoogleMap()").assertExists()
+        }
+    }
+
+
+
 }

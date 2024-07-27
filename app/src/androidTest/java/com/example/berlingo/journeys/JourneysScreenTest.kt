@@ -33,19 +33,19 @@ class JourneysScreenTest {
         journeysViewModel = JourneysViewModel(mockJourneysRepository)
         stopsViewModel = StopsViewModel(mockStopsRepository)
         tripsViewModel = TripsViewModel(mockTripsRepository)
+        rule.setContent {
+            JourneysScreen(
+                journeysState = journeysViewModel.state.collectAsState().value,
+                journeysEvent = journeysViewModel::handleEvent,
+                stopsState = stopsViewModel.state.collectAsState().value,
+                stopsEvent = stopsViewModel::handleEvent,
+                tripsState = tripsViewModel.state.collectAsState().value,
+                tripsEvent = tripsViewModel::handleEvent
+            )
+        }
     }
     @Test
-    fun testStopsColumn() {
-    rule.setContent {
-        JourneysScreen(
-        journeysState = journeysViewModel.state.collectAsState().value,
-        journeysEvent = journeysViewModel::handleEvent,
-        stopsState = stopsViewModel.state.collectAsState().value,
-        stopsEvent = stopsViewModel::handleEvent,
-        tripsState = tripsViewModel.state.collectAsState().value,
-        tripsEvent = tripsViewModel::handleEvent
-        )
-    }
+    fun assert_StopsColumn_exists() {
         rule.apply{
             onNodeWithTag("StopsColumn(): Column()").assertExists()
             onNodeWithTag("StopsColumn(): OriginTextField(): TextField()").assertExists().performTextInput("Lichterfelde")
