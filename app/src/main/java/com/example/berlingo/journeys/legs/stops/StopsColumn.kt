@@ -26,6 +26,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -42,12 +43,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.sp
 import com.example.berlingo.MainActivity
 import com.example.berlingo.R
 import com.example.berlingo.common.Dimensions.large
 import com.example.berlingo.common.Dimensions.medium
 import com.example.berlingo.common.Dimensions.smallXX
 import com.example.berlingo.common.Dimensions.smallXXX
+import com.example.berlingo.common.Dimensions.smallXXXX
 import com.example.berlingo.common.components.ErrorScreen
 import com.example.berlingo.common.components.LoadingScreen
 import com.example.berlingo.common.logger.BaseLogger
@@ -57,6 +60,7 @@ import com.example.berlingo.journeys.legs.stops.network.responses.Stop
 import com.example.berlingo.locationPermissionGranted
 import com.example.berlingo.ui.theme.DarkGray
 import com.example.berlingo.ui.theme.LightGray
+import com.example.berlingo.ui.theme.White
 import com.example.berlingo.ui.theme.isDarkMode
 import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.CoroutineScope
@@ -92,7 +96,7 @@ fun StopsColumn(
         val context = LocalContext.current
         OriginTextField(textColor, backgroundColor, stopsEvent, context)
         DestinationTextField(textColor, backgroundColor, stopsEvent)
-        SearchJourneysButton(journeysEvent, textColor)
+        SearchJourneysButton(journeysEvent)
     }
     HandleStopsState(stopsState, stopsEvent)
 }
@@ -110,10 +114,15 @@ private fun OriginTextField(
             .testTag("$testTag: OriginTextField(): TextField()")
             .background(color = backgroundColor)
             .fillMaxWidth()
-            .padding(smallXX)
+            .padding(horizontal = smallXXXX)
             .onFocusChanged { focusState ->
                 textFieldOriginFocused = focusState.isFocused
             },
+        textStyle = androidx.compose.ui.text.TextStyle(fontSize = 24.sp),
+        colors = TextFieldDefaults.textFieldColors(
+            containerColor = if (isDarkMode()) DarkGray else White,
+            unfocusedIndicatorColor = Color.Transparent
+        ),
         label = { Text(text = "A", color = textColor, fontWeight = FontWeight.SemiBold) },
         value = originStopName,
         onValueChange = { query ->
@@ -121,6 +130,7 @@ private fun OriginTextField(
             getStops(stopsEvent, query)
         },
         trailingIcon = { OriginTrailingIcons(stopsEvent, context) },
+        shape = RoundedCornerShape(smallXXXX),
     )
 }
 
@@ -166,10 +176,15 @@ private fun DestinationTextField(
             .testTag("$testTag: DestinationTextField(): TextField()")
             .background(color = backgroundColor)
             .fillMaxWidth()
-            .padding(smallXX)
+            .padding(horizontal = smallXXXX)
             .onFocusChanged { focusState ->
                 textFieldDestinationFocused = focusState.isFocused
             },
+        textStyle = androidx.compose.ui.text.TextStyle(fontSize = 24.sp),
+        colors = TextFieldDefaults.textFieldColors(
+            containerColor = if (isDarkMode()) DarkGray else White,
+            unfocusedIndicatorColor = Color.Transparent
+        ),
         label = { Text("B", color = textColor, fontWeight = FontWeight.SemiBold) },
         value = destinStopName,
         onValueChange = { query ->
@@ -177,6 +192,7 @@ private fun DestinationTextField(
             getStops(stopsEvent, query)
         },
         trailingIcon = { DestinationTrailingIcons() },
+        shape = RoundedCornerShape(smallXXXX),
     )
 }
 
@@ -205,7 +221,6 @@ private fun DestinationTrailingIcons() {
 @Composable
 private fun SearchJourneysButton(
     journeysEvent: suspend (JourneysEvent) -> Unit,
-    textColor: Color,
 ) {
     Box(
         modifier = Modifier
@@ -217,17 +232,18 @@ private fun SearchJourneysButton(
             modifier = Modifier
                 .testTag("$testTag: SearchJourneysButton(): Box(): Button()")
                 .fillMaxWidth()
+                .padding(horizontal = smallXXXX)
                 .height(large)
                 .align(Alignment.Center),
             onClick = { getJourneys(journeysEvent) },
-            shape = RoundedCornerShape(smallXXX),
+            shape = RoundedCornerShape(smallXXXX),
         ) {
             Icon(
                 modifier = Modifier
                     .testTag("$testTag: SearchJourneysButton(): Box(): Button(): Icon()")
                     .size(large),
                 painter = painterResource(id = R.drawable.icon_search),
-                tint = textColor,
+                tint = White,
                 contentDescription = null,
             )
         }
@@ -375,8 +391,8 @@ private fun clearStopsColumn(stopsEvent: suspend (StopsEvent) -> Unit) {
     }
 }
 
- @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
- @Composable
- fun StopsColumnPreview() {
-     StopsColumn()
- }
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
+@Composable
+fun StopsColumnPreview() {
+    StopsColumn()
+}
